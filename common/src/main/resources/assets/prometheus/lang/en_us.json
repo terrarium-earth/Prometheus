@@ -1,0 +1,38 @@
+{
+    "prometheus.players.inventory": "%s's %s",
+    "prometheus.tpa.request.to": "[TPA] %s has requested to teleport to you: %s",
+    "prometheus.tpa.request.from": "[TPA] %s has requested you teleport to them: %s",
+    "prometheus.tpa.error.self_request": "[TPA] You cannot request to teleport to yourself.",
+    "prometheus.tpa.error.expired_request": "[TPA] Teleport request has expired.",
+    "prometheus.tpa.error.invalid_request": "[TPA] Invalid teleport request.",
+    "prometheus.tpa.error.request_denied": "[TPA] Teleport request denied.",
+    "prometheus.tpa.error.sender_offline": "[TPA] Teleport request sender is offline.",
+    "prometheus.tpa.teleporting": "Teleporting...",
+    "prometheus.tpa.request": "[TPA] Teleport request sent.",
+
+    "prometheus.rtp.failed_with_ceiling": "You can not rtp in a dimension with a ceiling.",
+
+    "prometheus.invsee.enderchest": "Open Ender Chest",
+
+    "prometheus.invsee.inventory": "%s's Inventory",
+    "prometheus.invsee.your_inventory": "Your Inventory",
+
+    "prometheus.heading.streaming": "§5● Streaming ●",
+    "prometheus.heading.recording": "§c● Recording ●",
+    "prometheus.heading.afk": "§e⌚ AFK ⌚",
+    "prometheus.heading.dnd": "§c✖ Do Not Disturb ✖",
+    "prometheus.heading.music": "§9♬ %s §9♬",
+
+    "prometheus.heading.name.streaming": "§5Streaming",
+    "prometheus.heading.name.recording": "§cRecording",
+    "prometheus.heading.name.afk": "§eAFK",
+    "prometheus.heading.name.dnd": "§cDo Not Disturb",
+    "prometheus.heading.name.music": "§9Music",
+    "prometheus.heading.name.none": "nothing.",
+
+    "prometheus.heading.join": "Heading is set to %s from last login.",
+    "prometheus.heading.set": "Heading is set to %s.",
+
+    "prometheus.locations.home": "Homes",
+    "prometheus.locations.home.add": "Add A Home"
+}

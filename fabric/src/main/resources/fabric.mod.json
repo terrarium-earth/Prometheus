@@ -1,0 +1,28 @@
+{
+    "schemaVersion": 1,
+    "id": "prometheus",
+    "version": "${version}",
+    "name": "prometheus",
+    "description": "",
+    "authors": [],
+    "contact": {},
+    "license": "MIT",
+    "icon": "icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "earth.terrarium.prometheus.fabric.PrometheusFabric"
+        ],
+        "client": [
+            "earth.terrarium.prometheus.client.PrometheusClient::init"
+        ]
+    },
+    "mixins": [
+        "prometheus.mixins.json",
+        "prometheus-common.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=0.14.19",
+        "minecraft": ">=1.19.4"
+    }
+}
