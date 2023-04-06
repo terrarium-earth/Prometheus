@@ -34,5 +34,9 @@
     "prometheus.heading.set": "Heading is set to %s.",
 
     "prometheus.locations.home": "Homes",
-    "prometheus.locations.home.add": "Add A Home"
+    "prometheus.locations.home.add": "Add A Home",
+    "prometheus.locations.warp": "Warps",
+    "prometheus.locations.warp.add": "Add A Warp",
+    "prometheus.locations.add": "Add New Location:",
+    "prometheus.locations.save": "Save"
 }

@@ -40,7 +40,7 @@ public class InvseeScreen extends AbstractContainerCursorScreen<InvseeMenu> impl
             }
         })).setTooltip(Tooltip.create(Component.translatable("prometheus.invsee.enderchest")));
         try {
-            this.renderedPlayer = new RemotePlayer(this.minecraft.level, new GameProfile(this.menu.getPlayerUUID(), "Fake Inventory Player"));
+            this.renderedPlayer = new RemotePlayer(getMc().level, new GameProfile(this.menu.getPlayerUUID(), "Fake Inventory Player"));
         }catch (Exception ignored){}
     }
 

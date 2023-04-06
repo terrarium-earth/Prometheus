@@ -1,9 +1,11 @@
-package earth.terrarium.prometheus.client.screens;
+package earth.terrarium.prometheus.client.screens.location;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import earth.terrarium.prometheus.Prometheus;
-import earth.terrarium.prometheus.common.menus.LocationMenu;
+import earth.terrarium.prometheus.client.screens.AbstractContainerCursorScreen;
+import earth.terrarium.prometheus.common.menus.location.Location;
+import earth.terrarium.prometheus.common.menus.location.LocationMenu;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
@@ -31,28 +33,28 @@ public class LocationScreen extends AbstractContainerCursorScreen<LocationMenu> 
     @Override
     protected void init() {
         super.init();
-        var imageButton = this.addRenderableWidget(new ImageButton(this.leftPos + 157, this.topPos + 22, 12, 12, 176, 0, 12, CONTAINER_BACKGROUND, (button) -> {
-            if (this.minecraft != null && this.minecraft.gameMode != null) {
-
-            }
-        }));
-        imageButton.setTooltip(Tooltip.create(Component.translatable("prometheus.locations.home.add")));
+        ImageButton addButton = this.addRenderableWidget(new ImageButton(this.leftPos + 157, this.topPos + 22, 12, 12, 176, 0, 12, CONTAINER_BACKGROUND, (button) ->
+            getMc().setScreen(new AddLocationScreen(this.menu.getLocationType()))
+        ));
+        addButton.setTooltip(Tooltip.create(Component.translatable("prometheus.locations." + menu.getLocationType().getId() + ".add")));
         if (menu.getLocations().size() >= menu.getMax() || !menu.canModify()) {
-            imageButton.active = false;
+            addButton.active = false;
         }
 
-        var list = this.addRenderableWidget(new LocationsList(this.leftPos + 8, this.topPos + 43, 160, 160, 20, item -> {
-
+        LocationsList list = this.addRenderableWidget(new LocationsList(this.leftPos + 8, this.topPos + 43, 160, 160, 20, item -> {
+            if (item != null) {
+                sendClick(item.id());
+            }
         }));
-        list.update(getEntries(menu.getLocations(), ""), menu.canModify());
+        list.update(getEntries(menu.getLocations(), ""));
 
-        var search = this.addRenderableWidget(new EditBox(this.font, this.leftPos + 9, this.topPos + 24, 143, 11, CommonComponents.EMPTY));
-        search.setMaxLength(32);
-        search.setBordered(false);
-        search.setResponder(text -> list.update(getEntries(menu.getLocations(), text), menu.canModify()));
+        EditBox searchBar = this.addRenderableWidget(new EditBox(this.font, this.leftPos + 9, this.topPos + 24, 143, 11, CommonComponents.EMPTY));
+        searchBar.setMaxLength(32);
+        searchBar.setBordered(false);
+        searchBar.setResponder(text -> list.update(getEntries(menu.getLocations(), text)));
     }
 
-    private static Stream<LocationMenu.Location> getEntries(List<LocationMenu.Location> locations, String filter) {
+    private static Stream<Location> getEntries(List<Location> locations, String filter) {
         return locations.stream().filter(location -> filter.isBlank() || location.name().toLowerCase().contains(filter.toLowerCase()));
     }
 
@@ -78,10 +80,19 @@ public class LocationScreen extends AbstractContainerCursorScreen<LocationMenu> 
 
     @Override
     public boolean keyPressed(int i, int j, int k) {
-        if (this.minecraft.options.keyInventory.matches(i, j)) {
-
+        if (getMc().options.keyInventory.matches(i, j)) {
             return true;
         }
         return super.keyPressed(i, j, k);
+    }
+
+    public void sendClick(String name) {
+        if (this.getMc().gameMode == null) return;
+        for (int i = 0; i < this.menu.getLocations().size(); i++) {
+            if (this.menu.getLocations().get(i).name().equals(name)) {
+                this.getMc().gameMode.handleInventoryButtonClick(menu.containerId, i);
+                break;
+            }
+        }
     }
 }

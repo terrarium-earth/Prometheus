@@ -81,4 +81,9 @@ public class WarpHandler extends SavedData {
         WarpHandler data = read(player.level);
         return data.warps.keySet();
     }
+
+    public static Map<String, GlobalPos> getWarpsMap(Player player) {
+        WarpHandler data = read(player.level);
+        return data.warps;
+    }
 }

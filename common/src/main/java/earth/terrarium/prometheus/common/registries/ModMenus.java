@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.menus.InvseeMenu;
-import earth.terrarium.prometheus.common.menus.LocationMenu;
+import earth.terrarium.prometheus.common.menus.location.LocationMenu;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;

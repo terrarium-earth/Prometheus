@@ -5,13 +5,22 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import earth.terrarium.prometheus.common.handlers.WarpHandler;
+import earth.terrarium.prometheus.common.menus.location.Location;
+import earth.terrarium.prometheus.common.menus.location.LocationMenu;
+import earth.terrarium.prometheus.common.menus.location.LocationType;
+import earth.terrarium.prometheus.common.utils.ModUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerPlayer;
+
+import java.util.List;
+import java.util.Map;
 
 public class WarpCommand {
 
@@ -26,9 +35,13 @@ public class WarpCommand {
                 .then(add())
                 .then(remove())
                 .then(list())
+                .executes(context -> {
+                    WarpCommand.openWarpMenu(context.getSource().getPlayerOrException());
+                    return 1;
+                })
         );
         dispatcher.register(Commands.literal("warp")
-                .then(Commands.argument("name", StringArgumentType.string())
+                .then(Commands.argument("name", StringArgumentType.greedyString())
                         .suggests(SUGGESTION_PROVIDER)
                         .executes(context -> {
                             WarpHandler.teleport(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
@@ -41,7 +54,7 @@ public class WarpCommand {
     private static ArgumentBuilder<CommandSourceStack, ?> add() {
         return Commands.literal("add")
                 .requires(source -> source.hasPermission(2))
-                .then(Commands.argument("name", StringArgumentType.string())
+                .then(Commands.argument("name", StringArgumentType.greedyString())
                         .executes(context -> {
                             WarpHandler.add(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
                             return 1;
@@ -53,7 +66,7 @@ public class WarpCommand {
     private static ArgumentBuilder<CommandSourceStack, ?> remove() {
         return Commands.literal("remove")
                 .requires(source -> source.hasPermission(2))
-                .then(Commands.argument("name", StringArgumentType.string())
+                .then(Commands.argument("name", StringArgumentType.greedyString())
                         .suggests(SUGGESTION_PROVIDER)
                         .executes(context -> {
                             WarpHandler.remove(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
@@ -82,5 +95,23 @@ public class WarpCommand {
                 ClickEvent.Action.RUN_COMMAND,
                 "/warp " + name
         )));
+    }
+
+    public static void openWarpMenu(ServerPlayer player) {
+        Map<String, GlobalPos> homes = WarpHandler.getWarpsMap(player);
+        List<Location> locations = homes.entrySet()
+                .stream()
+                .map(entry -> new Location(entry.getKey(), entry.getValue()))
+                .toList();
+
+        //TODO Change to a permission
+        int maxAmount = player.hasPermissions(2) ? Integer.MAX_VALUE : -1;
+
+        ModUtils.openMenu(
+                player,
+                (i, inventory, playerx) -> new LocationMenu(i, LocationType.WARP, maxAmount, locations),
+                Component.translatable("prometheus.locations.warp"),
+                buf -> LocationMenu.write(buf, LocationType.WARP, maxAmount, locations)
+        );
     }
 }

@@ -3,6 +3,7 @@ package earth.terrarium.prometheus.client.screens;
 import com.mojang.blaze3d.vertex.PoseStack;
 import earth.terrarium.prometheus.client.utils.ClientUtils;
 import earth.terrarium.prometheus.client.utils.CursorScreen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -11,6 +12,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public abstract class AbstractContainerCursorScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> implements CursorScreen {
 
@@ -52,5 +55,10 @@ public abstract class AbstractContainerCursorScreen<T extends AbstractContainerM
     @Override
     public void setCursor(Cursor cursor) {
         this.cursor = cursor;
+    }
+
+    @NotNull
+    protected Minecraft getMc() {
+        return Objects.requireNonNull(this.minecraft);
     }
 }

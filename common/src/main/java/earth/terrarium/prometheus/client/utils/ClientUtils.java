@@ -25,4 +25,8 @@ public class ClientUtils {
     public static void setDefault() {
         GLFW.glfwSetCursor(Minecraft.getInstance().getWindow().getWindow(), ClientUtils.DEFAULT_CURSOR);
     }
+
+    public static void sendCommand(String command) {
+        Minecraft.getInstance().getConnection().sendUnsignedCommand(command);
+    }
 }

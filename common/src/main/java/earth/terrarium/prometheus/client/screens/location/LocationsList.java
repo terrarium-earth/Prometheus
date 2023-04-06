@@ -1,4 +1,4 @@
-package earth.terrarium.prometheus.client.screens;
+package earth.terrarium.prometheus.client.screens.location;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefullib.client.components.selection.SelectionL
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.client.utils.CursorScreen;
-import earth.terrarium.prometheus.common.menus.LocationMenu;
+import earth.terrarium.prometheus.common.menus.location.Location;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -27,8 +27,8 @@ public class LocationsList extends SelectionList<LocationsList.Entry> {
         super(x, y, width, height, itemHeight, onSelection);
     }
 
-    public void update(Stream<LocationMenu.Location> locations, boolean canDelete) {
-        updateEntries(locations.map(location -> new Entry(this, location, canDelete)).toList());
+    public void update(Stream<Location> locations) {
+        updateEntries(locations.map(location -> new Entry(this, location)).toList());
     }
 
     @Override
@@ -40,47 +40,22 @@ public class LocationsList extends SelectionList<LocationsList.Entry> {
     public static class Entry extends ListEntry {
 
         private final LocationsList list;
-        private final LocationMenu.Location location;
-        private final boolean hasDelete;
+        private final Location location;
 
-        public Entry(LocationsList list, LocationMenu.Location location, boolean hasDelete) {
+        public Entry(LocationsList list, Location location) {
             this.list = list;
             this.location = location;
-            this.hasDelete = hasDelete;
         }
 
         @Override
         protected void render(@NotNull ScissorBoxStack scissorStack, @NotNull PoseStack stack, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
             RenderSystem.setShaderTexture(0, CONTAINER_BACKGROUND);
-            blit(stack, left, top, 0, 211, 160, 20);
-            renderButtons(stack, left, top, mouseX, mouseY);
+            blit(stack, left, top, 0, hovered ? 231 : 211, 160, 19);
 
             Minecraft.getInstance().font.drawShadow(stack, Component.literal(location.name()), left + 5, top + 5, 0xFFFFFF);
-        }
-
-        private void renderButtons(@NotNull PoseStack stack, int left, int top, int mouseX, int mouseY) {
-            if (hasDelete) {
-                renderButton(stack, left + 140, top + 2, mouseX, mouseY, "X");
-                renderButton(stack, left + 116, top + 2, mouseX, mouseY, ">");
-            } else {
-                renderButton(stack, left + 140, top + 2, mouseX, mouseY, ">");
+            if (Minecraft.getInstance().screen instanceof CursorScreen cursorScreen && hovered) {
+                cursorScreen.setCursor(CursorScreen.Cursor.POINTER);
             }
-        }
-
-        private void renderButton(PoseStack stack, int x, int y, int mouseX, int mouseY, String icon) {
-            RenderSystem.setShaderTexture(0, CONTAINER_BACKGROUND);
-            if (mouseX >= x && mouseX <= x + 16 && mouseY >= y && mouseY <= y + 16) {
-                blit(stack, x, y, 188, 16, 16, 16);
-                if (Minecraft.getInstance().screen instanceof CursorScreen cursorScreen) {
-                    cursorScreen.setCursor(CursorScreen.Cursor.POINTER);
-                }
-            } else {
-                blit(stack, x, y, 188, 0, 16, 16);
-            }
-            Component iconComponent = Component.literal(icon);
-            var font = Minecraft.getInstance().font;
-            int width = font.width(iconComponent);
-            font.drawShadow(stack, iconComponent, x + 1 + (16 - width) / 2f, y + 4f, 0xFFFFFF);
         }
 
         @Override
@@ -89,6 +64,10 @@ public class LocationsList extends SelectionList<LocationsList.Entry> {
         @Override
         public boolean isFocused() {
             return list.selected == this;
+        }
+
+        public String id() {
+            return location.name();
         }
     }
 }
