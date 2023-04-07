@@ -9,6 +9,7 @@ import earth.terrarium.prometheus.common.commands.cheating.FeedCommand;
 import earth.terrarium.prometheus.common.commands.cheating.FlyCommand;
 import earth.terrarium.prometheus.common.commands.cheating.GodModeCommand;
 import earth.terrarium.prometheus.common.commands.cheating.HealCommand;
+import earth.terrarium.prometheus.common.commands.testing.PermissionCommand;
 import earth.terrarium.prometheus.common.commands.utilities.HeadingCommand;
 import earth.terrarium.prometheus.common.commands.utilities.*;
 import net.minecraft.commands.CommandBuildContext;
@@ -33,5 +34,6 @@ public class ModCommands {
         HeadingCommand.register(dispatcher);
         TpToCommand.register(dispatcher);
         NicknameCommand.register(dispatcher);
+        PermissionCommand.register(dispatcher);
     }
 }

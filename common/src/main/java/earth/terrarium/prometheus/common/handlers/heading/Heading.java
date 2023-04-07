@@ -2,8 +2,10 @@ package earth.terrarium.prometheus.common.handlers.heading;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -39,6 +41,15 @@ public enum Heading {
 
     public Component getDisplayName() {
         return Component.translatable(name);
+    }
+
+    public String permission() {
+        return "prometheus.heading." + this.name().toLowerCase(Locale.ROOT);
+    }
+
+    public boolean hasPermission(@Nullable Player player) {
+        if (this == NONE) return true;
+        return player != null && PermissionApi.API.getPermission(player, this.permission()).isTrue();
     }
 
     public static Heading fromId(byte id) {

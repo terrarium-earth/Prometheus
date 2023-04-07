@@ -11,10 +11,13 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.List;
+
 public class HeadingCommand {
 
     private static final SuggestionProvider<CommandSourceStack> SUGGEST_HEADINGS = (context, builder) -> {
-        SharedSuggestionProvider.suggest(Heading.VALUES, builder,
+        List<Heading> headings = Heading.VALUES.stream().filter(heading -> heading.hasPermission(context.getSource().getPlayer())).toList();
+        SharedSuggestionProvider.suggest(headings, builder,
                 heading -> heading.name().charAt(0) + heading.name().substring(1).toLowerCase(),
                 Heading::getDisplayName);
         return builder.buildFuture();
@@ -27,9 +30,13 @@ public class HeadingCommand {
                             Heading heading = Heading.fromCommand(context);
                             if (heading != null) {
                                 ServerPlayer player = context.getSource().getPlayerOrException();
-                                //TODO Check if they have the permission to use this heading
-                                HeadingHandler.set(player, heading);
-                                player.sendSystemMessage(Component.translatable("prometheus.heading.set", heading.getDisplayName()));
+                                if (HeadingHandler.set(player, heading)) {
+                                    player.sendSystemMessage(Component.translatable("prometheus.heading.set", heading.getDisplayName()));
+                                } else {
+                                    player.sendSystemMessage(Component.translatable("prometheus.heading.invalid_permission", heading.getDisplayName()));
+                                }
+                            } else {
+                                context.getSource().sendFailure(Component.translatable("prometheus.heading.invalid", StringArgumentType.getString(context, "name")));
                             }
                             return 1;
                         })));

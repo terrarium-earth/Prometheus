@@ -14,7 +14,11 @@
             "earth.terrarium.prometheus.fabric.PrometheusFabric"
         ],
         "client": [
-            "earth.terrarium.prometheus.client.PrometheusClient::init"
+            "earth.terrarium.prometheus.client.PrometheusClient::init",
+            "earth.terrarium.prometheus.Prometheus::postInit"
+        ],
+        "server": [
+            "earth.terrarium.prometheus.Prometheus::postInit"
         ]
     },
     "mixins": [

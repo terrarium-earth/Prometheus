@@ -41,13 +41,17 @@ public class HeadingHandler extends SavedData {
         return storage.computeIfAbsent(HeadingHandler::new, HeadingHandler::new, "prometheus_headings");
     }
 
-    public static void set(Player player, Heading heading) {
+    public static boolean set(Player player, Heading heading) {
         final HeadingHandler handler = read(player.level);
-        handler.headings.put(player.getUUID(), heading);
-        if (player instanceof HeadingEntityHook hook) {
-            hook.prometheus$setHeadingAndUpdate(heading);
+        if (heading.hasPermission(player)) {
+            handler.headings.put(player.getUUID(), heading);
+            if (player instanceof HeadingEntityHook hook) {
+                hook.prometheus$setHeadingAndUpdate(heading);
+            }
+            handler.setDirty();
+            return true;
         }
-        handler.setDirty();
+        return false;
     }
 
     public static Heading get(Player player) {

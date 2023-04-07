@@ -31,7 +31,9 @@
     "prometheus.heading.name.none": "nothing.",
 
     "prometheus.heading.join": "Heading is set to %s from last login.",
-    "prometheus.heading.set": "Heading is set to %s.",
+    "prometheus.heading.set": "Heading is set to %s",
+    "prometheus.heading.invalid_permission": "You do not have permission to set your heading to %s",
+    "prometheus.heading.invalid": "Invalid heading %s",
 
     "prometheus.locations.home": "Homes",
     "prometheus.locations.home.add": "Add A Home",
