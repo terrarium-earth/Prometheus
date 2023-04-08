@@ -5,8 +5,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
+import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import earth.terrarium.prometheus.Prometheus;
-import earth.terrarium.prometheus.client.utils.CursorScreen;
 import earth.terrarium.prometheus.common.menus.location.Location;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -50,7 +50,7 @@ public class LocationsList extends SelectionList<LocationsList.Entry> {
         @Override
         protected void render(@NotNull ScissorBoxStack scissorStack, @NotNull PoseStack stack, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
             RenderSystem.setShaderTexture(0, CONTAINER_BACKGROUND);
-            blit(stack, left, top, 0, hovered ? 231 : 211, 160, 19);
+            blit(stack, left, top, 0, hovered ? 231 : 211, 160, 20);
 
             Minecraft.getInstance().font.drawShadow(stack, Component.literal(location.name()), left + 5, top + 5, 0xFFFFFF);
             if (Minecraft.getInstance().screen instanceof CursorScreen cursorScreen && hovered) {

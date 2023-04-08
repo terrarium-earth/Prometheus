@@ -3,6 +3,7 @@ package earth.terrarium.prometheus.client.screens;
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefullib.client.screens.AbstractContainerCursorScreen;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.menus.InvseeMenu;
 import net.minecraft.client.gui.components.ImageButton;
@@ -40,7 +41,7 @@ public class InvseeScreen extends AbstractContainerCursorScreen<InvseeMenu> impl
             }
         })).setTooltip(Tooltip.create(Component.translatable("prometheus.invsee.enderchest")));
         try {
-            this.renderedPlayer = new RemotePlayer(getMc().level, new GameProfile(this.menu.getPlayerUUID(), "Fake Inventory Player"));
+            this.renderedPlayer = new RemotePlayer(this.minecraft.level, new GameProfile(this.menu.getPlayerUUID(), "Fake Inventory Player"));
         }catch (Exception ignored){}
     }
 

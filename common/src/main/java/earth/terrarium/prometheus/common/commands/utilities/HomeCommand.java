@@ -4,7 +4,9 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import earth.terrarium.prometheus.api.roles.RoleApi;
 import earth.terrarium.prometheus.common.handlers.HomeHandler;
+import earth.terrarium.prometheus.common.handlers.role.options.defaults.HomeOptions;
 import earth.terrarium.prometheus.common.menus.location.Location;
 import earth.terrarium.prometheus.common.menus.location.LocationMenu;
 import earth.terrarium.prometheus.common.menus.location.LocationType;
@@ -21,6 +23,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class HomeCommand {
 
@@ -104,11 +107,13 @@ public class HomeCommand {
                 .map(entry -> new Location(entry.getKey(), entry.getValue()))
                 .toList();
 
+        int maxHomes = Objects.requireNonNull(RoleApi.API.getOption(player, HomeOptions.SERIALIZER)).max();
+
         ModUtils.openMenu(
                 player,
-                (i, inventory, playerx) -> new LocationMenu(i, LocationType.HOME, HomeHandler.MAX_HOMES, locations),
+                (i, inventory, playerx) -> new LocationMenu(i, LocationType.HOME, maxHomes, locations),
                 Component.translatable("prometheus.locations.home"),
-                buf -> LocationMenu.write(buf, LocationType.HOME, HomeHandler.MAX_HOMES, locations)
+                buf -> LocationMenu.write(buf, LocationType.HOME, maxHomes, locations)
         );
     }
 }

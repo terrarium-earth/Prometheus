@@ -1,5 +1,7 @@
 package earth.terrarium.prometheus.common.handlers;
 
+import earth.terrarium.prometheus.api.roles.RoleApi;
+import earth.terrarium.prometheus.common.handlers.role.options.defaults.HomeOptions;
 import earth.terrarium.prometheus.common.utils.ModUtils;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
@@ -15,8 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class HomeHandler extends SavedData {
-
-    public static final int MAX_HOMES = 5;
 
     private static final HomeHandler CLIENT_SIDE = new HomeHandler();
 
@@ -57,7 +57,9 @@ public class HomeHandler extends SavedData {
     public static void add(Player player, String name) {
         HomeHandler data = read(player.level);
         Map<String, GlobalPos> homes = data.homes.computeIfAbsent(player.getUUID(), uuid -> new HashMap<>());
-        if (homes.size() >= MAX_HOMES) {
+        int maxHomes = Objects.requireNonNull(RoleApi.API.getOption(player, HomeOptions.SERIALIZER)).max();
+
+        if (homes.size() >= maxHomes) {
             player.sendSystemMessage(Component.literal("You have reached the maximum number of homes"));
             return;
         } else if (homes.containsKey(name)) {

@@ -20,6 +20,10 @@ public class RoleMap {
         return uuid;
     }
 
+    public void removeRole(UUID id) {
+        roles.removeIf(pair -> pair.getFirst().equals(id));
+    }
+
     public UUID setRole(UUID uuid, Role role) {
         int index = getRoleIndex(uuid);
         if (index == -1) {
@@ -91,6 +95,12 @@ public class RoleMap {
             identifiers.add(pair.getFirst());
         }
         return identifiers;
+    }
+
+    public List<Pair<UUID, Role>> getRoles() {
+        List<Pair<UUID, Role>> roles = new ArrayList<>(this.roles);
+        roles.add(Pair.of(DEFAULT_ROLE, defaultRole));
+        return roles;
     }
 
     public void load(CompoundTag tag) {

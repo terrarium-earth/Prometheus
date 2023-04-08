@@ -36,9 +36,17 @@
     "prometheus.heading.invalid": "Invalid heading %s",
 
     "prometheus.locations.home": "Homes",
-    "prometheus.locations.home.add": "Add A Home",
+    "prometheus.locations.home.add": "Add a Home",
     "prometheus.locations.warp": "Warps",
-    "prometheus.locations.warp.add": "Add A Warp",
+    "prometheus.locations.warp.add": "Add a Warp",
     "prometheus.locations.add": "Add New Location:",
-    "prometheus.locations.save": "Save"
+
+    "prometheus.ui.unsaved_changes": "Unsaved Changes!",
+    "prometheus.ui.save": "Save",
+    "prometheus.ui.remove": "Remove",
+    "prometheus.ui.undo": "Undo",
+    "prometheus.ui.move_up": "Move Up",
+    "prometheus.ui.move_down": "Move Down",
+    "prometheus.ui.edit": "Edit",
+    "prometheus.ui.add": "Add"
 }

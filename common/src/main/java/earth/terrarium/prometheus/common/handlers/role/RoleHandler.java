@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -91,6 +92,14 @@ public class RoleHandler extends SavedData {
         return id;
     }
 
+    public static void removeRole(Player player, UUID id) {
+        RoleHandler data = read(player.level);
+        data.roles.removeRole(id);
+        data.players.values().forEach(ids -> ids.remove(id));
+        data.setDirty();
+        updatePlayers(player.getServer());
+    }
+
     public static RoleMap getRoles(Player player) {
         RoleHandler data = read(player.level);
         return data.roles;
@@ -100,7 +109,25 @@ public class RoleHandler extends SavedData {
         RoleHandler data = read(player.level);
         data.roles.reorder(newOrder);
         data.setDirty();
-        MinecraftServer server = player.getServer();
+        updatePlayers(player.getServer());
+    }
+
+    public static Role getRole(Player player, UUID id) {
+        RoleHandler data = read(player.level);
+        return data.roles.getRole(id);
+    }
+
+    public static Role getHighestRole(Player player) {
+        RoleHandler data = read(player.level);
+        List<Role> roles = data.roles.getRoles(data.players.getOrDefault(player.getUUID(), Set.of()));
+        return roles.get(0);
+    }
+
+    public static boolean canModifyRoles(Player player) {
+        return player.hasPermissions(2);
+    }
+
+    private static void updatePlayers(@Nullable MinecraftServer server) {
         if (server == null) return;
         for (var listPlayer : server.getPlayerList().getPlayers()) {
             if (listPlayer instanceof PermissionHolder holder) {

@@ -1,10 +1,7 @@
 package earth.terrarium.prometheus.common.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import earth.terrarium.prometheus.common.commands.admin.InvseeCommand;
-import earth.terrarium.prometheus.common.commands.admin.MuteCommand;
-import earth.terrarium.prometheus.common.commands.admin.TpToCommand;
-import earth.terrarium.prometheus.common.commands.admin.WarpCommand;
+import earth.terrarium.prometheus.common.commands.admin.*;
 import earth.terrarium.prometheus.common.commands.cheating.FeedCommand;
 import earth.terrarium.prometheus.common.commands.cheating.FlyCommand;
 import earth.terrarium.prometheus.common.commands.cheating.GodModeCommand;
@@ -35,5 +32,6 @@ public class ModCommands {
         TpToCommand.register(dispatcher);
         NicknameCommand.register(dispatcher);
         PermissionCommand.register(dispatcher);
+        RolesCommand.register(dispatcher);
     }
 }

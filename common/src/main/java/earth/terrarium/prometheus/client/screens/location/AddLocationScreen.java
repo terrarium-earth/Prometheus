@@ -3,6 +3,7 @@ package earth.terrarium.prometheus.client.screens.location;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import earth.terrarium.prometheus.client.utils.ClientUtils;
+import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.menus.location.LocationType;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.network.messages.server.AddLocationPacket;
@@ -17,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 public class AddLocationScreen extends Screen {
 
     private static final Component TITLE = Component.translatable("prometheus.locations.add");
-    private static final Component SAVE = Component.translatable("prometheus.locations.save");
 
     private final LocationType type;
 
@@ -40,7 +40,7 @@ public class AddLocationScreen extends Screen {
                 .build()
         );
         addRenderableWidget(
-                Button.builder(SAVE, button -> NetworkHandler.CHANNEL.sendToServer(new AddLocationPacket(type, text.getValue())))
+                Button.builder(ConstantComponents.SAVE, button -> NetworkHandler.CHANNEL.sendToServer(new AddLocationPacket(type, text.getValue())))
                 .bounds((int) ((width / 2f) + 20), (int) ((height / 2f) + 10), 100, 20)
                 .build()
         );

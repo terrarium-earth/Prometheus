@@ -3,6 +3,7 @@ package earth.terrarium.prometheus.client;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import earth.terrarium.prometheus.client.screens.InvseeScreen;
 import earth.terrarium.prometheus.client.screens.location.LocationScreen;
+import earth.terrarium.prometheus.client.screens.roles.RolesScreen;
 import earth.terrarium.prometheus.common.registries.ModMenus;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -19,6 +20,7 @@ public class PrometheusClient {
     public static void init() {
         register(ModMenus.INVSEE.get(), InvseeScreen::new);
         register(ModMenus.LOCATION.get(), LocationScreen::new);
+        register(ModMenus.ROLES.get(), RolesScreen::new);
     }
 
     @ExpectPlatform

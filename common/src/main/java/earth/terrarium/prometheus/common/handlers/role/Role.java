@@ -45,7 +45,7 @@ public record Role(Map<String, TriState> permissions, Map<ResourceLocation, Role
      * @return returns Optional.empty() if the data is not present
      * @throws IllegalArgumentException if serializer on data does not match data passed in.
      */
-    public <T extends RoleOption<T>> Optional<T> getOptionalData(RoleOptionSerializer<T> serializer) {
+    public <T extends RoleOption<T>> Optional<T> getOptionalOption(RoleOptionSerializer<T> serializer) {
         RoleOption<?> data = options.get(serializer.id());
         if (data != null) {
             if (data.serializer().equals(serializer)) {
@@ -61,8 +61,8 @@ public record Role(Map<String, TriState> permissions, Map<ResourceLocation, Role
      * @throws IllegalArgumentException if serializer on data does not match data passed in.
      */
     @Nullable
-    public <T extends RoleOption<T>> T getData(RoleOptionSerializer<T> serializer) {
-        return getOptionalData(serializer).orElse(serializer.defaultValue());
+    public <T extends RoleOption<T>> T getOption(RoleOptionSerializer<T> serializer) {
+        return getOptionalOption(serializer).orElse(serializer.defaultValue());
     }
 
     public CompoundTag toTag() {

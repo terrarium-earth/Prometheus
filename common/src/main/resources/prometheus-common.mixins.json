@@ -8,6 +8,7 @@
         "HeadingPlayerMixin",
         "NickedPlayerMixin",
         "PermissionPlayerMixin",
+        "RolePlayerMixin",
         "ServerGamePacketListenerImplMixin"
     ],
     "client": [

@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.menus.InvseeMenu;
+import earth.terrarium.prometheus.common.menus.RolesMenu;
 import earth.terrarium.prometheus.common.menus.location.LocationMenu;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -20,6 +21,7 @@ public class ModMenus {
 
     public static final RegistryEntry<MenuType<InvseeMenu>> INVSEE = MENUS.register("invsee", () -> createMenu(InvseeMenu::new));
     public static final RegistryEntry<MenuType<LocationMenu>> LOCATION = MENUS.register("location", () -> createMenu(LocationMenu::new));
+    public static final RegistryEntry<MenuType<RolesMenu>> ROLES = MENUS.register("roles", () -> createMenu(RolesMenu::new));
 
     @ExpectPlatform
     private static <T extends AbstractContainerMenu> MenuType<T> createMenu(MenuSupplier<T> supplier) {
