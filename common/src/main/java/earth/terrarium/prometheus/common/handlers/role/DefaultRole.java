@@ -3,7 +3,7 @@ package earth.terrarium.prometheus.common.handlers.role;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.prometheus.api.TriState;
 import earth.terrarium.prometheus.api.roles.options.RoleOption;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.DisplayOptions;
+import earth.terrarium.prometheus.common.handlers.role.options.defaults.CosmeticOptions;
 import earth.terrarium.prometheus.common.handlers.role.options.defaults.HomeOptions;
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
@@ -19,7 +19,7 @@ public class DefaultRole {
     });
 
     private static final Map<ResourceLocation, RoleOption<?>> OPTIONS = Util.make(new HashMap<>(), map -> {
-        map.put(DisplayOptions.SERIALIZER.id(), new DisplayOptions("@Everyone", '⛏', Color.DEFAULT));
+        map.put(CosmeticOptions.SERIALIZER.id(), new CosmeticOptions("@Everyone", "⛏", Color.DEFAULT));
         map.put(HomeOptions.SERIALIZER.id(), new HomeOptions(5));
     });
 

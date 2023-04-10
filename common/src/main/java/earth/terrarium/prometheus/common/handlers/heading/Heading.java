@@ -44,7 +44,7 @@ public enum Heading {
     }
 
     public String permission() {
-        return "prometheus.heading." + this.name().toLowerCase(Locale.ROOT);
+        return "headings." + this.name().toLowerCase(Locale.ROOT);
     }
 
     public boolean hasPermission(@Nullable Player player) {

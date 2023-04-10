@@ -25,12 +25,17 @@ public class RoleMap {
     }
 
     public UUID setRole(UUID uuid, Role role) {
+        if (uuid.equals(DEFAULT_ROLE)) {
+            defaultRole = role;
+            return uuid;
+        }
         int index = getRoleIndex(uuid);
         if (index == -1) {
             roles.add(Pair.of(uuid, role));
         } else {
             roles.set(index, Pair.of(uuid, role));
         }
+
         return uuid;
     }
 
@@ -63,6 +68,15 @@ public class RoleMap {
         for (Pair<UUID, Role> pair : roles) {
             if (pair.getFirst().equals(uuid)) {
                 return pair.getSecond();
+            }
+        }
+        return null;
+    }
+
+    public UUID getRoleId(Role role) {
+        for (Pair<UUID, Role> pair : roles) {
+            if (pair.getSecond().equals(role)) {
+                return pair.getFirst();
             }
         }
         return null;

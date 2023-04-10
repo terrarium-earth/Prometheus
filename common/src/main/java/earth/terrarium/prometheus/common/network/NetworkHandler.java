@@ -5,7 +5,8 @@ import com.teamresourceful.resourcefullib.common.networking.base.NetworkDirectio
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.network.messages.server.AddLocationPacket;
 import earth.terrarium.prometheus.common.network.messages.server.AddRolePacket;
-import earth.terrarium.prometheus.common.network.messages.server.RemoveRolePacket;
+import earth.terrarium.prometheus.common.network.messages.server.ChangeRolesPacket;
+import earth.terrarium.prometheus.common.network.messages.server.SaveRolePacket;
 
 public class NetworkHandler {
 
@@ -14,6 +15,7 @@ public class NetworkHandler {
     public static void init() {
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, AddLocationPacket.ID, AddLocationPacket.HANDLER, AddLocationPacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, AddRolePacket.ID, AddRolePacket.HANDLER, AddRolePacket.class);
-        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, RemoveRolePacket.ID, RemoveRolePacket.HANDLER, RemoveRolePacket.class);
+        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, ChangeRolesPacket.ID, ChangeRolesPacket.HANDLER, ChangeRolesPacket.class);
+        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, SaveRolePacket.ID, SaveRolePacket.HANDLER, SaveRolePacket.class);
     }
 }

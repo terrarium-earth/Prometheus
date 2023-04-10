@@ -9,7 +9,7 @@ import earth.terrarium.prometheus.api.TriState;
 import earth.terrarium.prometheus.common.handlers.permission.PermissionHolder;
 import earth.terrarium.prometheus.common.handlers.role.Role;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.DisplayOptions;
+import earth.terrarium.prometheus.common.handlers.role.options.defaults.CosmeticOptions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -49,14 +49,14 @@ public class PermissionCommand {
         dispatcher.register(Commands.literal("getoption").then(
                 Commands.argument("id", UuidArgument.uuid()).suggests(SUGGEST_IDS)
                         .executes(context -> {
-                            DisplayOptions option = RoleHandler.getRoles(context.getSource().getPlayerOrException())
+                            CosmeticOptions option = RoleHandler.getRoles(context.getSource().getPlayerOrException())
                                     .getRole(UuidArgument.getUuid(context, "id"))
-                                    .getOption(DisplayOptions.SERIALIZER);
+                                    .getOption(CosmeticOptions.SERIALIZER);
                             if (option == null) {
                                 System.out.println("null");
                                 return 1;
                             }
-                            DisplayOptions.SERIALIZER.codec().encodeStart(JsonOps.INSTANCE, option)
+                            CosmeticOptions.SERIALIZER.codec().encodeStart(JsonOps.INSTANCE, option)
                                     .result().ifPresent(System.out::println);
                             return 1;
                         })
@@ -66,7 +66,7 @@ public class PermissionCommand {
                         .executes(context -> {
                             RoleHandler.getRoles(context.getSource().getPlayerOrException())
                                     .getRole(UuidArgument.getUuid(context, "id"))
-                                    .setData(new DisplayOptions("Test", 'L', Color.RAINBOW));
+                                    .setData(new CosmeticOptions("Test", "L", Color.RAINBOW));
                             return 1;
                         })
         ));

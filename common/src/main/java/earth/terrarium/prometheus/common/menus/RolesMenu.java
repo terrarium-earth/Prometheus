@@ -5,9 +5,10 @@ import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefullib.common.networking.PacketHelper;
 import earth.terrarium.prometheus.common.handlers.role.Role;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.server.RemoveRolePacket;
+import earth.terrarium.prometheus.common.network.messages.server.ChangeRolesPacket;
 import earth.terrarium.prometheus.common.registries.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -23,10 +24,8 @@ public class RolesMenu extends AbstractContainerMenu {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final List<UUID> removed = new ArrayList<>();
     private List<Pair<UUID, Role>> roles;
     private List<Pair<UUID, Role>> newRoles;
-
 
     public RolesMenu(int i, Inventory inventory, FriendlyByteBuf buf) {
         this(i, read(buf));
@@ -50,6 +49,10 @@ public class RolesMenu extends AbstractContainerMenu {
 
     @Override
     public boolean clickMenuButton(@NotNull Player player, int i) {
+        if (i < newRoles.size() && i >= 0 && player instanceof ServerPlayer serverPlayer) {
+            RoleEditMenu.open(serverPlayer, newRoles, i);
+            return true;
+        }
         return false;
     }
 
@@ -59,7 +62,6 @@ public class RolesMenu extends AbstractContainerMenu {
 
     public void remove(UUID id) {
         newRoles.removeIf(pair -> pair.getFirst().equals(id));
-        removed.add(id);
     }
 
     public List<Pair<UUID, Role>> getRoles() {
@@ -68,15 +70,20 @@ public class RolesMenu extends AbstractContainerMenu {
 
     public void reset() {
         this.newRoles = new ArrayList<>(roles);
-        this.removed.clear();
     }
 
     public void save() {
-        if (!this.removed.isEmpty()) {
-            NetworkHandler.CHANNEL.sendToServer(new RemoveRolePacket(this.removed));
-        }
         this.roles = new ArrayList<>(newRoles);
-        //TODO send packet to reset
+        NetworkHandler.CHANNEL.sendToServer(new ChangeRolesPacket(this.roles.stream().map(Pair::getFirst).toList()));
+    }
+
+    public int getIndexOf(UUID id) {
+        for (int i = 0; i < newRoles.size(); i++) {
+            if (newRoles.get(i).getFirst().equals(id)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public boolean areRolesDifferent() {

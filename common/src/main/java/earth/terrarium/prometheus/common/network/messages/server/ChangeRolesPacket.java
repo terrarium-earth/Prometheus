@@ -15,10 +15,10 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.List;
 import java.util.UUID;
 
-public record RemoveRolePacket(List<UUID> ids) implements Packet<RemoveRolePacket> {
+public record ChangeRolesPacket(List<UUID> ids) implements Packet<ChangeRolesPacket> {
 
-    public static final PacketHandler<RemoveRolePacket> HANDLER = new Handler();
-    public static final ResourceLocation ID = new ResourceLocation(Prometheus.MOD_ID, "remove_role");
+    public static final PacketHandler<ChangeRolesPacket> HANDLER = new Handler();
+    public static final ResourceLocation ID = new ResourceLocation(Prometheus.MOD_ID, "change_roles");
 
     @Override
     public ResourceLocation getID() {
@@ -26,39 +26,33 @@ public record RemoveRolePacket(List<UUID> ids) implements Packet<RemoveRolePacke
     }
 
     @Override
-    public PacketHandler<RemoveRolePacket> getHandler() {
+    public PacketHandler<ChangeRolesPacket> getHandler() {
         return HANDLER;
     }
 
-    private static class Handler implements PacketHandler<RemoveRolePacket> {
+    private static class Handler implements PacketHandler<ChangeRolesPacket> {
 
         @Override
-        public void encode(RemoveRolePacket message, FriendlyByteBuf buffer) {
+        public void encode(ChangeRolesPacket message, FriendlyByteBuf buffer) {
             buffer.writeCollection(message.ids, FriendlyByteBuf::writeUUID);
         }
 
         @Override
-        public RemoveRolePacket decode(FriendlyByteBuf buffer) {
-            return new RemoveRolePacket(buffer.readList(FriendlyByteBuf::readUUID));
+        public ChangeRolesPacket decode(FriendlyByteBuf buffer) {
+            return new ChangeRolesPacket(buffer.readList(FriendlyByteBuf::readUUID));
         }
 
         @Override
-        public PacketContext handle(RemoveRolePacket message) {
+        public PacketContext handle(ChangeRolesPacket message) {
             return (player, level) -> {
                 if (player instanceof ServerPlayer serverPlayer && RoleHandler.canModifyRoles(player)) {
-                    boolean loserTriedToRemoveTheirHighestRole = false;
-                    for (UUID id : message.ids) {
-                        Role role = RoleHandler.getRole(player, id);
-                        if (RoleHandler.getHighestRole(player) == role) {
-                            loserTriedToRemoveTheirHighestRole = true;
-                        } else {
-                            RoleHandler.removeRole(player, id);
-                        }
-                    }
-                    if (loserTriedToRemoveTheirHighestRole) {
+                    Role highestRole = RoleHandler.getHighestRole(player);
+                    UUID highestRoleUUID = RoleHandler.getRoles(player).getRoleId(highestRole);
+                    if (highestRoleUUID != null && !message.ids.contains(highestRoleUUID)) {
                         player.sendSystemMessage(Component.literal("You cannot remove your highest role!"));
                         serverPlayer.closeContainer();
                     } else {
+                        RoleHandler.reorder(player, message.ids);
                         RolesCommand.openRolesMenu(serverPlayer);
                     }
                 }

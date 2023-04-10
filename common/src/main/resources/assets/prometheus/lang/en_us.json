@@ -43,10 +43,24 @@
 
     "prometheus.ui.unsaved_changes": "Unsaved Changes!",
     "prometheus.ui.save": "Save",
+    "prometheus.ui.back": "Back",
     "prometheus.ui.remove": "Remove",
     "prometheus.ui.undo": "Undo",
     "prometheus.ui.move_up": "Move Up",
     "prometheus.ui.move_down": "Move Down",
     "prometheus.ui.edit": "Edit",
-    "prometheus.ui.add": "Add"
+    "prometheus.ui.add": "Add",
+    "prometheus.ui.next": "Next",
+    "prometheus.ui.prev": "Previous",
+
+    "prometheus.roles.edit": "Edit Role — %s",
+    "option.prometheus.permissions": "Permissions",
+    "option.prometheus.homes/v1": "Homes",
+    "option.prometheus.cosmetics/v1": "Cosmetics",
+
+    "headings.streaming.permission": "Can set Streaming heading",
+    "headings.recording.permission": "Can set Recording heading",
+    "headings.afk.permission": "Can set AFK heading",
+    "headings.dnd.permission": "Can set DND heading",
+    "headings.music.permission": "Can set Music heading"
 }

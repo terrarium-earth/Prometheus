@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
+import com.teamresourceful.resourcefullib.client.utils.CursorUtils;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.menus.location.Location;
 import net.minecraft.client.Minecraft;
@@ -53,9 +54,7 @@ public class LocationsList extends SelectionList<LocationsList.Entry> {
             blit(stack, left, top, 0, hovered ? 231 : 211, 160, 20);
 
             Minecraft.getInstance().font.drawShadow(stack, Component.literal(location.name()), left + 5, top + 5, 0xFFFFFF);
-            if (Minecraft.getInstance().screen instanceof CursorScreen cursorScreen && hovered) {
-                cursorScreen.setCursor(CursorScreen.Cursor.POINTER);
-            }
+            CursorUtils.setCursor(hovered, CursorScreen.Cursor.POINTER);
         }
 
         @Override

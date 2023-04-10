@@ -11,6 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -51,6 +52,10 @@ public final class OptionRegistry {
     @Nullable
     public RoleOptionSerializer<?> get(ResourceLocation id) {
         return this.serializers.get(id);
+    }
+
+    public List<RoleOptionSerializer<?>> getAll() {
+        return List.copyOf(this.serializers.values());
     }
 
     @SuppressWarnings("unchecked")

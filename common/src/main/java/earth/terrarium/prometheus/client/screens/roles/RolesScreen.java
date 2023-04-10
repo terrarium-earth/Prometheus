@@ -4,11 +4,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.screens.AbstractContainerCursorScreen;
 import earth.terrarium.prometheus.Prometheus;
+import earth.terrarium.prometheus.client.screens.roles.editing.RoleEditScreen;
 import earth.terrarium.prometheus.client.utils.MouseLocationFix;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.menus.RolesMenu;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.network.messages.server.AddRolePacket;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
@@ -100,8 +102,8 @@ public class RolesScreen extends AbstractContainerCursorScreen<RolesMenu> implem
         this.editButton = this.addRenderableWidget(button(this.leftPos + 157, this.topPos + 99, 12, 12, 224, 0, 12, CONTAINER_BACKGROUND, button -> {
             if (this.saveButton.active) {
                 this.timeSinceLastSaveWarning = System.currentTimeMillis();
-            } else {
-                //TODO EDIT PACKET
+            } else if (Minecraft.getInstance().gameMode != null && this.selected != null) {
+                Minecraft.getInstance().gameMode.handleInventoryButtonClick(this.menu.containerId, this.menu.getIndexOf(this.selected.id()));
             }
         }, ConstantComponents.EDIT));
         this.editButton.active = false;
@@ -159,7 +161,7 @@ public class RolesScreen extends AbstractContainerCursorScreen<RolesMenu> implem
     @Override
     public void removed() {
         super.removed();
-        MouseLocationFix.setFix(this.getClass());
+        MouseLocationFix.setFix(clas -> clas == RolesScreen.class || clas == RoleEditScreen.class);
     }
 
     private static ImageButton button(int x, int y, int width, int height, int u, int v, int vOffset, ResourceLocation resourceLocation, Button.OnPress onPress, Component component) {

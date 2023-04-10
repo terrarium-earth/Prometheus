@@ -92,10 +92,9 @@ public class RoleHandler extends SavedData {
         return id;
     }
 
-    public static void removeRole(Player player, UUID id) {
+    public static void setRole(Player player, UUID uuid, Role role) {
         RoleHandler data = read(player.level);
-        data.roles.removeRole(id);
-        data.players.values().forEach(ids -> ids.remove(id));
+        data.roles.setRole(uuid, role);
         data.setDirty();
         updatePlayers(player.getServer());
     }
@@ -110,11 +109,6 @@ public class RoleHandler extends SavedData {
         data.roles.reorder(newOrder);
         data.setDirty();
         updatePlayers(player.getServer());
-    }
-
-    public static Role getRole(Player player, UUID id) {
-        RoleHandler data = read(player.level);
-        return data.roles.getRole(id);
     }
 
     public static Role getHighestRole(Player player) {

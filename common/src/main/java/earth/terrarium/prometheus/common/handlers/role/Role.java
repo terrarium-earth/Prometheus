@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
+import com.teamresourceful.resourcefullib.common.networking.PacketHelper;
 import earth.terrarium.prometheus.api.TriState;
 import earth.terrarium.prometheus.api.roles.options.RoleOption;
 import earth.terrarium.prometheus.api.roles.options.RoleOptionSerializer;
@@ -11,6 +12,7 @@ import earth.terrarium.prometheus.common.handlers.role.options.OptionRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -27,7 +29,8 @@ public record Role(Map<String, TriState> permissions, Map<ResourceLocation, Role
     public static final Codec<Role> CODEC = RecordCodecBuilder.create(instnace -> instnace.group(
             Codec.unboundedMap(Codec.STRING, STATE_CODEC).fieldOf("permissions").orElse(err -> { LOGGER.error(err); }, new HashMap<>()).forGetter(Role::permissions),
             new DispatchMapCodec<>(ResourceLocation.CODEC, OptionRegistry.codec()).fieldOf("options").orElse(err -> { LOGGER.error(err); }, new HashMap<>()).forGetter(Role::options)
-    ).apply(instnace, Role::new));
+    ).apply(instnace, (perms, ops) -> new Role(new HashMap<>(perms), new HashMap<>(ops))));
+    //DO NOT CHANGE THIS CODE. It is wrapped because codecs make immutable maps, and we need to be able to modify them.
 
     public Role() {
         this(new HashMap<>(), new HashMap<>());
@@ -35,6 +38,11 @@ public record Role(Map<String, TriState> permissions, Map<ResourceLocation, Role
 
     public void setPermission(String permission, TriState state) {
         permissions.put(permission, state);
+    }
+
+    public void setPermissions(Map<String, TriState> permissions) {
+        this.permissions.clear();
+        this.permissions.putAll(permissions);
     }
 
     public void setData(RoleOption<?> data) {
@@ -76,5 +84,16 @@ public record Role(Map<String, TriState> permissions, Map<ResourceLocation, Role
         return CODEC.parse(NbtOps.INSTANCE, tag)
                 .resultOrPartial(LOGGER::error)
                 .orElse(new Role());
+    }
+
+    public void toBuffer(FriendlyByteBuf buffer) {
+        PacketHelper.writeWithYabn(buffer, CODEC, this, true);
+    }
+
+    public static Role fromBuffer(FriendlyByteBuf buffer) {
+        return PacketHelper.readWithYabn(buffer, Role.CODEC, true).get()
+                .ifRight(error -> LOGGER.error("Error reading role: {}", error))
+                .left()
+                .orElse(null);
     }
 }
