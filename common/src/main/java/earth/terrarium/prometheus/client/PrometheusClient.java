@@ -12,6 +12,7 @@ import earth.terrarium.prometheus.client.screens.roles.editing.RoleEditScreen;
 import earth.terrarium.prometheus.client.screens.roles.options.displays.CosmeticOptionsDisplay;
 import earth.terrarium.prometheus.client.screens.roles.options.displays.HomeOptionsDisplay;
 import earth.terrarium.prometheus.client.screens.roles.options.displays.PermissionDisplay;
+import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
 import earth.terrarium.prometheus.common.handlers.role.options.defaults.CosmeticOptions;
 import earth.terrarium.prometheus.common.handlers.role.options.defaults.HomeOptions;
 import earth.terrarium.prometheus.common.registries.ModMenus;
@@ -49,6 +50,8 @@ public class PrometheusClient {
         api.addAutoComplete("headings.afk");
         api.addAutoComplete("headings.dnd");
         api.addAutoComplete("headings.music");
+
+        api.addAutoComplete(() -> CommandPermissionHandler.COMMAND_PERMS);
     }
 
     @ExpectPlatform

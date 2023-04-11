@@ -5,6 +5,7 @@ import earth.terrarium.prometheus.api.TriState;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public interface PermissionApi {
 
@@ -22,7 +23,16 @@ public interface PermissionApi {
      * Adds a permission to the auto complete list
      * @param permission the permission to add
      */
-    void addAutoComplete(String permission);
+    default void addAutoComplete(String permission) {
+        List<String> list = List.of(permission);
+        addAutoComplete(() -> list);
+    }
+
+    /**
+     * Adds a permission to the auto complete list
+     * @param permission the permission to add
+     */
+    void addAutoComplete(Supplier<List<String>> permission);
 
     /**
      * Gets the list of possible auto complete options
