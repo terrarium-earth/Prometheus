@@ -3,6 +3,7 @@ package earth.terrarium.prometheus.common.handlers.role;
 import earth.terrarium.prometheus.api.TriState;
 import earth.terrarium.prometheus.common.handlers.permission.PermissionHolder;
 import earth.terrarium.prometheus.common.utils.ModUtils;
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -75,21 +76,37 @@ public class RoleHandler extends SavedData {
 
     public static Map<String, TriState> getPermissions(Player player) {
         RoleHandler data = read(player.level);
-        List<Role> roles = data.roles.getRoles(data.players.getOrDefault(player.getUUID(), Set.of()));
+        List<RoleEntry> roles = data.roles.getRoles(data.players.getOrDefault(player.getUUID(), Set.of()));
         Map<String, TriState> permissions = new HashMap<>();
-        for (Role role : roles) {
-            for (var entry : role.permissions().entrySet()) {
-                permissions.compute(entry.getKey(), (key, value) -> value == null || value.isUndefined() ? entry.getValue() : value);
-            }
+        for (RoleEntry entry : roles) {
+            entry.role().permissions().forEach((key, value) -> permissions.compute(key, (k, v) -> TriState.map(v, value)));
         }
         return permissions;
     }
 
-    public static UUID addRole(Player player, Role role) {
+    public static void changeRoles(Player player, UUID target, Object2BooleanMap<UUID> roles) {
         RoleHandler data = read(player.level);
-        UUID id = data.roles.addRole(role);
+        data.players.compute(target, (key, value) -> {
+            final Set<UUID> map = value == null ? new HashSet<>() : new HashSet<>(value);
+            roles.forEach((id, has) -> {
+                if (has) {
+                    map.add(id);
+                } else {
+                    map.remove(id);
+                }
+            });
+            return map;
+        });
         data.setDirty();
-        return id;
+        if (player.getServer() != null && player.getServer().getPlayerList().getPlayer(target) instanceof PermissionHolder holder) {
+            holder.prometheus$updatePermissions();
+        }
+    }
+
+    public static void addRole(Player player, Role role) {
+        RoleHandler data = read(player.level);
+        data.roles.addRole(role);
+        data.setDirty();
     }
 
     public static void setRole(Player player, UUID uuid, Role role) {
@@ -111,10 +128,41 @@ public class RoleHandler extends SavedData {
         updatePlayers(player.getServer());
     }
 
+    public static Set<UUID> getEditableRoles(Player player) {
+        RoleHandler data = read(player.level);
+        if (player.getServer() != null && player.getServer().getPlayerList().isOp(player.getGameProfile())) {
+            Set<UUID> roles = new HashSet<>(data.roles.getIdentifiers());
+            roles.add(DefaultRole.DEFAULT_ROLE);
+            return roles;
+        }
+        Set<UUID> roles = data.players.getOrDefault(player.getUUID(), Set.of());
+        Set<UUID> editable = new HashSet<>();
+        boolean canModify = false;
+        for (RoleEntry role : data.roles) {
+            if (canModify) {
+                editable.add(role.id());
+            }
+            if (roles.contains(role.id())) {
+                canModify = true;
+            }
+        }
+        editable.add(DefaultRole.DEFAULT_ROLE);
+        return editable;
+    }
+
+    public static boolean canModifyRole(Player player, UUID id) {
+        return getEditableRoles(player).contains(id);
+    }
+
     public static Role getHighestRole(Player player) {
         RoleHandler data = read(player.level);
-        List<Role> roles = data.roles.getRoles(data.players.getOrDefault(player.getUUID(), Set.of()));
-        return roles.get(0);
+        List<RoleEntry> roles = data.roles.getRoles(data.players.getOrDefault(player.getUUID(), Set.of()));
+        return roles.get(0).role();
+    }
+
+    public static Set<UUID> getRolesForPlayer(Player player, UUID id) {
+        RoleHandler data = read(player.level);
+        return data.players.getOrDefault(id, Set.of());
     }
 
     public static boolean canModifyRoles(Player player) {

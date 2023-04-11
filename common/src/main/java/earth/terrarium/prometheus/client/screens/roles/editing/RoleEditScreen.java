@@ -2,13 +2,13 @@ package earth.terrarium.prometheus.client.screens.roles.editing;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.datafixers.util.Pair;
 import com.teamresourceful.resourcefullib.client.screens.AbstractContainerCursorScreen;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.client.screens.roles.RolesScreen;
 import earth.terrarium.prometheus.client.utils.ClientUtils;
 import earth.terrarium.prometheus.client.utils.MouseLocationFix;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
+import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
 import earth.terrarium.prometheus.common.handlers.role.options.defaults.CosmeticOptions;
 import earth.terrarium.prometheus.common.menus.RoleEditMenu;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
@@ -73,7 +73,7 @@ public class RoleEditScreen extends AbstractContainerCursorScreen<RoleEditMenu> 
             this.displayList.save(this.menu.getSelected());
             int index = this.menu.getIndexOf(this.menu.getSelectedId());
             if (index != -1) {
-                this.menu.getRoles().set(index, new Pair<>(this.menu.getSelectedId(), this.menu.getSelected()));
+                this.menu.getRoles().set(index, new RoleEntry(this.menu.getSelectedId(), this.menu.getSelected()));
             }
             NetworkHandler.CHANNEL.sendToServer(new SaveRolePacket(this.menu.getSelectedId(), this.menu.getSelected()));
             this.list.update(this.menu.getRoles());

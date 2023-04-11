@@ -2,13 +2,13 @@ package earth.terrarium.prometheus.client.screens.roles;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.datafixers.util.Pair;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.handlers.role.Role;
+import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
 import earth.terrarium.prometheus.common.handlers.role.options.defaults.CosmeticOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -29,16 +29,16 @@ public class RolesList extends SelectionList<RolesList.Entry> {
         super(x, y, width, height, itemHeight, onSelection);
     }
 
-    public void update(List<Pair<UUID, Role>> roles) {
+    public void update(List<RoleEntry> roles) {
         update(roles, null);
     }
 
-    public void update(List<Pair<UUID, Role>> roles, UUID selected) {
+    public void update(List<RoleEntry> roles, UUID selected) {
         updateEntries(List.of());
         Entry selectedEntry = null;
         for (var role : roles) {
-            Entry entry = new Entry(role.getFirst(), role.getSecond());
-            if (role.getFirst().equals(selected)) {
+            Entry entry = new Entry(role.id(), role.role());
+            if (role.id().equals(selected)) {
                 selectedEntry = entry;
             }
             addEntry(entry);

@@ -1,9 +1,7 @@
 package earth.terrarium.prometheus.common.menus;
 
-import com.mojang.datafixers.util.Pair;
-import com.mojang.logging.LogUtils;
-import com.teamresourceful.resourcefullib.common.networking.PacketHelper;
 import earth.terrarium.prometheus.common.handlers.role.Role;
+import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.network.messages.server.ChangeRolesPacket;
 import earth.terrarium.prometheus.common.registries.ModMenus;
@@ -14,7 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,19 +19,31 @@ import java.util.UUID;
 
 public class RolesMenu extends AbstractContainerMenu {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private final List<RoleEntry> uneditable;
 
-    private List<Pair<UUID, Role>> roles;
-    private List<Pair<UUID, Role>> newRoles;
+    private List<RoleEntry> roles;
+    private List<RoleEntry> newRoles;
 
     public RolesMenu(int i, Inventory inventory, FriendlyByteBuf buf) {
-        this(i, read(buf));
+        this(i, read(buf), buf.readVarInt());
     }
-
-    public RolesMenu(int id, List<Pair<UUID, Role>> roles) {
+    public RolesMenu(int id, List<RoleEntry> roles, int starting) {
         super(ModMenus.ROLES.get(), id);
-        this.roles = roles;
-        this.newRoles = new ArrayList<>(roles);
+        this.uneditable = new ArrayList<>();
+        this.roles = new ArrayList<>();
+        if (roles != null) {
+            for (int i = 0; i < roles.size(); i++) {
+                if (i >= starting) {
+                    this.roles.add(roles.get(i));
+                } else {
+                    this.uneditable.add(roles.get(i));
+                }
+            }
+            this.newRoles = new ArrayList<>(this.roles);
+        } else {
+            this.roles = null;
+            this.newRoles = null;
+        }
     }
 
     @Override
@@ -50,7 +59,7 @@ public class RolesMenu extends AbstractContainerMenu {
     @Override
     public boolean clickMenuButton(@NotNull Player player, int i) {
         if (i < newRoles.size() && i >= 0 && player instanceof ServerPlayer serverPlayer) {
-            RoleEditMenu.open(serverPlayer, newRoles, i);
+            RoleEditMenu.open(serverPlayer, newRoles.get(i).id());
             return true;
         }
         return false;
@@ -61,10 +70,10 @@ public class RolesMenu extends AbstractContainerMenu {
     }
 
     public void remove(UUID id) {
-        newRoles.removeIf(pair -> pair.getFirst().equals(id));
+        newRoles.removeIf(pair -> pair.id().equals(id));
     }
 
-    public List<Pair<UUID, Role>> getRoles() {
+    public List<RoleEntry> getRoles() {
         return newRoles;
     }
 
@@ -74,12 +83,15 @@ public class RolesMenu extends AbstractContainerMenu {
 
     public void save() {
         this.roles = new ArrayList<>(newRoles);
-        NetworkHandler.CHANNEL.sendToServer(new ChangeRolesPacket(this.roles.stream().map(Pair::getFirst).toList()));
+        List<UUID> ids = new ArrayList<>();
+        uneditable.forEach(pair -> ids.add(pair.id()));
+        roles.forEach(pair -> ids.add(pair.id()));
+        NetworkHandler.CHANNEL.sendToServer(new ChangeRolesPacket(ids));
     }
 
     public int getIndexOf(UUID id) {
         for (int i = 0; i < newRoles.size(); i++) {
-            if (newRoles.get(i).getFirst().equals(id)) {
+            if (newRoles.get(i).id().equals(id)) {
                 return i;
             }
         }
@@ -93,7 +105,7 @@ public class RolesMenu extends AbstractContainerMenu {
     public void move(UUID id, boolean up) {
         int index = -1;
         for (int i = 0; i < newRoles.size(); i++) {
-            if (newRoles.get(i).getFirst().equals(id)) {
+            if (newRoles.get(i).id().equals(id)) {
                 index = i;
                 break;
             }
@@ -101,32 +113,27 @@ public class RolesMenu extends AbstractContainerMenu {
         if (index == -1) return;
         if (up) {
             if (index == 0) return;
-            Pair<UUID, Role> role = newRoles.remove(index);
+            RoleEntry role = newRoles.remove(index);
             newRoles.add(index - 1, role);
         } else {
             if (index == newRoles.size() - 1) return;
-            Pair<UUID, Role> role = newRoles.remove(index);
+            RoleEntry role = newRoles.remove(index);
             newRoles.add(index + 1, role);
         }
     }
 
-    public static void write(FriendlyByteBuf buf, List<Pair<UUID, Role>> roles){
-        buf.writeCollection(roles, (buffer, role) -> {
-            PacketHelper.writeWithYabn(buffer, Role.CODEC, role.getSecond(), true);
-            buffer.writeUUID(role.getFirst());
+    public static void write(FriendlyByteBuf buf, List<RoleEntry> roles, int starting) {
+        buf.writeCollection(roles, (buffer, entry) -> {
+            buffer.writeUUID(entry.id());
+            entry.role().toBuffer(buffer);
         });
+        buf.writeVarInt(starting);
     }
 
-    public static List<Pair<UUID, Role>> read(FriendlyByteBuf buf) {
-        List<Pair<UUID, Role>> roles = buf.readList(buffer -> {
-            Role role = PacketHelper.readWithYabn(buffer, Role.CODEC, true).get()
-                    .ifRight(error -> LOGGER.error("Error reading role: {}", error))
-                    .left()
-                    .orElse(null);
-            return role == null ? null : new Pair<>(buffer.readUUID(), role);
-        });
-        for (Pair<UUID, Role> role : roles) {
-            if (role == null) {
+    public static List<RoleEntry> read(FriendlyByteBuf buf) {
+        List<RoleEntry> roles = buf.readList(buffer -> new RoleEntry(buffer.readUUID(), Role.fromBuffer(buffer)));
+        for (RoleEntry role : roles) {
+            if (role.role() == null) {
                 return null;
             }
         }

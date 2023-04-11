@@ -7,6 +7,7 @@ import earth.terrarium.prometheus.api.roles.client.OptionDisplayApi;
 import earth.terrarium.prometheus.client.screens.InvseeScreen;
 import earth.terrarium.prometheus.client.screens.location.LocationScreen;
 import earth.terrarium.prometheus.client.screens.roles.RolesScreen;
+import earth.terrarium.prometheus.client.screens.roles.adding.MemberRolesScreen;
 import earth.terrarium.prometheus.client.screens.roles.editing.RoleEditScreen;
 import earth.terrarium.prometheus.client.screens.roles.options.displays.CosmeticOptionsDisplay;
 import earth.terrarium.prometheus.client.screens.roles.options.displays.HomeOptionsDisplay;
@@ -32,6 +33,7 @@ public class PrometheusClient {
         register(ModMenus.LOCATION.get(), LocationScreen::new);
         register(ModMenus.ROLES.get(), RolesScreen::new);
         register(ModMenus.ROLE_EDIT.get(), RoleEditScreen::new);
+        register(ModMenus.MEMBER_ROLES.get(), MemberRolesScreen::new);
 
         OptionDisplayApi.API.register(new ResourceLocation(Prometheus.MOD_ID, "permissions"), PermissionDisplay::create);
         OptionDisplayApi.API.register(CosmeticOptions.SERIALIZER.id(), CosmeticOptionsDisplay::create);

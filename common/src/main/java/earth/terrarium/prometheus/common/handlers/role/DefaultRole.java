@@ -10,8 +10,11 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class DefaultRole {
+
+    public static final UUID DEFAULT_ROLE = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     private static final Map<String, TriState> PERMISSIONS = Util.make(new HashMap<>(), map -> {
         map.put("headings.afk", TriState.TRUE);

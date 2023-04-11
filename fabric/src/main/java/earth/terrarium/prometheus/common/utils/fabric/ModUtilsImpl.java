@@ -15,22 +15,26 @@ import java.util.function.Consumer;
 
 public class ModUtilsImpl {
     public static void openMenu(ServerPlayer player, MenuConstructor constructor, Component title, Consumer<FriendlyByteBuf> options) {
-        player.openMenu(new ExtendedScreenHandlerFactory() {
-            @Override
-            public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
-                options.accept(buf);
-            }
+        try {
+            player.openMenu(new ExtendedScreenHandlerFactory() {
+                @Override
+                public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
+                    options.accept(buf);
+                }
 
-            @Override
-            public @NotNull Component getDisplayName() {
-                return title;
-            }
+                @Override
+                public @NotNull Component getDisplayName() {
+                    return title;
+                }
 
-            @Nullable
-            @Override
-            public AbstractContainerMenu createMenu(int i, @NotNull Inventory inventory, @NotNull Player player) {
-                return constructor.createMenu(i, inventory, player);
-            }
-        });
+                @Nullable
+                @Override
+                public AbstractContainerMenu createMenu(int i, @NotNull Inventory inventory, @NotNull Player player) {
+                    return constructor.createMenu(i, inventory, player);
+                }
+            });
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

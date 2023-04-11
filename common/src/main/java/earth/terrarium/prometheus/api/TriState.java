@@ -29,6 +29,10 @@ public enum TriState {
         return this != UNDEFINED;
     }
 
+    public static TriState map(TriState state, TriState value) {
+        return state == null || state == UNDEFINED ? value : state;
+    }
+
     public static TriState of(Number number) {
         if (number == null || number.longValue() >= 2) {
             return UNDEFINED;

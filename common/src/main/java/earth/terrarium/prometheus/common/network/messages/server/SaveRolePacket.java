@@ -54,7 +54,11 @@ public record SaveRolePacket(UUID id, Role role) implements Packet<SaveRolePacke
         public PacketContext handle(SaveRolePacket message) {
             return (player, level) -> {
                 if (player instanceof ServerPlayer serverPlayer && RoleHandler.canModifyRoles(player)) {
-                    RoleHandler.setRole(serverPlayer, message.id(), message.role());
+                    if (RoleHandler.getEditableRoles(player).contains(message.id())) {
+                        RoleHandler.setRole(serverPlayer, message.id(), message.role());
+                    } else {
+                        player.sendSystemMessage(Component.literal("You cannot edit that role!"));
+                    }
                 } else {
                     player.sendSystemMessage(Component.literal("You do not have permission to do that!"));
                 }

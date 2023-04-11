@@ -2,7 +2,6 @@ package earth.terrarium.prometheus.client.screens.roles.editing;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.datafixers.util.Pair;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
@@ -11,6 +10,7 @@ import com.teamresourceful.resourcefullib.client.utils.CursorUtils;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.client.utils.ClientUtils;
 import earth.terrarium.prometheus.common.handlers.role.Role;
+import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
 import earth.terrarium.prometheus.common.handlers.role.options.defaults.CosmeticOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -33,10 +33,10 @@ public class QuickEditList extends SelectionList<QuickEditList.Entry> {
         super(x, y, width, height, itemHeight, onSelection);
     }
 
-    public void update(List<Pair<UUID, Role>> roles) {
+    public void update(List<RoleEntry> roles) {
         updateEntries(List.of());
         for (var role : roles) {
-            addEntry(new Entry(role.getFirst(), role.getSecond()));
+            addEntry(new Entry(role.id(), role.role()));
         }
     }
 
