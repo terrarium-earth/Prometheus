@@ -41,7 +41,7 @@ public record AddRolePacket() implements Packet<AddRolePacket> {
         public PacketContext handle(AddRolePacket message) {
             return (player, level) -> {
                 if (player instanceof ServerPlayer serverPlayer && RoleHandler.canModifyRoles(player)) {
-                    RoleHandler.addRole(player, new Role());
+                    RoleHandler.setRole(player, null, new Role());
                     RolesCommand.openRolesMenu(serverPlayer);
                 } else {
                     player.sendSystemMessage(Component.literal("You do not have permission to do that!"));

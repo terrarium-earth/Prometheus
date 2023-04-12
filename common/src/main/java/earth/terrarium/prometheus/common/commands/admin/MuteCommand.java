@@ -43,14 +43,14 @@ public class MuteCommand {
         final long time = IntegerArgumentType.getInteger(context, "time") * 50L;
         final ServerLevel level = context.getSource().getLevel();
         for (GameProfile player : GameProfileArgument.getGameProfiles(context, "player")) {
-            MuteHandler.mutePlayer(level, player, time, ChronoUnit.MILLIS);
+            MuteHandler.mute(level, player, time, ChronoUnit.MILLIS);
         }
     }
 
     private static void unmute(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         final ServerLevel level = context.getSource().getLevel();
         for (GameProfile player : GameProfileArgument.getGameProfiles(context, "player")) {
-            MuteHandler.unmutePlayer(level, player);
+            MuteHandler.unmute(level, player);
         }
     }
 }

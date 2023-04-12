@@ -28,7 +28,7 @@ import java.util.Objects;
 public class HomeCommand {
 
     private static final SuggestionProvider<CommandSourceStack> SUGGEST_HOMES = (context, builder) -> {
-        SharedSuggestionProvider.suggest(HomeHandler.getHomes(context.getSource().getPlayerOrException()), builder);
+        SharedSuggestionProvider.suggest(HomeHandler.getHomes(context.getSource().getPlayerOrException()).keySet(), builder);
         return builder.buildFuture();
     };
 
@@ -83,6 +83,7 @@ public class HomeCommand {
                 .executes(context -> {
                     context.getSource().sendSuccess(Component.literal("Homes:"), false);
                     HomeHandler.getHomes(context.getSource().getPlayerOrException())
+                            .keySet()
                             .stream()
                             .map(HomeCommand::createListEntry)
                             .forEach(msg -> context.getSource().sendSuccess(msg, false));
@@ -101,7 +102,7 @@ public class HomeCommand {
     }
 
     public static void openHomeMenu(ServerPlayer player) {
-        Map<String, GlobalPos> homes = HomeHandler.getHomesMap(player);
+        Map<String, GlobalPos> homes = HomeHandler.getHomes(player);
         List<Location> locations = homes.entrySet()
                 .stream()
                 .map(entry -> new Location(entry.getKey(), entry.getValue()))

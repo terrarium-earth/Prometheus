@@ -62,5 +62,12 @@
     "headings.recording.permission": "Can set Recording heading",
     "headings.afk.permission": "Can set AFK heading",
     "headings.dnd.permission": "Can set DND heading",
-    "headings.music.permission": "Can set Music heading"
+    "headings.music.permission": "Can set Music heading",
+
+
+    "prometheus.homes.error.max_homes": "You have reached the maximum number of homes.",
+    "prometheus.homes.error.home_does_not_exist": "Home does not exist.",
+    "prometheus.homes.error.home_already_exists": "Home already exists.",
+    "prometheus.homes.error.no_homes": "You do not have any homes.",
+    "prometheus.location.error.cant_find_dimension": "Could not find dimension."
 }

@@ -1,6 +1,6 @@
 package earth.terrarium.prometheus.common.handlers.role;
 
-public interface RoleHolder {
+public interface RoleEntityHook {
 
     void prometheus$updateHighestRole();
 

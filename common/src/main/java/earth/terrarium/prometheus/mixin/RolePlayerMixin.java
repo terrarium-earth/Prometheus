@@ -2,7 +2,7 @@ package earth.terrarium.prometheus.mixin;
 
 import earth.terrarium.prometheus.common.handlers.role.Role;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
-import earth.terrarium.prometheus.common.handlers.role.RoleHolder;
+import earth.terrarium.prometheus.common.handlers.role.RoleEntityHook;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(Player.class)
-public abstract class RolePlayerMixin extends LivingEntity implements RoleHolder {
+public abstract class RolePlayerMixin extends LivingEntity implements RoleEntityHook {
 
     private Role prometheus$highestRole;
 

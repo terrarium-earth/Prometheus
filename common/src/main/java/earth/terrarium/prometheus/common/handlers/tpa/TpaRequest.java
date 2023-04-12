@@ -6,10 +6,10 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.UUID;
 
-public record TpaRequest(long time, UUID sender, UUID receiver, Direction direction) {
+public record TpaRequest(long time, int expires, UUID sender, UUID receiver, Direction direction) {
 
-    public TpaRequest(UUID sender, UUID receiver, Direction direction) {
-        this(System.currentTimeMillis(), sender, receiver, direction);
+    public TpaRequest(UUID sender, UUID receiver, int expires, Direction direction) {
+        this(System.currentTimeMillis(), expires, sender, receiver, direction);
     }
 
     public Component getMessage(Player sender) {

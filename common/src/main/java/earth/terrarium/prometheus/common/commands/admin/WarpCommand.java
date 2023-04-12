@@ -25,7 +25,7 @@ import java.util.Map;
 public class WarpCommand {
 
     private static final SuggestionProvider<CommandSourceStack> SUGGESTION_PROVIDER = (context, builder) -> {
-        SharedSuggestionProvider.suggest(WarpHandler.getWarps(context.getSource().getPlayerOrException()), builder);
+        SharedSuggestionProvider.suggest(WarpHandler.getWarps(context.getSource().getPlayerOrException()).keySet(), builder);
         return builder.buildFuture();
     };
 
@@ -80,6 +80,7 @@ public class WarpCommand {
                 .executes(context -> {
                     context.getSource().sendSuccess(Component.literal("Warps:"), false);
                     WarpHandler.getWarps(context.getSource().getPlayerOrException())
+                            .keySet()
                             .stream()
                             .map(WarpCommand::createListEntry)
                             .forEach(msg -> context.getSource().sendSuccess(msg, false));
@@ -98,7 +99,7 @@ public class WarpCommand {
     }
 
     public static void openWarpMenu(ServerPlayer player) {
-        Map<String, GlobalPos> homes = WarpHandler.getWarpsMap(player);
+        Map<String, GlobalPos> homes = WarpHandler.getWarps(player);
         List<Location> locations = homes.entrySet()
                 .stream()
                 .map(entry -> new Location(entry.getKey(), entry.getValue()))

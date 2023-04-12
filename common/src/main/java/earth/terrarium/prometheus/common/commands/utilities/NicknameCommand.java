@@ -2,6 +2,7 @@ package earth.terrarium.prometheus.common.commands.utilities;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import earth.terrarium.prometheus.common.handlers.nickname.Nickname;
 import earth.terrarium.prometheus.common.handlers.nickname.NicknameHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -18,7 +19,7 @@ public class NicknameCommand {
                 }))
                 .then(Commands.literal("set").then(Commands.argument("nickname", StringArgumentType.string())
                         .executes(context -> {
-                            NicknameHandler.set(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "nickname"));
+                            NicknameHandler.set(context.getSource().getPlayerOrException(), Component.literal(StringArgumentType.getString(context, "nickname")));
                             return 1;
                         })
                 )));
@@ -28,7 +29,7 @@ public class NicknameCommand {
                         .then(Commands.argument("nickname", StringArgumentType.string())
                                 .then(Commands.argument("player", EntityArgument.player())
                                         .executes(context -> {
-                                            NicknameHandler.set(EntityArgument.getPlayer(context, "player"), StringArgumentType.getString(context, "nickname"));
+                                            NicknameHandler.set(EntityArgument.getPlayer(context, "player"), Component.literal(StringArgumentType.getString(context, "nickname")));
                                             return 1;
                                         })
                                 )
@@ -44,7 +45,8 @@ public class NicknameCommand {
                 .then(Commands.literal("list")
                         .executes(context -> {
                             context.getSource().sendSuccess(Component.empty().append("Nicknames:"), false);
-                            NicknameHandler.getNicknames(context.getSource().getLevel())
+                            NicknameHandler.names(context.getSource().getLevel())
+                                    .values()
                                     .stream().map(NicknameCommand::getNicknameEntry)
                                     .forEach(component -> context.getSource().sendSuccess(component, false));
                             return 1;
@@ -52,7 +54,7 @@ public class NicknameCommand {
                 ));
     }
 
-    private static Component getNicknameEntry(NicknameHandler.Nickname nickname) {
+    private static Component getNicknameEntry(Nickname nickname) {
         return Component.empty().append(nickname.name()).append(" - ").append(nickname.component());
     }
 }

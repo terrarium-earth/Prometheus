@@ -1,6 +1,6 @@
 package earth.terrarium.prometheus.common.handlers.permission;
 
-import earth.terrarium.prometheus.common.handlers.role.RoleHolder;
+import earth.terrarium.prometheus.common.handlers.role.RoleEntityHook;
 import net.minecraft.world.entity.Entity;
 
 public class PermissionEvents {
@@ -9,7 +9,7 @@ public class PermissionEvents {
         if (entity instanceof PermissionHolder holder) {
             holder.prometheus$updatePermissions();
         }
-        if (entity instanceof RoleHolder holder) {
+        if (entity instanceof RoleEntityHook holder) {
             holder.prometheus$updateHighestRole();
         }
     }

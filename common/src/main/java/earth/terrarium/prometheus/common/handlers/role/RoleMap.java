@@ -1,5 +1,6 @@
 package earth.terrarium.prometheus.common.handlers.role;
 
+import earth.terrarium.prometheus.common.utils.ModUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -12,18 +13,13 @@ public class RoleMap implements Iterable<RoleEntry> {
     private final List<RoleEntry> roles = new ArrayList<>();
     private RoleEntry defaultRole = new RoleEntry(DefaultRole.DEFAULT_ROLE, DefaultRole.create());
 
-    public UUID addRole(Role role) {
-        UUID uuid = generateUUID();
-        roles.add(new RoleEntry(uuid, role));
-        return uuid;
-    }
-
-    public void setRole(UUID uuid, Role role) {
+    public void set(UUID uuid, Role role) {
+        if (uuid == null) uuid = ModUtils.generate(id -> getIndex(id) == -1 && !DefaultRole.DEFAULT_ROLE.equals(id), UUID::randomUUID);
         if (uuid.equals(DefaultRole.DEFAULT_ROLE)) {
             defaultRole = new RoleEntry(uuid, role);
             return;
         }
-        int index = getRoleIndex(uuid);
+        int index = getIndex(uuid);
         if (index == -1) {
             roles.add(new RoleEntry(uuid, role));
         } else {
@@ -45,7 +41,7 @@ public class RoleMap implements Iterable<RoleEntry> {
         roles.addAll(newRoles);
     }
 
-    public List<RoleEntry> getRoles(Set<UUID> ids) {
+    public List<RoleEntry> roles(Set<UUID> ids) {
         List<RoleEntry> roles = new ArrayList<>();
         for (RoleEntry entry : this.roles) {
             if (ids.contains(entry.id())) {
@@ -56,28 +52,13 @@ public class RoleMap implements Iterable<RoleEntry> {
         return roles;
     }
 
-    private int getRoleIndex(UUID uuid) {
-        for (int i = 0; i < roles.size(); i++) {
-            if (Objects.equals(roles.get(i).id(), uuid)) {
-                return i;
-            }
-        }
-        return -1;
+    public List<RoleEntry> roles() {
+        List<RoleEntry> roles = new ArrayList<>(this.roles);
+        roles.add(defaultRole);
+        return roles;
     }
 
-    private UUID generateUUID() {
-        UUID uuid;
-        do {
-            uuid = UUID.randomUUID();
-        } while (contains(uuid) || DefaultRole.DEFAULT_ROLE.equals(uuid));
-        return uuid;
-    }
-
-    private boolean contains(UUID uuid) {
-        return roles.stream().anyMatch(pair -> Objects.equals(pair.id(), uuid));
-    }
-
-    public Set<UUID> getIdentifiers() {
+    public Set<UUID> ids() {
         Set<UUID> identifiers = new LinkedHashSet<>();
         for (RoleEntry pair : roles) {
             identifiers.add(pair.id());
@@ -85,10 +66,13 @@ public class RoleMap implements Iterable<RoleEntry> {
         return identifiers;
     }
 
-    public List<RoleEntry> getRoles() {
-        List<RoleEntry> roles = new ArrayList<>(this.roles);
-        roles.add(defaultRole);
-        return roles;
+    private int getIndex(UUID uuid) {
+        for (int i = 0; i < roles.size(); i++) {
+            if (Objects.equals(roles.get(i).id(), uuid)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public void load(CompoundTag tag) {

@@ -109,7 +109,7 @@ public class RoleEditMenu extends AbstractContainerMenu {
             player.sendSystemMessage(Component.literal("You do not have permission to edit this role!"));
             return;
         }
-        List<RoleEntry> roles = RoleHandler.getRoles(player).getRoles().stream()
+        List<RoleEntry> roles = RoleHandler.roles(player).roles().stream()
                 .filter(entry -> editable.contains(entry.id()))
                 .toList();
         ModUtils.openMenu(player,

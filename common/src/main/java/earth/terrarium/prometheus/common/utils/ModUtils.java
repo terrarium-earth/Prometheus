@@ -25,10 +25,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.*;
 
 public final class ModUtils {
 
@@ -73,6 +70,14 @@ public final class ModUtils {
             map.put(keyMapper.apply(key), valueMapper.apply(key, tag));
         }
         return map;
+    }
+
+    public static <T> T generate(Predicate<T> validator, Supplier<T> getter) {
+        T value;
+        do {
+            value = getter.get();
+        } while (!validator.test(value));
+        return value;
     }
 
     @ExpectPlatform

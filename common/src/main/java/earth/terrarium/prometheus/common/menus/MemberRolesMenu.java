@@ -53,17 +53,12 @@ public class MemberRolesMenu extends AbstractContainerMenu {
     }
 
     public static void write(FriendlyByteBuf buf, List<MemberRole> roles, UUID selected) {
-        buf.writeCollection(roles, (buffer, role) -> {
-            buffer.writeUUID(role.id);
-            buffer.writeUtf(role.name);
-            buffer.writeBoolean(role.selected);
-            buffer.writeBoolean(role.canGive);
-        });
+        buf.writeCollection(roles, (buffer, role) -> role.write(buffer));
         buf.writeUUID(selected);
     }
 
     public static void open(ServerPlayer player, GameProfile profile) {
-        List<RoleEntry> roles = RoleHandler.getRoles(player).getRoles();
+        List<RoleEntry> roles = RoleHandler.roles(player).roles();
         Set<UUID> editable = RoleHandler.getEditableRoles(player);
         Set<UUID> selected = RoleHandler.getRolesForPlayer(player, profile.getId());
 
@@ -87,6 +82,13 @@ public class MemberRolesMenu extends AbstractContainerMenu {
 
         public static MemberRole of(FriendlyByteBuf buf) {
             return new MemberRole(buf.readUUID(), buf.readUtf(), buf.readBoolean(), buf.readBoolean());
+        }
+
+        public void write(FriendlyByteBuf buf) {
+            buf.writeUUID(id);
+            buf.writeUtf(name);
+            buf.writeBoolean(selected);
+            buf.writeBoolean(canGive);
         }
     }
 }

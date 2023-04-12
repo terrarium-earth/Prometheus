@@ -47,12 +47,14 @@ public record AddLocationPacket(LocationType type, String name) implements Packe
                 if (player instanceof ServerPlayer serverPlayer) {
                     switch (message.type) {
                         case HOME -> {
-                            HomeHandler.add(player, message.name);
-                            HomeCommand.openHomeMenu(serverPlayer);
+                            if (HomeHandler.add(serverPlayer, message.name)) {
+                                HomeCommand.openHomeMenu(serverPlayer);
+                            }
                         }
                         case WARP -> {
-                            WarpHandler.add(player, message.name);
-                            WarpCommand.openWarpMenu(serverPlayer);
+                            if (WarpHandler.add(serverPlayer, message.name)) {
+                                WarpCommand.openWarpMenu(serverPlayer);
+                            }
                         }
                     }
                 }

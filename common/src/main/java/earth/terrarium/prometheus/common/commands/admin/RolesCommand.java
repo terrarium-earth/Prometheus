@@ -41,7 +41,7 @@ public class RolesCommand {
 
     public static void openRolesMenu(ServerPlayer player) {
         Set<UUID> editable = RoleHandler.getEditableRoles(player);
-        List<RoleEntry> roles = RoleHandler.getRoles(player).getRoles();
+        List<RoleEntry> roles = RoleHandler.roles(player).roles();
         int starting = 0;
         for (RoleEntry role : roles) {
             if (editable.contains(role.id())) {
