@@ -1,4 +1,4 @@
-package earth.terrarium.prometheus.mixin;
+package earth.terrarium.prometheus.mixin.common;
 
 import earth.terrarium.prometheus.common.handlers.heading.Heading;
 import earth.terrarium.prometheus.common.handlers.heading.HeadingEntityHook;
@@ -23,7 +23,8 @@ import java.util.Optional;
 public abstract class HeadingPlayerMixin extends LivingEntity implements HeadingEntityHook {
 
     private static final EntityDataAccessor<Optional<Component>> PROMETHEUS$TEXT = SynchedEntityData.defineId(Player.class, EntityDataSerializers.OPTIONAL_COMPONENT);
-    private static final EntityDataAccessor<Byte> PROMETHEUS$HEADING = SynchedEntityData.defineId(Player.class, EntityDataSerializers.BYTE);
+    private Heading prometheus$heading = Heading.NONE;
+
 
     protected HeadingPlayerMixin(EntityType<? extends LivingEntity> entityType, Level level) {
         super(entityType, level);
@@ -32,17 +33,16 @@ public abstract class HeadingPlayerMixin extends LivingEntity implements Heading
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
     public void prometheus$defineSynchedData(CallbackInfo ci) {
         this.entityData.define(PROMETHEUS$TEXT, Optional.empty());
-        this.entityData.define(PROMETHEUS$HEADING, (byte) 0);
     }
 
     @Override
     public void prometheus$setHeading(Heading heading) {
-        this.entityData.set(PROMETHEUS$HEADING, (byte) heading.ordinal());
+        this.prometheus$heading = heading;
     }
 
     @Override
     public Heading prometheus$getHeading() {
-        return Heading.fromId(this.entityData.get(PROMETHEUS$HEADING));
+        return this.prometheus$heading;
     }
 
     @Override

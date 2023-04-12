@@ -4,17 +4,19 @@
     "package": "earth.terrarium.prometheus.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
-        "ChatTypeMixin",
-        "CommandNodeAccessor",
-        "CommandsMixin",
-        "HeadingPlayerMixin",
-        "NickedPlayerMixin",
-        "PermissionPlayerMixin",
-        "RolePlayerMixin",
-        "ServerGamePacketListenerImplMixin"
+        "common.ChatTypeMixin",
+        "common.CommandNodeAccessor",
+        "common.CommandsMixin",
+        "common.HeadingPlayerMixin",
+        "common.NickedPlayerMixin",
+        "common.PermissionPlayerMixin",
+        "common.RolePlayerMixin",
+        "common.ServerGamePacketListenerImplMixin"
     ],
     "client": [
-        "PlayerRendererMixin"
+        "client.ClientPacketListenerMixin",
+        "client.PlayerRendererMixin",
+        "client.PlayerTabOverlayMixin"
     ],
     "injectors": {
         "defaultRequire": 1

@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefullib.common.networking.NetworkChannel;
 import com.teamresourceful.resourcefullib.common.networking.base.NetworkDirection;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.network.messages.client.CommandPermissionsPacket;
+import earth.terrarium.prometheus.common.network.messages.client.UpdateHeadingPacket;
 import earth.terrarium.prometheus.common.network.messages.server.*;
 
 public class NetworkHandler {
@@ -17,5 +18,6 @@ public class NetworkHandler {
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, SaveRolePacket.ID, SaveRolePacket.HANDLER, SaveRolePacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, MemberRolesPacket.ID, MemberRolesPacket.HANDLER, MemberRolesPacket.class);
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, CommandPermissionsPacket.ID, CommandPermissionsPacket.HANDLER, CommandPermissionsPacket.class);
+        CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, UpdateHeadingPacket.ID, UpdateHeadingPacket.HANDLER, UpdateHeadingPacket.class);
     }
 }

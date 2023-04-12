@@ -1,4 +1,4 @@
-package earth.terrarium.prometheus.mixin;
+package earth.terrarium.prometheus.mixin.common;
 
 import earth.terrarium.prometheus.common.handlers.role.Role;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;

@@ -21,6 +21,9 @@ dependencies {
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+
+    implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-common:${rootProject.mixinextras_version}"))
+    include(implementation("com.github.llamalad7.mixinextras:mixinextras-forge:${rootProject.mixinextras_version}"))
 }
 
 processResources {
@@ -57,19 +60,5 @@ sourcesJar {
 components.java {
     withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
         skip()
-    }
-}
-
-publishing {
-    publications {
-        mavenForge(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
-            from components.java
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
     }
 }

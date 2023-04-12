@@ -12,31 +12,41 @@ import java.util.List;
 import java.util.Locale;
 
 public enum Heading {
-    NONE(""),
-    AFK("§e⌚"),
-    DND("§c✖"),
-    MUSIC("§9♬"),
-    RECORDING("§c●"),
-    STREAMING("§5●");
+    NONE(-1, -1),
+    AFK(8, 8),
+    DND(0, 8),
+    MUSIC(-1, -1),
+    RECORDING(0, 0),
+    STREAMING(8, 0);
 
     public static final List<Heading> VALUES = List.of(values());
 
     private final String translation;
     private final String name;
-    private final String icon;
+    private final int u;
+    private final int v;
 
-    Heading(String icon) {
+    Heading(int u, int v) {
         this.translation = "prometheus.heading." + this.name().toLowerCase(Locale.ROOT);
         this.name = "prometheus.heading.name." + this.name().toLowerCase(Locale.ROOT);
-        this.icon = icon;
+        this.u = u;
+        this.v = v;
     }
 
     public Component getTranslation(Object... args) {
         return Component.translatable(translation, args);
     }
 
-    public String getIcon() {
-        return icon;
+    public boolean hasIcon() {
+        return this.u != -1 && this.v != -1;
+    }
+
+    public int getU() {
+        return this.u;
+    }
+
+    public int getV() {
+        return this.v;
     }
 
     public Component getDisplayName() {
@@ -50,14 +60,6 @@ public enum Heading {
     public boolean hasPermission(@Nullable Player player) {
         if (this == NONE) return true;
         return player != null && PermissionApi.API.getPermission(player, this.permission()).isTrue();
-    }
-
-    public static Heading fromId(byte id) {
-        try {
-            return values()[id];
-        } catch (Exception e) {
-            return NONE;
-        }
     }
 
     public static Heading fromName(String name) {

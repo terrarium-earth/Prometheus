@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.CommandNode;
 import earth.terrarium.prometheus.api.TriState;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
-import earth.terrarium.prometheus.mixin.CommandNodeAccessor;
+import earth.terrarium.prometheus.mixin.common.CommandNodeAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.commands.CommandSourceStack;
 

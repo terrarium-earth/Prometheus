@@ -1,4 +1,4 @@
-package earth.terrarium.prometheus.mixin;
+package earth.terrarium.prometheus.mixin.common;
 
 import com.mojang.brigadier.CommandDispatcher;
 import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;

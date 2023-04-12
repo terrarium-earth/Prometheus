@@ -1,5 +1,5 @@
 
-package earth.terrarium.prometheus.mixin;
+package earth.terrarium.prometheus.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import earth.terrarium.prometheus.client.rendering.HeadingRenderer;

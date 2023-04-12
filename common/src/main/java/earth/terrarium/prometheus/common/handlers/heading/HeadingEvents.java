@@ -1,12 +1,20 @@
 package earth.terrarium.prometheus.common.handlers.heading;
 
+import com.mojang.datafixers.util.Pair;
+import earth.terrarium.prometheus.common.network.NetworkHandler;
+import earth.terrarium.prometheus.common.network.messages.client.UpdateHeadingPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 
 public class HeadingEvents {
@@ -36,7 +44,25 @@ public class HeadingEvents {
             if (heading != null && heading != hook.prometheus$getHeading()) {
                 hook.prometheus$setHeadingAndUpdate(heading);
                 player.sendSystemMessage(Component.translatable("prometheus.heading.join", heading.getDisplayName()));
+                sendToOnlinePlayers(player.getServer(), player, heading);
             }
+            sendAllHeadings(player);
         }
+    }
+
+    public static void sendToOnlinePlayers(MinecraftServer server, Player player, Heading heading) {
+        if (server == null) return;
+        NetworkHandler.CHANNEL.sendToPlayers(new UpdateHeadingPacket(List.of(Pair.of(player.getUUID(), heading))), server.getPlayerList().getPlayers());
+    }
+
+    public static void sendAllHeadings(ServerPlayer player) {
+        if (player.getServer() == null) return;
+        List<Pair<UUID, Heading>> headings = new ArrayList<>();
+        player.getServer().getPlayerList().getPlayers().forEach(p -> {
+            if (p instanceof HeadingEntityHook hook) {
+                headings.add(Pair.of(p.getUUID(), hook.prometheus$getHeading()));
+            }
+        });
+        NetworkHandler.CHANNEL.sendToPlayer(new UpdateHeadingPacket(headings), player);
     }
 }

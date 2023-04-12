@@ -1,4 +1,4 @@
-package earth.terrarium.prometheus.mixin;
+package earth.terrarium.prometheus.mixin.common;
 
 import earth.terrarium.prometheus.common.handlers.heading.HeadingEvents;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
