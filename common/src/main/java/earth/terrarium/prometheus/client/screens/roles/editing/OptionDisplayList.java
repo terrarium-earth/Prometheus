@@ -43,6 +43,9 @@ public class OptionDisplayList extends SelectionList<ListEntry> {
         int index = availableOptions.indexOf(selectedDisplay);
         if (index != -1) {
             index = (index + amount) % availableOptions.size();
+            if (index < 0) {
+                index = availableOptions.size() + index;
+            }
             setDisplay(availableOptions.get(index));
         }
     }

@@ -6,8 +6,8 @@ import earth.terrarium.prometheus.api.TriState;
 import earth.terrarium.prometheus.api.roles.client.OptionDisplay;
 import earth.terrarium.prometheus.client.screens.roles.options.entries.PermissionHeaderListEntry;
 import earth.terrarium.prometheus.client.screens.roles.options.entries.PermissionListEntry;
+import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.role.Role;
-import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public record PermissionDisplay(List<ListEntry> entries, SelectionList<ListEntry
 
     public static PermissionDisplay create(Role role, SelectionList<ListEntry> list) {
         List<ListEntry> entries = new ArrayList<>();
-        entries.add(new PermissionHeaderListEntry(Component.literal("Permissions"), list, text -> {
+        entries.add(new PermissionHeaderListEntry(ConstantComponents.PERMISSIONS_TITLE, list, text -> {
             if (!text.isBlank()) {
                 var entry = new PermissionListEntry(text, TriState.UNDEFINED, list, entries);
                 list.addEntry(entry);

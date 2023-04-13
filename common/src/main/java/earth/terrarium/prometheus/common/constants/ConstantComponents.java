@@ -35,4 +35,17 @@ public class ConstantComponents {
 
     public static final Component WARP_ALREADY_EXISTS = Component.translatable("prometheus.warps.error.warp_already_exists");
     public static final Component WARP_DOES_NOT_EXIST = Component.translatable("prometheus.warps.error.warp_does_not_exist");
+
+    // Option Displays
+    public static final Component PERMISSIONS_TITLE = Component.translatable("prometheus.options.permissions.title");
+
+    public static final Component COSMETIC_TITLE = Component.translatable("prometheus.options.cosmetic.title");
+    public static final Component COSMETIC_ROLE_NAME = Component.translatable("prometheus.options.cosmetic.role_name");
+    public static final Component COSMETIC_ROLE_ICON = Component.translatable("prometheus.options.cosmetic.role_icon");
+
+    public static final Component HOMES_TITLE = Component.translatable("prometheus.options.homes.title");
+    public static final Component HOMES_MAX = Component.translatable("prometheus.options.homes.max");
+
+    public static final Component TPA_TITLE = Component.translatable("prometheus.options.tpa.title");
+    public static final Component REQUEST_TIMEOUT = Component.translatable("prometheus.options.tpa.request_timeout");
 }

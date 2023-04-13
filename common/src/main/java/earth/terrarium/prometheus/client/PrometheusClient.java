@@ -13,9 +13,11 @@ import earth.terrarium.prometheus.client.screens.roles.editing.RoleEditScreen;
 import earth.terrarium.prometheus.client.screens.roles.options.displays.CosmeticOptionsDisplay;
 import earth.terrarium.prometheus.client.screens.roles.options.displays.HomeOptionsDisplay;
 import earth.terrarium.prometheus.client.screens.roles.options.displays.PermissionDisplay;
+import earth.terrarium.prometheus.client.screens.roles.options.displays.TpaOptionsDisplay;
 import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
 import earth.terrarium.prometheus.common.handlers.role.options.defaults.CosmeticOptions;
 import earth.terrarium.prometheus.common.handlers.role.options.defaults.HomeOptions;
+import earth.terrarium.prometheus.common.handlers.role.options.defaults.TpaOptions;
 import earth.terrarium.prometheus.common.registries.ModMenus;
 import earth.terrarium.prometheus.client.utils.SystemNotificationUtils;
 import net.fabricmc.api.EnvType;
@@ -43,6 +45,7 @@ public class PrometheusClient {
         OptionDisplayApi.API.register(new ResourceLocation(Prometheus.MOD_ID, "permissions"), PermissionDisplay::create);
         OptionDisplayApi.API.register(CosmeticOptions.SERIALIZER.id(), CosmeticOptionsDisplay::create);
         OptionDisplayApi.API.register(HomeOptions.SERIALIZER.id(), HomeOptionsDisplay::create);
+        OptionDisplayApi.API.register(TpaOptions.SERIALIZER.id(), TpaOptionsDisplay::create);
 
         addAutoCompletes();
         addIcons();

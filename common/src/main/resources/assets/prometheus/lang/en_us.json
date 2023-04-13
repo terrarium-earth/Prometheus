@@ -57,6 +57,7 @@
     "option.prometheus.permissions": "Permissions",
     "option.prometheus.homes/v1": "Homes",
     "option.prometheus.cosmetics/v1": "Cosmetics",
+    "option.prometheus.tpa/v1": "TPA",
 
     "headings.streaming.permission": "Can set Streaming heading",
     "headings.recording.permission": "Can set Recording heading",
@@ -73,5 +74,18 @@
 
     "dimension.minecraft.overworld": "Overworld",
     "dimension.minecraft.the_nether": "The Nether",
-    "dimension.minecraft.the_end": "The End"
+    "dimension.minecraft.the_end": "The End",
+
+
+    "prometheus.options.permissions.title": "Permissions",
+
+    "prometheus.options.homes.title": "Home Options",
+    "prometheus.options.homes.max": "Max Homes",
+
+    "prometheus.options.cosmetic.title": "Cosmetic Options",
+    "prometheus.options.cosmetic.role_name": "Role Name",
+    "prometheus.options.cosmetic.role_icon": "Role Icon",
+
+    "prometheus.options.tpa.title": "TPA Options",
+    "prometheus.options.tpa.request_timeout": "Request Timeout"
 }

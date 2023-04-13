@@ -7,17 +7,17 @@ import earth.terrarium.prometheus.client.screens.roles.options.entries.NumberBox
 import earth.terrarium.prometheus.client.screens.roles.options.entries.TextListEntry;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.role.Role;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.HomeOptions;
+import earth.terrarium.prometheus.common.handlers.role.options.defaults.TpaOptions;
 
 import java.util.List;
 
-public record HomeOptionsDisplay(List<ListEntry> entries) implements OptionDisplay {
+public record TpaOptionsDisplay(List<ListEntry> entries) implements OptionDisplay {
 
-    public static HomeOptionsDisplay create(Role role, SelectionList<ListEntry> ignored) {
-        HomeOptions home = role.getNonNullOption(HomeOptions.SERIALIZER);
-        return new HomeOptionsDisplay(List.of(
-                new TextListEntry(ConstantComponents.HOMES_TITLE),
-                new NumberBoxListEntry(home.max(), false, ConstantComponents.HOMES_MAX)
+    public static TpaOptionsDisplay create(Role role, SelectionList<ListEntry> ignored) {
+        TpaOptions tpa = role.getNonNullOption(TpaOptions.SERIALIZER);
+        return new TpaOptionsDisplay(List.of(
+                new TextListEntry(ConstantComponents.TPA_TITLE),
+                new NumberBoxListEntry(tpa.expire(), false, ConstantComponents.REQUEST_TIMEOUT)
         ));
     }
 
@@ -31,7 +31,7 @@ public record HomeOptionsDisplay(List<ListEntry> entries) implements OptionDispl
         if (entries.get(1) instanceof NumberBoxListEntry box) {
             var intValue = box.getIntValue();
             if (intValue.isPresent()) {
-                role.setData(new HomeOptions(intValue.getAsInt()));
+                role.setData(new TpaOptions(intValue.getAsInt()));
                 return true;
             }
         }

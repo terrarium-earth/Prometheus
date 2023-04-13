@@ -9,7 +9,7 @@
 - [x] Dimension icons to location screens
     - [x] Add dimension icon registry.
 - [ ] Setup default roles/permissions
-- [ ] Add TPA options screen
+- [x] Add TPA options screen
 - [ ] Add KDE and Gnome linux notify-send compat to desktop notifier.
 - [ ] Clean up Component usages to be translated and add translations for options and such.
 - [ ] Add trashcan command/screen

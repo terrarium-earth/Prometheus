@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public record Role(Map<String, TriState> permissions, Map<ResourceLocation, RoleOption<?>> options) {
@@ -34,10 +35,6 @@ public record Role(Map<String, TriState> permissions, Map<ResourceLocation, Role
 
     public Role() {
         this(new HashMap<>(), new HashMap<>());
-    }
-
-    public void setPermission(String permission, TriState state) {
-        permissions.put(permission, state);
     }
 
     public void setPermissions(Map<String, TriState> permissions) {
@@ -71,6 +68,13 @@ public record Role(Map<String, TriState> permissions, Map<ResourceLocation, Role
     @Nullable
     public <T extends RoleOption<T>> T getOption(RoleOptionSerializer<T> serializer) {
         return getOptionalOption(serializer).orElse(serializer.defaultValue());
+    }
+
+    /**
+     * @return returns option or throws NPE if data not found. Should only be used if you know the data is present or has a default value.
+     */
+    public <T extends RoleOption<T>> T getNonNullOption(RoleOptionSerializer<T> serializer) {
+        return Objects.requireNonNull(getOptionalOption(serializer).orElse(serializer.defaultValue()));
     }
 
     public CompoundTag toTag() {
