@@ -22,11 +22,15 @@ public enum TriState {
     }
 
     public boolean isUndefined() {
-        return this == UNDEFINED;
+        return !isDefined();
     }
 
     public boolean isDefined() {
         return this != UNDEFINED;
+    }
+
+    public boolean map(boolean value) {
+        return this == UNDEFINED ? value : this == TRUE;
     }
 
     public static TriState map(TriState state, TriState value) {

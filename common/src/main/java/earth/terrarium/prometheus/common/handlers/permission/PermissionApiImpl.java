@@ -28,12 +28,13 @@ public class PermissionApiImpl implements PermissionApi {
     }
 
     @Override
-    public List<String> getAutoComplete(String text) {
+    public List<String> getAutoComplete(String text, Set<String> permissions) {
         if (text == null || text.isBlank()) return List.of();
         Set<String> complete = new LinkedHashSet<>();
         AUTO_COMPLETE.stream()
                 .map(Supplier::get)
                 .flatMap(List::stream)
+                .filter(s -> !permissions.contains(s))
                 .filter(s -> s.startsWith(text))
                 .map(s -> s.substring(text.length()))
                 .map(s -> s.split("\\.")[0])

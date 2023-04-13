@@ -7,6 +7,7 @@ import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.mixin.common.CommandNodeAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,10 +55,24 @@ public class CommandPermissionHandler {
         public boolean test(CommandSourceStack stack) {
             if (stack.isPlayer()) {
                 TriState state = PermissionApi.API.getPermission(stack.getPlayer(), permission);
+                if (state.isUndefined()) {
+                    state = recursivePermissionCheck(stack.getPlayer(), permission.substring(0, permission.lastIndexOf('.')));
+                }
                 return (state.isUndefined() && original.test(stack)) || state.isTrue();
             }
             return original.test(stack);
         }
+    }
+
+    private static TriState recursivePermissionCheck(ServerPlayer player, String permission) {
+        if (permission.equals("commands") || permission.isEmpty()) {
+            return TriState.UNDEFINED;
+        }
+        TriState state = PermissionApi.API.getPermission(player, permission + ".*");
+        if (state.isUndefined()) {
+            return recursivePermissionCheck(player, permission.substring(0, permission.lastIndexOf('.')));
+        }
+        return state;
     }
 
     private record RedirectedPermissionPredicate(Supplier<String> deferredPermission, PermissionPredicate predicate) implements Predicate<CommandSourceStack> {

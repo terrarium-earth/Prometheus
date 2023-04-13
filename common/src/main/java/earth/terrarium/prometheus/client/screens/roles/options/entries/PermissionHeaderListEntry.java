@@ -19,9 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class PermissionHeaderListEntry extends TextBoxListEntry {
@@ -102,13 +100,23 @@ public class PermissionHeaderListEntry extends TextBoxListEntry {
     }
 
     private String getAutoComplete() {
-        List<String> perms = PermissionApi.API.getAutoComplete(text);
+        List<String> perms = PermissionApi.API.getAutoComplete(text, getCurrentPermissions());
         if (Objects.equals(perms, lastAutoCompleteList)) {
             return lastAutoComplete;
         }
         lastAutoCompleteList = perms;
         lastAutoComplete = perms.isEmpty() ? "" : perms.get(0);
         return lastAutoComplete;
+    }
+
+    private Set<String> getCurrentPermissions() {
+        Set<String> perms = new HashSet<>();
+        for (ListEntry child : this.list.children()) {
+            if (child instanceof PermissionListEntry entry) {
+                perms.add(entry.permission());
+            }
+        }
+        return perms;
     }
 
     private boolean canAdd() {
@@ -121,15 +129,5 @@ public class PermissionHeaderListEntry extends TextBoxListEntry {
             }
         }
         return true;
-    }
-
-    @Override
-    public void setFocused(boolean bl) {
-
-    }
-
-    @Override
-    public boolean isFocused() {
-        return false;
     }
 }

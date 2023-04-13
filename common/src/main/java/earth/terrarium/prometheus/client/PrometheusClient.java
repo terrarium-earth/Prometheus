@@ -16,6 +16,7 @@ import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHa
 import earth.terrarium.prometheus.common.handlers.role.options.defaults.CosmeticOptions;
 import earth.terrarium.prometheus.common.handlers.role.options.defaults.HomeOptions;
 import earth.terrarium.prometheus.common.registries.ModMenus;
+import earth.terrarium.prometheus.client.utils.SystemNotificationUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
@@ -41,6 +42,8 @@ public class PrometheusClient {
         OptionDisplayApi.API.register(HomeOptions.SERIALIZER.id(), HomeOptionsDisplay::create);
 
         addAutoCompletes();
+
+        SystemNotificationUtils.init();
     }
 
     private static void addAutoCompletes() {
@@ -50,6 +53,8 @@ public class PrometheusClient {
         api.addAutoComplete("headings.afk");
         api.addAutoComplete("headings.dnd");
         api.addAutoComplete("headings.music");
+        api.addAutoComplete("roles.manage");
+        api.addAutoComplete("warps.manage");
 
         api.addAutoComplete(() -> CommandPermissionHandler.COMMAND_PERMS);
     }

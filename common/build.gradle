@@ -8,3 +8,7 @@ dependencies {
 architectury {
     common()
 }
+
+loom {
+    accessWidenerPath = file("src/main/resources/prometheus.accesswidener")
+}

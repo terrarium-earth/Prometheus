@@ -105,8 +105,7 @@ public class WarpCommand {
                 .map(entry -> new Location(entry.getKey(), entry.getValue()))
                 .toList();
 
-        //TODO Change to a permission
-        int maxAmount = player.hasPermissions(2) ? Integer.MAX_VALUE : -1;
+        int maxAmount = WarpHandler.canModifyWarps(player) ? Integer.MAX_VALUE : -1;
 
         ModUtils.openMenu(
                 player,

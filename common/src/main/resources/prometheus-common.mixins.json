@@ -14,7 +14,9 @@
         "common.ServerGamePacketListenerImplMixin"
     ],
     "client": [
+        "client.ChatOptionsScreenMixin",
         "client.ClientPacketListenerMixin",
+        "client.OptionsMixin",
         "client.PlayerRendererMixin",
         "client.PlayerTabOverlayMixin"
     ],

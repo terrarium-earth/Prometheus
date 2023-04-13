@@ -1,5 +1,6 @@
 package earth.terrarium.prometheus.common.handlers;
 
+import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.base.Handler;
 import earth.terrarium.prometheus.common.utils.ModUtils;
@@ -25,14 +26,17 @@ public class WarpHandler extends Handler {
     }
 
     public static boolean add(ServerPlayer player, String name) {
-        Map<String, GlobalPos> warps = getWarps(player);
-        if (warps.containsKey(name)) {
-            player.sendSystemMessage(ConstantComponents.WARP_ALREADY_EXISTS);
-            return false;
+        if (canModifyWarps(player)) {
+            Map<String, GlobalPos> warps = getWarps(player);
+            if (warps.containsKey(name)) {
+                player.sendSystemMessage(ConstantComponents.WARP_ALREADY_EXISTS);
+                return false;
+            }
+            warps.put(name, GlobalPos.of(player.level.dimension(), player.blockPosition()));
+            read(player.level).setDirty();
+            return true;
         }
-        warps.put(name, GlobalPos.of(player.level.dimension(), player.blockPosition()));
-        read(player.level).setDirty();
-        return true;
+        return false;
     }
 
     public static void remove(ServerPlayer player, String name) {
@@ -58,6 +62,10 @@ public class WarpHandler extends Handler {
 
     public static Map<String, GlobalPos> getWarps(Player player) {
         return read(player.level).warps;
+    }
+
+    public static boolean canModifyWarps(ServerPlayer player) {
+        return PermissionApi.API.getPermission(player, "warps.manage").map(player.hasPermissions(2));
     }
 
     @Override
