@@ -6,8 +6,8 @@
     - [ ] Add command execution
     - [ ] Add command registry
 - [ ] Add ping sounds
-- [ ] Dimension icons to location screens
-    - [ ] Add dimension icon registry.
+- [x] Dimension icons to location screens
+    - [x] Add dimension icon registry.
 - [ ] Setup default roles/permissions
 - [ ] Add TPA options screen
 - [ ] Add KDE and Gnome linux notify-send compat to desktop notifier.

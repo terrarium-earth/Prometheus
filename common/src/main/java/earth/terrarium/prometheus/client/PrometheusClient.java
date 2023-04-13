@@ -5,6 +5,7 @@ import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.api.roles.client.OptionDisplayApi;
 import earth.terrarium.prometheus.client.screens.InvseeScreen;
+import earth.terrarium.prometheus.client.screens.location.LocationDisplayApiImpl;
 import earth.terrarium.prometheus.client.screens.location.LocationScreen;
 import earth.terrarium.prometheus.client.screens.roles.RolesScreen;
 import earth.terrarium.prometheus.client.screens.roles.adding.MemberRolesScreen;
@@ -21,7 +22,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -42,6 +45,7 @@ public class PrometheusClient {
         OptionDisplayApi.API.register(HomeOptions.SERIALIZER.id(), HomeOptionsDisplay::create);
 
         addAutoCompletes();
+        addIcons();
 
         SystemNotificationUtils.init();
     }
@@ -57,6 +61,60 @@ public class PrometheusClient {
         api.addAutoComplete("warps.manage");
 
         api.addAutoComplete(() -> CommandPermissionHandler.COMMAND_PERMS);
+    }
+
+    private static void addIcons() {
+        var api = LocationDisplayApiImpl.API;
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("overworld")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_vanilla_overworld.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("the_nether")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_vanilla_nether.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("the_end")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_vanilla_the_end.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("the_bumblezone:the_bumblezone")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_bumblezone_bumblezone.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("twilightforest:twilightforest")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_twilightforest_twilight_forest.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("undergarden:undergarden")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_undergarden_the_undergarden.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("edenring:edenring")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_edenring_eden_ring.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("deeperdarker:otherside")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_deeperdarker_the_otherside.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("blue_skies:everdawn")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_blue_skies_everdawn.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("blue_skies:everbright")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_blue_skies_everbright.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("mining_dimension:mining")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_advancedminingdimension_advanced_mining_dimension.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("ad_astra:earth_orbit")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_adastra_orbit.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("ad_astra:galcio_orbit")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_adastra_orbit.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("ad_astra:mars_orbit")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_adastra_orbit.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("ad_astra:mercury_orbit")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_adastra_orbit.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("ad_astra:moon_orbit")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_adastra_orbit.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("ad_astra:venus_orbit")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_adastra_orbit.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("ad_astra:venus")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_adastra_venus.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("ad_astra:moon")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_adastra_moon.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("ad_astra:mercury")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_adastra_mercury.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("ad_astra:mars")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_adastra_mars.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("ad_astra:galcio")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_adastra_glacio.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("theabyss:frost_world")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_abyssii_frost_world.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("theabyss:pocket_dimension")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_abyssii_pocket_dimension.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("theabyss:the_abyss")),
+                new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_abyssii_the_abyss.png"));
     }
 
     @ExpectPlatform

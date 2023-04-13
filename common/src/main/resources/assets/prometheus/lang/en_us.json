@@ -69,5 +69,9 @@
     "prometheus.homes.error.home_does_not_exist": "Home does not exist.",
     "prometheus.homes.error.home_already_exists": "Home already exists.",
     "prometheus.homes.error.no_homes": "You do not have any homes.",
-    "prometheus.location.error.cant_find_dimension": "Could not find dimension."
+    "prometheus.location.error.cant_find_dimension": "Could not find dimension.",
+
+    "dimension.minecraft.overworld": "Overworld",
+    "dimension.minecraft.the_nether": "The Nether",
+    "dimension.minecraft.the_end": "The End"
 }

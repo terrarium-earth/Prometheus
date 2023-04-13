@@ -8,6 +8,8 @@ import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import com.teamresourceful.resourcefullib.client.utils.CursorUtils;
 import earth.terrarium.prometheus.Prometheus;
+import earth.terrarium.prometheus.api.locations.client.LocationDisplayApi;
+import earth.terrarium.prometheus.client.utils.ClientUtils;
 import earth.terrarium.prometheus.common.menus.location.Location;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -21,6 +23,7 @@ import java.util.stream.Stream;
 public class LocationsList extends SelectionList<LocationsList.Entry> {
 
     private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/location.png");
+    private static final ResourceLocation DEFAULT_ICON = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_unknown.png");
 
     private Entry selected;
 
@@ -42,19 +45,29 @@ public class LocationsList extends SelectionList<LocationsList.Entry> {
 
         private final LocationsList list;
         private final Location location;
+        private final ResourceLocation icon;
 
         public Entry(LocationsList list, Location location) {
             this.list = list;
             this.location = location;
+            var locIcon = LocationDisplayApi.API.getIcon(location.pos().dimension());
+            this.icon = locIcon == null ? DEFAULT_ICON : locIcon;
         }
 
         @Override
         protected void render(@NotNull ScissorBoxStack scissorStack, @NotNull PoseStack stack, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
             RenderSystem.setShaderTexture(0, CONTAINER_BACKGROUND);
             blit(stack, left, top, 0, hovered ? 231 : 211, 160, 20);
-
-            Minecraft.getInstance().font.drawShadow(stack, Component.literal(location.name()), left + 5, top + 5, 0xFFFFFF);
+            RenderSystem.setShaderTexture(0, icon);
+            blit(stack, left + 5, top + 2, 0, 0, 16, 16, 16, 16);
+            Minecraft.getInstance().font.drawShadow(stack, Component.literal(location.name()), left + 25, top + 5, 0xFFFFFF);
             CursorUtils.setCursor(hovered, CursorScreen.Cursor.POINTER);
+            if (mouseX >= left + 5 && mouseX <= left + 21 && mouseY >= top + 2 && mouseY <= top + 18) {
+                ClientUtils.setTooltip(Component.translatableWithFallback(
+                        location.pos().dimension().location().toLanguageKey("dimension"),
+                        location.pos().dimension().location().toString()
+                ));
+            }
         }
 
         @Override
