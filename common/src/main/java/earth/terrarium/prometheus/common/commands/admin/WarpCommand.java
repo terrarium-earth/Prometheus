@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.WarpHandler;
 import earth.terrarium.prometheus.common.menus.location.Location;
 import earth.terrarium.prometheus.common.menus.location.LocationMenu;
@@ -78,7 +79,7 @@ public class WarpCommand {
     private static ArgumentBuilder<CommandSourceStack, ?> list() {
         return Commands.literal("list")
                 .executes(context -> {
-                    context.getSource().sendSuccess(Component.literal("Warps:"), false);
+                    context.getSource().sendSuccess(ConstantComponents.WARPS_COMMAND_TITLE, false);
                     WarpHandler.getWarps(context.getSource().getPlayerOrException())
                             .keySet()
                             .stream()
@@ -91,7 +92,7 @@ public class WarpCommand {
     private static Component createListEntry(String name) {
         return Component.literal(" - " + name).setStyle(Style.EMPTY.withHoverEvent(new HoverEvent(
                 HoverEvent.Action.SHOW_TEXT,
-                Component.literal("Click to warp to " + name)
+                Component.translatable("prometheus.locations.warp.to", name)
         )).withClickEvent(new ClickEvent(
                 ClickEvent.Action.RUN_COMMAND,
                 "/warp " + name
@@ -110,7 +111,7 @@ public class WarpCommand {
         ModUtils.openMenu(
                 player,
                 (i, inventory, playerx) -> new LocationMenu(i, LocationType.WARP, maxAmount, locations),
-                Component.translatable("prometheus.locations.warp"),
+                ConstantComponents.WARPS_UI_TITLE,
                 buf -> LocationMenu.write(buf, LocationType.WARP, maxAmount, locations)
         );
     }

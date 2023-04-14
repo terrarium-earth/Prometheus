@@ -1,9 +1,9 @@
 package earth.terrarium.prometheus.common.handlers;
 
 import com.mojang.authlib.GameProfile;
+import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.base.Handler;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +41,7 @@ public class MuteHandler extends Handler {
             unmute(sender.level, sender.getGameProfile());
             return true;
         }
-        sender.sendSystemMessage(Component.literal("You are muted!"));
+        sender.sendSystemMessage(ConstantComponents.MUTED);
         return false;
     }
 

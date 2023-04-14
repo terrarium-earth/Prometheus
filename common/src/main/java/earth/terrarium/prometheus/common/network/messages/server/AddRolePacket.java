@@ -5,10 +5,10 @@ import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.commands.admin.RolesCommand;
+import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.role.Role;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -44,7 +44,7 @@ public record AddRolePacket() implements Packet<AddRolePacket> {
                     RoleHandler.setRole(player, null, new Role());
                     RolesCommand.openRolesMenu(serverPlayer);
                 } else {
-                    player.sendSystemMessage(Component.literal("You do not have permission to do that!"));
+                    player.sendSystemMessage(ConstantComponents.NOT_ALLOWED_TO_EDIT_ROLES);
                 }
             };
         }

@@ -1,4 +1,6 @@
 {
+    "prometheus.error.logs": "Error occured, check logs for more information.",
+
     "prometheus.players.inventory": "%s's %s",
     "prometheus.tpa.request.to": "[TPA] %s has requested to teleport to you: %s",
     "prometheus.tpa.request.from": "[TPA] %s has requested you teleport to them: %s",
@@ -36,9 +38,13 @@
     "prometheus.heading.invalid": "Invalid heading %s",
 
     "prometheus.locations.home": "Homes",
+    "prometheus.locations.home.command": "Homes:",
     "prometheus.locations.home.add": "Add a Home",
+    "prometheus.locations.home.to": "Click to teleport to %s",
     "prometheus.locations.warp": "Warps",
+    "prometheus.locations.warp.command": "Warps:",
     "prometheus.locations.warp.add": "Add a Warp",
+    "prometheus.locations.warp.to": "Click to warp to %s",
     "prometheus.locations.add": "Add New Location:",
 
     "prometheus.ui.unsaved_changes": "Unsaved Changes!",
@@ -65,19 +71,23 @@
     "headings.dnd.permission": "Can set DND heading",
     "headings.music.permission": "Can set Music heading",
 
-
     "prometheus.homes.error.max_homes": "You have reached the maximum number of homes.",
     "prometheus.homes.error.home_does_not_exist": "Home does not exist.",
     "prometheus.homes.error.home_already_exists": "Home already exists.",
     "prometheus.homes.error.no_homes": "You do not have any homes.",
     "prometheus.location.error.cant_find_dimension": "Could not find dimension.",
+    "prometheus.roles.error.cant_edit_role": "You can't edit that role.",
+    "prometheus.roles.error.cant_edit_role_in_list": "You can't edit a role in this list.",
+    "prometheus.roles.error.not_allowed_to_edit_roles": "You do not have permission to modify roles.",
+
+    "prometheus.muted": "You cannot not message while muted.",
 
     "dimension.minecraft.overworld": "Overworld",
     "dimension.minecraft.the_nether": "The Nether",
     "dimension.minecraft.the_end": "The End",
 
-
     "prometheus.options.permissions.title": "Permissions",
+    "prometheus.options.permissions.add": "Add a permission",
 
     "prometheus.options.homes.title": "Home Options",
     "prometheus.options.homes.max": "Max Homes",
@@ -87,5 +97,10 @@
     "prometheus.options.cosmetic.role_icon": "Role Icon",
 
     "prometheus.options.tpa.title": "TPA Options",
-    "prometheus.options.tpa.request_timeout": "Request Timeout"
+    "prometheus.options.tpa.request_timeout": "Request Timeout",
+
+    "options.prometheusNotificationSound": "Ping Sound",
+    "options.prometheus.sound.tooltip": "Play a sound when you receive a message or are mentioned in chat.",
+    "options.prometheusShowNotifications": "Show Desktop Notifications",
+    "options.prometheus.notifications.tooltip": "Get desktop notifications when you receive a message or are mentioned in chat."
 }

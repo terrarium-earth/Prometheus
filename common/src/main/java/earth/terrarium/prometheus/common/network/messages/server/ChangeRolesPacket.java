@@ -5,9 +5,9 @@ import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.commands.admin.RolesCommand;
+import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -50,7 +50,7 @@ public record ChangeRolesPacket(List<UUID> ids) implements Packet<ChangeRolesPac
                     Set<UUID> roles = RoleHandler.roles(player).ids();
                     //Check if message.ids contains any roles that the player cannot edit
                     if (!isValid(editableRoles, roles, message.ids)) {
-                        player.sendSystemMessage(Component.literal("Error: Uneditable role in list!"));
+                        player.sendSystemMessage(ConstantComponents.CANT_EDIT_ROLE_IN_LIST);
                         serverPlayer.closeContainer();
                     } else {
                         RoleHandler.reorder(player, message.ids);

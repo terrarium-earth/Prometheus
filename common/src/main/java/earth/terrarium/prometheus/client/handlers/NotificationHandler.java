@@ -7,10 +7,14 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.ByIdMap;
+import net.minecraft.util.OptionEnum;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 import java.util.UUID;
+import java.util.function.IntFunction;
 
 public class NotificationHandler {
 
@@ -71,5 +75,29 @@ public class NotificationHandler {
         PRIVATE,
         TEAM,
         UNKNOWN
+    }
+
+    public enum PingSound implements OptionEnum {
+        NONE,
+        PING1,
+        PING2,
+        PING3,
+        PING4;
+
+        private static final IntFunction<PingSound> BY_ID = ByIdMap.continuous(PingSound::getId, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
+
+        public static PingSound byId(int id) {
+            return BY_ID.apply(id);
+        }
+
+        @Override
+        public int getId() {
+            return ordinal();
+        }
+
+        @Override
+        public @NotNull String getKey() {
+            return name().charAt(0) + name().substring(1).toLowerCase(Locale.ROOT);
+        }
     }
 }

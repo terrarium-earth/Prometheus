@@ -1,6 +1,7 @@
 package earth.terrarium.prometheus.common.menus;
 
 import earth.terrarium.prometheus.common.commands.admin.RolesCommand;
+import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.role.Role;
 import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
@@ -8,7 +9,6 @@ import earth.terrarium.prometheus.common.registries.ModMenus;
 import earth.terrarium.prometheus.common.utils.ModUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -26,7 +26,7 @@ public class RoleEditMenu extends AbstractContainerMenu {
     private final Role selected;
     private final UUID selectedId;
 
-    public RoleEditMenu(int i, Inventory inventory, FriendlyByteBuf buf) {
+    public RoleEditMenu(int i, Inventory ignored, FriendlyByteBuf buf) {
         this(i, read(buf), buf.readUUID());
     }
 
@@ -106,7 +106,7 @@ public class RoleEditMenu extends AbstractContainerMenu {
     public static void open(ServerPlayer player, UUID selected) {
         Set<UUID> editable = RoleHandler.getEditableRoles(player);
         if (!editable.contains(selected)) {
-            player.sendSystemMessage(Component.literal("You do not have permission to edit this role!"));
+            player.sendSystemMessage(ConstantComponents.CANT_EDIT_ROLE);
             return;
         }
         List<RoleEntry> roles = RoleHandler.roles(player).roles().stream()

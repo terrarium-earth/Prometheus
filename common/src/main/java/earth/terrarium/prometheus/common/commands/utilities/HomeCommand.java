@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import earth.terrarium.prometheus.api.roles.RoleApi;
+import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.HomeHandler;
 import earth.terrarium.prometheus.common.handlers.role.options.defaults.HomeOptions;
 import earth.terrarium.prometheus.common.menus.location.Location;
@@ -81,7 +82,7 @@ public class HomeCommand {
     private static ArgumentBuilder<CommandSourceStack, ?> list() {
         return Commands.literal("list")
                 .executes(context -> {
-                    context.getSource().sendSuccess(Component.literal("Homes:"), false);
+                    context.getSource().sendSuccess(ConstantComponents.HOMES_COMMAND_TITLE, false);
                     HomeHandler.getHomes(context.getSource().getPlayerOrException())
                             .keySet()
                             .stream()
@@ -94,7 +95,7 @@ public class HomeCommand {
     private static Component createListEntry(String name) {
         return Component.literal(" - " + name).setStyle(Style.EMPTY.withHoverEvent(new HoverEvent(
                 HoverEvent.Action.SHOW_TEXT,
-                Component.literal("Click to teleport to " + name)
+                Component.translatable("prometheus.locations.home.to", name)
         )).withClickEvent(new ClickEvent(
                 ClickEvent.Action.RUN_COMMAND,
                 "/home " + name
@@ -113,7 +114,7 @@ public class HomeCommand {
         ModUtils.openMenu(
                 player,
                 (i, inventory, playerx) -> new LocationMenu(i, LocationType.HOME, maxHomes, locations),
-                Component.translatable("prometheus.locations.home"),
+                ConstantComponents.HOMES_UI_TITLE,
                 buf -> LocationMenu.write(buf, LocationType.HOME, maxHomes, locations)
         );
     }

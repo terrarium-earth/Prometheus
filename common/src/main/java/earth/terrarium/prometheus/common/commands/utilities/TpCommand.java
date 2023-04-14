@@ -1,10 +1,10 @@
 package earth.terrarium.prometheus.common.commands.utilities;
 
 import com.mojang.brigadier.CommandDispatcher;
+import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -22,7 +22,7 @@ public class TpCommand {
                             player.setLastDeathLocation(Optional.empty());
                             ServerLevel level = player.server.getLevel(pos.dimension());
                             if (level == null) {
-                                player.sendSystemMessage(Component.literal("Dimension not found"));
+                                player.sendSystemMessage(ConstantComponents.NO_DIMENSION);
                                 return;
                             }
                             player.teleportTo(level, pos.pos().getX(), pos.pos().getY(), pos.pos().getZ(), player.getYRot(), player.getXRot());

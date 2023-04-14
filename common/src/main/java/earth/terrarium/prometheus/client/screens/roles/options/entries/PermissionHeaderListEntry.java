@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.client.utils.ClientUtils;
+import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -45,7 +46,7 @@ public class PermissionHeaderListEntry extends TextBoxListEntry {
         Gui.blit(stack, left + width - 14 - 7, top + 3, 0, canAdd() ? btnHovered ? 63 : 49 : 77, 14, 14);
         if (btnHovered) {
             CursorUtils.setCursor(true, canAdd() ? CursorScreen.Cursor.POINTER : CursorScreen.Cursor.DISABLED);
-            ClientUtils.setTooltip(Component.literal("Add a Permission"));
+            ClientUtils.setTooltip(ConstantComponents.PERMISSIONS_ADD);
         }
 
         MutableComponent tempText = Component.literal(text);
