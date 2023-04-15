@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.CommandNode;
 import earth.terrarium.prometheus.api.TriState;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
+import earth.terrarium.prometheus.common.utils.UnsafeUtils;
 import earth.terrarium.prometheus.mixin.common.CommandNodeAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.commands.CommandSourceStack;
@@ -45,8 +46,12 @@ public class CommandPermissionHandler {
 
     @SuppressWarnings("unchecked")
     private static <T extends CommandSourceStack> void setRequirement(CommandNode<T> node, Predicate<T> requirement) {
-        CommandNodeAccessor<T> accessor = (CommandNodeAccessor<T>) node;
-        accessor.setRequirement(requirement);
+        if (node instanceof CommandNodeAccessor accessor) {
+            accessor.setRequirement(requirement);
+        } else if (UnsafeUtils.hasField(node, "requirement")) {
+            //Unsafe way to set the requirement, this is because of forges modules and forge seemingly blocking mixins to CommandNode
+            UnsafeUtils.setField(node, "requirement", requirement);
+        }
     }
 
     private record PermissionPredicate(String permission, Predicate<CommandSourceStack> original) implements Predicate<CommandSourceStack> {

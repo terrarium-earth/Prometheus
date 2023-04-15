@@ -38,7 +38,7 @@ public class RolesScreen extends AbstractContainerCursorScreen<RolesMenu> implem
 
     public RolesScreen(RolesMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
-        this.passEvents = true;
+        this.passEvents = false;
         this.imageHeight = 212;
         this.imageWidth = 176;
     }

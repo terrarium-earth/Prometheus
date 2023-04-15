@@ -33,7 +33,7 @@ public class RoleEditScreen extends AbstractContainerCursorScreen<RoleEditMenu> 
 
     public RoleEditScreen(RoleEditMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
-        this.passEvents = true;
+        this.passEvents = false;
         this.imageHeight = 223;
         this.imageWidth = 276;
     }
