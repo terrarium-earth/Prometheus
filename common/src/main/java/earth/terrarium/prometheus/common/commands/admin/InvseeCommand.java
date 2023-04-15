@@ -30,10 +30,7 @@ public class InvseeCommand {
                     InvseeCommand.openEnderChest(context.getSource().getEntity(), context.getSource().getEntity());
                     return 1;
                 }));
-        dispatcher.register(Commands.literal("ec")
-                .requires((commandSourceStack) -> commandSourceStack.hasPermission(2))
-                .redirect(enderChestCommand)
-        );
+        dispatcher.register(Commands.literal("ec").redirect(enderChestCommand));
 
         dispatcher.register(Commands.literal("invsee")
                 .requires(source -> source.hasPermission(2))

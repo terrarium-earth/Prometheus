@@ -21,11 +21,13 @@ public class RolesCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("roles")
+                .requires(source -> source.hasPermission(2))
                 .executes(context -> {
                     openRolesMenu(context.getSource().getPlayerOrException());
                     return 1;
                 }));
         dispatcher.register(Commands.literal("member")
+                .requires(source -> source.hasPermission(2))
                 .then(Commands.argument("player", GameProfileArgument.gameProfile())
                         .executes(context -> {
                             var player = GameProfileArgument.getGameProfiles(context, "player");

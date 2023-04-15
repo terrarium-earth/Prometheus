@@ -2,7 +2,7 @@ package earth.terrarium.prometheus.common.menus;
 
 import com.mojang.authlib.GameProfile;
 import earth.terrarium.prometheus.common.handlers.role.*;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.CosmeticOptions;
+import earth.terrarium.prometheus.common.roles.CosmeticOptions;
 import earth.terrarium.prometheus.common.registries.ModMenus;
 import earth.terrarium.prometheus.common.utils.ModUtils;
 import net.minecraft.network.FriendlyByteBuf;

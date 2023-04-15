@@ -57,8 +57,10 @@ public class ConstantComponents {
     public static final Component HOMES_TITLE = Component.translatable("prometheus.options.homes.title");
     public static final Component HOMES_MAX = Component.translatable("prometheus.options.homes.max");
 
-    public static final Component TPA_TITLE = Component.translatable("prometheus.options.tpa.title");
-    public static final Component REQUEST_TIMEOUT = Component.translatable("prometheus.options.tpa.request_timeout");
+    public static final Component TELEPORT_TITLE = Component.translatable("prometheus.options.teleport.title");
+    public static final Component REQUEST_TIMEOUT = Component.translatable("prometheus.options.teleport.request_timeout");
+    public static final Component RTP_COOLDOWN = Component.translatable("prometheus.options.teleport.rtp_cooldown");
+    public static final Component RTP_DISTANCE = Component.translatable("prometheus.options.teleport.rtp_distance");
 
     public static final Component NOTIFICATION_OPTION_TOOLTIP = Component.translatable("options.prometheus.notifications.tooltip");
     public static final Component SOUND_OPTION_TOOLTIP = Component.translatable("options.prometheus.sound.tooltip");

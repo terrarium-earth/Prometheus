@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefullib.common.networking.PacketHelper;
 import earth.terrarium.prometheus.api.TriState;
 import earth.terrarium.prometheus.api.roles.options.RoleOption;
 import earth.terrarium.prometheus.api.roles.options.RoleOptionSerializer;
-import earth.terrarium.prometheus.common.handlers.role.options.OptionRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;

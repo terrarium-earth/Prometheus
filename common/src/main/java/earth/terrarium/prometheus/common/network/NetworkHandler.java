@@ -17,6 +17,7 @@ public class NetworkHandler {
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, ChangeRolesPacket.ID, ChangeRolesPacket.HANDLER, ChangeRolesPacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, SaveRolePacket.ID, SaveRolePacket.HANDLER, SaveRolePacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, MemberRolesPacket.ID, MemberRolesPacket.HANDLER, MemberRolesPacket.class);
+        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, SaveCommandPacket.ID, SaveCommandPacket.HANDLER, SaveCommandPacket.class);
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, CommandPermissionsPacket.ID, CommandPermissionsPacket.HANDLER, CommandPermissionsPacket.class);
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, UpdateHeadingPacket.ID, UpdateHeadingPacket.HANDLER, UpdateHeadingPacket.class);
     }

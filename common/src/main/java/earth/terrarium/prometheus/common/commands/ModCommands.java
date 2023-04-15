@@ -30,5 +30,6 @@ public class ModCommands {
         TpToCommand.register(dispatcher);
         NicknameCommand.register(dispatcher);
         RolesCommand.register(dispatcher);
+        RunCommand.register(dispatcher);
     }
 }

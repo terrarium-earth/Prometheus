@@ -1,9 +1,9 @@
 package earth.terrarium.prometheus;
 
-import earth.terrarium.prometheus.common.handlers.role.options.OptionRegistry;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.CosmeticOptions;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.HomeOptions;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.TpaOptions;
+import earth.terrarium.prometheus.common.handlers.role.OptionRegistry;
+import earth.terrarium.prometheus.common.roles.CosmeticOptions;
+import earth.terrarium.prometheus.common.roles.HomeOptions;
+import earth.terrarium.prometheus.common.roles.TeleportOptions;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.registries.ModMenus;
 
@@ -15,7 +15,7 @@ public class Prometheus {
         ModMenus.MENUS.init();
         OptionRegistry.INSTANCE.register(CosmeticOptions.SERIALIZER);
         OptionRegistry.INSTANCE.register(HomeOptions.SERIALIZER);
-        OptionRegistry.INSTANCE.register(TpaOptions.SERIALIZER);
+        OptionRegistry.INSTANCE.register(TeleportOptions.SERIALIZER);
     }
 
     public static void postInit() {

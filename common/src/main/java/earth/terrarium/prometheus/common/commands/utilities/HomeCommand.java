@@ -7,7 +7,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import earth.terrarium.prometheus.api.roles.RoleApi;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.HomeHandler;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.HomeOptions;
+import earth.terrarium.prometheus.common.roles.HomeOptions;
 import earth.terrarium.prometheus.common.menus.location.Location;
 import earth.terrarium.prometheus.common.menus.location.LocationMenu;
 import earth.terrarium.prometheus.common.menus.location.LocationType;

@@ -5,6 +5,7 @@ import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.api.roles.client.OptionDisplayApi;
 import earth.terrarium.prometheus.client.screens.InvseeScreen;
+import earth.terrarium.prometheus.client.screens.commands.EditCommandScreen;
 import earth.terrarium.prometheus.client.screens.location.LocationDisplayApiImpl;
 import earth.terrarium.prometheus.client.screens.location.LocationScreen;
 import earth.terrarium.prometheus.client.screens.roles.RolesScreen;
@@ -13,11 +14,11 @@ import earth.terrarium.prometheus.client.screens.roles.editing.RoleEditScreen;
 import earth.terrarium.prometheus.client.screens.roles.options.displays.CosmeticOptionsDisplay;
 import earth.terrarium.prometheus.client.screens.roles.options.displays.HomeOptionsDisplay;
 import earth.terrarium.prometheus.client.screens.roles.options.displays.PermissionDisplay;
-import earth.terrarium.prometheus.client.screens.roles.options.displays.TpaOptionsDisplay;
+import earth.terrarium.prometheus.client.screens.roles.options.displays.TeleportOptionsDisplay;
 import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.CosmeticOptions;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.HomeOptions;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.TpaOptions;
+import earth.terrarium.prometheus.common.roles.CosmeticOptions;
+import earth.terrarium.prometheus.common.roles.HomeOptions;
+import earth.terrarium.prometheus.common.roles.TeleportOptions;
 import earth.terrarium.prometheus.common.registries.ModMenus;
 import earth.terrarium.prometheus.client.utils.SystemNotificationUtils;
 import net.fabricmc.api.EnvType;
@@ -41,11 +42,12 @@ public class PrometheusClient {
         register(ModMenus.ROLES.get(), RolesScreen::new);
         register(ModMenus.ROLE_EDIT.get(), RoleEditScreen::new);
         register(ModMenus.MEMBER_ROLES.get(), MemberRolesScreen::new);
+        register(ModMenus.EDIT_COMMAND.get(), EditCommandScreen::new);
 
         OptionDisplayApi.API.register(new ResourceLocation(Prometheus.MOD_ID, "permissions"), PermissionDisplay::create);
         OptionDisplayApi.API.register(CosmeticOptions.SERIALIZER.id(), CosmeticOptionsDisplay::create);
         OptionDisplayApi.API.register(HomeOptions.SERIALIZER.id(), HomeOptionsDisplay::create);
-        OptionDisplayApi.API.register(TpaOptions.SERIALIZER.id(), TpaOptionsDisplay::create);
+        OptionDisplayApi.API.register(TeleportOptions.SERIALIZER.id(), TeleportOptionsDisplay::create);
 
         addAutoCompletes();
         addIcons();

@@ -2,7 +2,7 @@ package earth.terrarium.prometheus.common.handlers.tpa;
 
 import earth.terrarium.prometheus.api.roles.RoleApi;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.TpaOptions;
+import earth.terrarium.prometheus.common.roles.TeleportOptions;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
@@ -19,7 +19,7 @@ public class TpaHandler {
             player.sendSystemMessage(ConstantComponents.CANT_TP_TO_SELF);
             return;
         }
-        TpaOptions options = RoleApi.API.getNonNullOption(player, TpaOptions.SERIALIZER);
+        TeleportOptions options = RoleApi.API.getNonNullOption(player, TeleportOptions.SERIALIZER);
         TpaRequest request = new TpaRequest(player.getUUID(), target.getUUID(), options.expire(), direction);
         REQUESTS.put(player.getUUID(), request);
         target.sendSystemMessage(request.getMessage(player));

@@ -1,6 +1,7 @@
 package earth.terrarium.prometheus.common.handlers.role;
 
 import earth.terrarium.prometheus.api.TriState;
+import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.common.handlers.base.Handler;
 import earth.terrarium.prometheus.common.handlers.permission.PermissionHolder;
 import earth.terrarium.prometheus.common.utils.ModUtils;
@@ -113,7 +114,7 @@ public class RoleHandler extends Handler {
     }
 
     public static boolean canModifyRoles(Player player) {
-        return player.hasPermissions(2);
+        return PermissionApi.API.getPermission(player, "roles.manage").map(player.hasPermissions(2));
     }
 
     private static void updatePlayers(@Nullable MinecraftServer server) {

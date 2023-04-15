@@ -7,7 +7,7 @@ import earth.terrarium.prometheus.client.screens.roles.options.entries.TextBoxLi
 import earth.terrarium.prometheus.client.screens.roles.options.entries.TextListEntry;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.role.Role;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.CosmeticOptions;
+import earth.terrarium.prometheus.common.roles.CosmeticOptions;
 
 import java.util.List;
 

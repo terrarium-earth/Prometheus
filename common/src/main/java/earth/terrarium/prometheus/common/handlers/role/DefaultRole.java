@@ -3,8 +3,9 @@ package earth.terrarium.prometheus.common.handlers.role;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.prometheus.api.TriState;
 import earth.terrarium.prometheus.api.roles.options.RoleOption;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.CosmeticOptions;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.HomeOptions;
+import earth.terrarium.prometheus.common.roles.CosmeticOptions;
+import earth.terrarium.prometheus.common.roles.HomeOptions;
+import earth.terrarium.prometheus.common.roles.TeleportOptions;
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 
@@ -22,8 +23,9 @@ public class DefaultRole {
     });
 
     private static final Map<ResourceLocation, RoleOption<?>> OPTIONS = Util.make(new HashMap<>(), map -> {
-        map.put(CosmeticOptions.SERIALIZER.id(), new CosmeticOptions("@Everyone", "⛏", Color.DEFAULT));
+        map.put(CosmeticOptions.SERIALIZER.id(), new CosmeticOptions("@everyone", "⛏", Color.DEFAULT));
         map.put(HomeOptions.SERIALIZER.id(), new HomeOptions(5));
+        map.put(TeleportOptions.SERIALIZER.id(), new TeleportOptions(30000, 60000, 3000));
     });
 
     public static Role create() {

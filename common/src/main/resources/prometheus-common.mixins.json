@@ -11,7 +11,8 @@
         "common.NickedPlayerMixin",
         "common.PermissionPlayerMixin",
         "common.RolePlayerMixin",
-        "common.ServerGamePacketListenerImplMixin"
+        "common.ServerGamePacketListenerImplMixin",
+        "common.CooldownPlayerMixin"
     ],
     "client": [
         "client.ChatOptionsScreenMixin",

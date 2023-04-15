@@ -47,6 +47,8 @@
     "prometheus.locations.warp.to": "Click to warp to %s",
     "prometheus.locations.add": "Add New Location:",
 
+    "prometheus.commands.edit": "Edit Command — %s",
+
     "prometheus.ui.unsaved_changes": "Unsaved Changes!",
     "prometheus.ui.save": "Save",
     "prometheus.ui.back": "Back",
@@ -63,7 +65,7 @@
     "option.prometheus.permissions": "Permissions",
     "option.prometheus.homes/v1": "Homes",
     "option.prometheus.cosmetics/v1": "Cosmetics",
-    "option.prometheus.tpa/v1": "TPA",
+    "option.prometheus.teleport/v1": "Teleport",
 
     "headings.streaming.permission": "Can set Streaming heading",
     "headings.recording.permission": "Can set Recording heading",
@@ -96,8 +98,9 @@
     "prometheus.options.cosmetic.role_name": "Role Name",
     "prometheus.options.cosmetic.role_icon": "Role Icon",
 
-    "prometheus.options.tpa.title": "TPA Options",
-    "prometheus.options.tpa.request_timeout": "Request Timeout",
+    "prometheus.options.teleport.title": "Teleport Options",
+    "prometheus.options.teleport.request_timeout": "Request Timeout",
+    "prometheus.options.teleport.rtp_cooldown": "RTP Cooldown",
 
     "options.prometheusNotificationSound": "Ping Sound",
     "options.prometheus.sound.tooltip": "Play a sound when you receive a message or are mentioned in chat.",

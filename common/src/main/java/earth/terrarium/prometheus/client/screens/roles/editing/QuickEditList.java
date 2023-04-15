@@ -11,7 +11,7 @@ import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.client.utils.ClientUtils;
 import earth.terrarium.prometheus.common.handlers.role.Role;
 import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.CosmeticOptions;
+import earth.terrarium.prometheus.common.roles.CosmeticOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.network.chat.Component;

@@ -54,25 +54,11 @@ public class CommandPermissionHandler {
         @Override
         public boolean test(CommandSourceStack stack) {
             if (stack.isPlayer()) {
-                TriState state = PermissionApi.API.getPermission(stack.getPlayer(), permission);
-                if (state.isUndefined()) {
-                    state = recursivePermissionCheck(stack.getPlayer(), permission.substring(0, permission.lastIndexOf('.')));
-                }
+                TriState state = getPermission(stack.getPlayer(), permission());
                 return (state.isUndefined() && original.test(stack)) || state.isTrue();
             }
             return original.test(stack);
         }
-    }
-
-    private static TriState recursivePermissionCheck(ServerPlayer player, String permission) {
-        if (permission.equals("commands") || permission.isEmpty()) {
-            return TriState.UNDEFINED;
-        }
-        TriState state = PermissionApi.API.getPermission(player, permission + ".*");
-        if (state.isUndefined()) {
-            return recursivePermissionCheck(player, permission.substring(0, permission.lastIndexOf('.')));
-        }
-        return state;
     }
 
     private record RedirectedPermissionPredicate(Supplier<String> deferredPermission, PermissionPredicate predicate) implements Predicate<CommandSourceStack> {
@@ -84,10 +70,29 @@ public class CommandPermissionHandler {
                 permission = predicate().permission();
             }
             if (stack.isPlayer()) {
-                TriState state = PermissionApi.API.getPermission(stack.getPlayer(), permission);
+                TriState state = getPermission(stack.getPlayer(), permission);
                 return (state.isUndefined() && predicate().original().test(stack)) || state.isTrue();
             }
             return predicate().original().test(stack);
         }
+    }
+
+    private static TriState getPermission(ServerPlayer player, String permission) {
+        TriState state = PermissionApi.API.getPermission(player, permission);
+        if (state.isUndefined()) {
+            state = recursivePermissionCheck(player, permission.substring(0, permission.lastIndexOf('.')));
+        }
+        return state;
+    }
+
+    private static TriState recursivePermissionCheck(ServerPlayer player, String permission) {
+        if (permission.equals("commands") || permission.isEmpty()) {
+            return TriState.UNDEFINED;
+        }
+        TriState state = PermissionApi.API.getPermission(player, permission + ".*");
+        if (state.isUndefined()) {
+            return recursivePermissionCheck(player, permission.substring(0, permission.lastIndexOf('.')));
+        }
+        return state;
     }
 }

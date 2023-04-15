@@ -1,4 +1,4 @@
-package earth.terrarium.prometheus.common.handlers.role.options.defaults;
+package earth.terrarium.prometheus.common.roles;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

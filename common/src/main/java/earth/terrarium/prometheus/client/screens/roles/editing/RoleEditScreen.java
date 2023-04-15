@@ -9,7 +9,7 @@ import earth.terrarium.prometheus.client.utils.ClientUtils;
 import earth.terrarium.prometheus.client.utils.MouseLocationFix;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
-import earth.terrarium.prometheus.common.handlers.role.options.defaults.CosmeticOptions;
+import earth.terrarium.prometheus.common.roles.CosmeticOptions;
 import earth.terrarium.prometheus.common.menus.RoleEditMenu;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.network.messages.server.SaveRolePacket;
