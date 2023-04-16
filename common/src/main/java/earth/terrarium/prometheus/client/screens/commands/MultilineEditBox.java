@@ -54,8 +54,6 @@ public class MultilineEditBox extends AbstractScrollWidget {
         String string = this.text.value();
         if (!string.isEmpty()) {
             int k = this.text.cursor();
-            boolean bl = this.isFocused();
-            boolean bl2 = k < string.length();
 
             int linesUpToCursor = this.text.value().substring(0, k).replaceAll("[^\\n]", "").length() + 1;
             var split = this.text.value().substring(0, k).split("\\R");
@@ -64,12 +62,6 @@ public class MultilineEditBox extends AbstractScrollWidget {
             int realWidth = this.width - 15;
             int avgCharWidth = Minecraft.getInstance().font.width("3".repeat(lineCursor + 1)) + (this.innerPadding() * 2);
             int xStart = this.getX() + 15 + this.innerPadding() - (avgCharWidth > realWidth ? avgCharWidth - realWidth : 0);
-            int l = 0;
-            int m = 0;
-            int n = this.getY() + this.innerPadding();
-
-            int var10002;
-            int var10004;
 
             int lineYStart = this.getY() + this.innerPadding();
             int line = 0;
@@ -89,15 +81,9 @@ public class MultilineEditBox extends AbstractScrollWidget {
                 line++;
             }
 
-            if (bl && !bl2) {
-                if (this.withinContentAreaTopBottom(m, m + 9)) {
-                    Minecraft.getInstance().font.drawShadow(stack, "_", (float)l, (float)m, -3092272);
-                }
-            }
-
             if (this.text.hasSelection()) {
                 MultilineTextField.StringView stringView2 = this.text.getSelected();
-                n = this.getY() + this.innerPadding();
+                int yStart = this.getY() + this.innerPadding();
 
                 for (MultilineTextField.StringView stringView3 : this.text.iterateLines()) {
                     if (stringView2.beginIndex() <= stringView3.endIndex()) {
@@ -105,7 +91,7 @@ public class MultilineEditBox extends AbstractScrollWidget {
                             break;
                         }
 
-                        if (this.withinContentAreaTopBottom(n, n + 9)) {
+                        if (this.withinContentAreaTopBottom(yStart, yStart + 9)) {
                             int p = Minecraft.getInstance().font.width(string.substring(stringView3.beginIndex(), Math.max(stringView2.beginIndex(), stringView3.beginIndex())));
                             int q;
                             if (stringView2.endIndex() > stringView3.endIndex()) {
@@ -114,12 +100,10 @@ public class MultilineEditBox extends AbstractScrollWidget {
                                 q = Minecraft.getInstance().font.width(string.substring(stringView3.beginIndex(), stringView2.endIndex()));
                             }
 
-                            var10002 = xStart + p;
-                            var10004 = xStart + q;
-                            this.renderHighlight(stack, var10002, n, var10004, n + 9);
+                            this.renderHighlight(stack, xStart + p, yStart, xStart + q, yStart + 9);
                         }
                     }
-                    n += 9;
+                    yStart += 9;
                 }
             }
 

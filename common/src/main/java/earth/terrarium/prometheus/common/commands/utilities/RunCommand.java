@@ -48,9 +48,9 @@ public class RunCommand {
                             var id = StringArgumentType.getString(context, "id");
                             DynamicCommandHandler.putCommand(context.getSource().getLevel(), id, new ArrayList<>());
                             context.getSource().sendSuccess(
-                                    Component.literal("Added command " + id)
+                                    Component.translatable("prometheus.commands.add", id)
                                             .withStyle(Style.EMPTY
-                                                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to edit.")))
+                                                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("prometheus.commands.click_edit")))
                                                     .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "runs edit " + id))
                                             ),
                                     false
@@ -62,7 +62,7 @@ public class RunCommand {
                         .executes(context -> {
                             var id = StringArgumentType.getString(context, "id");
                             DynamicCommandHandler.removeCommand(context.getSource().getLevel(), id);
-                            context.getSource().sendSuccess(Component.literal("Removed command " + id), false);
+                            context.getSource().sendSuccess(Component.translatable("prometheus.commands.remove", id), false);
                             return 1;
                         })))
         );

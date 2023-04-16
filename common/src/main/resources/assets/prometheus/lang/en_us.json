@@ -48,6 +48,9 @@
     "prometheus.locations.add": "Add New Location:",
 
     "prometheus.commands.edit": "Edit Command — %s",
+    "prometheus.commands.add": "Added command %s",
+    "prometheus.commands.remove": "Removed command %s",
+    "prometheus.commands.click_edit": "Click to edit.",
 
     "prometheus.ui.unsaved_changes": "Unsaved Changes!",
     "prometheus.ui.save": "Save",

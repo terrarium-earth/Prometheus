@@ -79,13 +79,22 @@ public class EditCommandScreen extends AbstractContainerCursorScreen<EditCommand
         for (GuiEventListener child : children()) {
             if (child instanceof AbstractWidget widget && widget.isHovered()) {
                 if (widget.active) {
-                    setCursor(widget instanceof MultilineEditBox ? Cursor.TEXT : Cursor.POINTER);
+                    if (widget instanceof MultilineEditBox) {
+                        super.setCursor(Cursor.TEXT);
+                    } else {
+                        super.setCursor(Cursor.POINTER);
+                    }
                 } else {
-                    setCursor(Cursor.DISABLED);
+                    super.setCursor(Cursor.DEFAULT);
                 }
                 break;
             }
         }
+    }
+
+    @Override
+    public void setCursor(Cursor cursor) {
+
     }
 
     public void updateButtons() {

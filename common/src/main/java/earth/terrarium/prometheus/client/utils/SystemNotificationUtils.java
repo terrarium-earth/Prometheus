@@ -19,6 +19,7 @@ public class SystemNotificationUtils {
     private static TrayIcon trayIcon;
 
     public static void init() {
+        if (Util.getPlatform() == Util.OS.OSX) return;
         System.setProperty("java.awt.headless", "false"); //Client should NEVER be headless
         if (SystemTray.isSupported()) {
             try (InputStream icon = SystemNotificationUtils.class.getClassLoader().getResourceAsStream("tray_icon.png")) {
@@ -35,6 +36,7 @@ public class SystemNotificationUtils {
                 e.printStackTrace();
             }
         }
+        System.setProperty("java.awt.headless", "true");
     }
 
     public static void sendNotification(String notification, String title) {
