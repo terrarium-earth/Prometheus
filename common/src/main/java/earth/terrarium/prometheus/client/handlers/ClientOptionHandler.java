@@ -15,22 +15,22 @@ public class ClientOptionHandler {
 
     public static void onLoad() {
         showNotifications = OptionInstance.createBoolean(
-                "options.prometheusShowNotifications",
-                OptionInstance.cachedConstantTooltip(ConstantComponents.NOTIFICATION_OPTION_TOOLTIP),
-                false
+            "options.prometheusShowNotifications",
+            OptionInstance.cachedConstantTooltip(ConstantComponents.NOTIFICATION_OPTION_TOOLTIP),
+            false
         );
         notificationSound = new OptionInstance<>(
-                "options.prometheusNotificationSound",
-                OptionInstance.cachedConstantTooltip(ConstantComponents.SOUND_OPTION_TOOLTIP),
-                OptionInstance.forOptionEnum(),
-                new OptionInstance.Enum<>(
-                        Arrays.asList(NotificationHandler.PingSound.values()),
-                        Codec.INT.xmap(NotificationHandler.PingSound::byId, NotificationHandler.PingSound::getId)
-                ),
-                NotificationHandler.PingSound.NONE,
-                ignored -> {
-                    //TODO play sound
-                }
+            "options.prometheusNotificationSound",
+            OptionInstance.cachedConstantTooltip(ConstantComponents.SOUND_OPTION_TOOLTIP),
+            OptionInstance.forOptionEnum(),
+            new OptionInstance.Enum<>(
+                Arrays.asList(NotificationHandler.PingSound.values()),
+                Codec.INT.xmap(NotificationHandler.PingSound::byId, NotificationHandler.PingSound::getId)
+            ),
+            NotificationHandler.PingSound.NONE,
+            ignored -> {
+                //TODO play sound
+            }
         );
     }
 

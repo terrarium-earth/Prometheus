@@ -33,7 +33,7 @@ public class ModUtilsImpl {
                     return constructor.createMenu(i, inventory, player);
                 }
             });
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

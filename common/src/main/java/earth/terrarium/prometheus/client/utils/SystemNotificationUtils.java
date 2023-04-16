@@ -12,8 +12,8 @@ import java.util.function.BiFunction;
 public class SystemNotificationUtils {
 
     private static final List<BiFunction<String, String, Boolean>> LINUX_RUNS = List.of(
-            SystemNotificationUtils::sendGnomeNotification,
-            SystemNotificationUtils::sendKdeNotifcation
+        SystemNotificationUtils::sendGnomeNotification,
+        SystemNotificationUtils::sendKdeNotifcation
     );
 
     private static TrayIcon trayIcon;
@@ -59,9 +59,9 @@ public class SystemNotificationUtils {
         if (!sendTrayNotification(notification, title)) {
             try {
                 Runtime.getRuntime().exec(new String[]{
-                        "osascript",
-                        "-e",
-                        "display notification \"" + notification + "\" with title \"" + title + "\""
+                    "osascript",
+                    "-e",
+                    "display notification \"" + notification + "\" with title \"" + title + "\""
                 });
             } catch (Exception ignored) {
             }
@@ -80,9 +80,9 @@ public class SystemNotificationUtils {
     private static boolean sendGnomeNotification(String notification, String title) {
         try {
             var process = Runtime.getRuntime().exec(new String[]{
-                    "notify-send",
-                    "\"" + title + "\"",
-                    "\"" + notification + "\""
+                "notify-send",
+                "\"" + title + "\"",
+                "\"" + notification + "\""
             });
             if (process == null) return false;
             return !process.waitFor(1, TimeUnit.SECONDS) || process.exitValue() == 0;
@@ -94,12 +94,12 @@ public class SystemNotificationUtils {
     private static boolean sendKdeNotifcation(String notification, String title) {
         try {
             var process = Runtime.getRuntime().exec(new String[]{
-                    "kdialog",
-                    "--title",
-                    "\"" + title + "\"",
-                    "--passivepopup",
-                    "\"" + notification + "\"",
-                    "3"
+                "kdialog",
+                "--title",
+                "\"" + title + "\"",
+                "--passivepopup",
+                "\"" + notification + "\"",
+                "3"
             });
             if (process == null) return false;
             return !process.waitFor(1, TimeUnit.SECONDS) || process.exitValue() == 0;

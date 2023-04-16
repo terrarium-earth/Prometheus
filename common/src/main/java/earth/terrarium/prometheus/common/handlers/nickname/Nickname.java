@@ -16,6 +16,7 @@ public record Nickname(String name, Component component) {
     public static Nickname of(CompoundTag tag) {
         return new Nickname(tag.getString("name"), Component.Serializer.fromJson(tag.getString("component")));
     }
+
     public CompoundTag toTag() {
         CompoundTag tag = new CompoundTag();
         tag.putString("name", name);

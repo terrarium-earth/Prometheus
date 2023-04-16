@@ -21,6 +21,7 @@ public class EditCommandMenu extends AbstractContainerMenu {
 
     private List<String> lines;
     private final String id;
+
     public EditCommandMenu(int i, Inventory ignored, FriendlyByteBuf buf) {
         this(i, buf.readList(FriendlyByteBuf::readUtf), buf.readUtf());
     }
@@ -63,9 +64,9 @@ public class EditCommandMenu extends AbstractContainerMenu {
     public static void open(ServerPlayer player, String commandId) {
         List<String> lines = DynamicCommandHandler.getCommand(player.getLevel(), commandId);
         ModUtils.openMenu(player,
-                (id, inventory, p) -> new EditCommandMenu(id, lines, commandId),
-                CommonComponents.EMPTY,
-                buf -> EditCommandMenu.write(buf, lines, commandId)
+            (id, inventory, p) -> new EditCommandMenu(id, lines, commandId),
+            CommonComponents.EMPTY,
+            buf -> EditCommandMenu.write(buf, lines, commandId)
         );
     }
 }

@@ -168,7 +168,7 @@ public class EditCommandScreen extends AbstractContainerCursorScreen<EditCommand
                     tempComponents.add(Component.literal(part.substring(last)).withStyle(Style.EMPTY.withColor(0x94b8d0)));
                 }
                 components.add(ComponentUtils.formatList(tempComponents, CommonComponents.EMPTY));
-            }else {
+            } else {
                 components.add(Component.literal(formatArgs(part)).withStyle(Style.EMPTY.withColor(0x94b8d0)));
             }
         }

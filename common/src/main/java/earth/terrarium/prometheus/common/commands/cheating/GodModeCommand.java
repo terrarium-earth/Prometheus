@@ -10,11 +10,11 @@ public class GodModeCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("godmode")
-                .requires(source -> source.hasPermission(2))
-                .executes(context -> {
-                    GodModeCommand.godmode(context.getSource().getEntity());
-                    return 1;
-                }));
+            .requires(source -> source.hasPermission(2))
+            .executes(context -> {
+                GodModeCommand.godmode(context.getSource().getEntity());
+                return 1;
+            }));
     }
 
     private static void godmode(Entity entity) {

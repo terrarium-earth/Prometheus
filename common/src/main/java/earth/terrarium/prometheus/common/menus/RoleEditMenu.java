@@ -34,10 +34,10 @@ public class RoleEditMenu extends AbstractContainerMenu {
         super(ModMenus.ROLE_EDIT.get(), id);
         this.roles = roles;
         this.selected = roles == null ? null : roles.stream()
-                .filter(entry -> entry.id().equals(selected))
-                .findFirst()
-                .map(RoleEntry::role)
-                .orElse(null);
+            .filter(entry -> entry.id().equals(selected))
+            .findFirst()
+            .map(RoleEntry::role)
+            .orElse(null);
         this.selectedId = selected;
     }
 
@@ -110,12 +110,12 @@ public class RoleEditMenu extends AbstractContainerMenu {
             return;
         }
         List<RoleEntry> roles = RoleHandler.roles(player).roles().stream()
-                .filter(entry -> editable.contains(entry.id()))
-                .toList();
+            .filter(entry -> editable.contains(entry.id()))
+            .toList();
         ModUtils.openMenu(player,
-                (id, inventory, p) -> new RoleEditMenu(id, roles, selected),
-                CommonComponents.EMPTY,
-                buf -> RoleEditMenu.write(buf, roles, selected)
+            (id, inventory, p) -> new RoleEditMenu(id, roles, selected),
+            CommonComponents.EMPTY,
+            buf -> RoleEditMenu.write(buf, roles, selected)
         );
     }
 }

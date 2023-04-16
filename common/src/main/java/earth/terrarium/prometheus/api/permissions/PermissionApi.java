@@ -14,7 +14,8 @@ public interface PermissionApi {
 
     /**
      * Checks if a player has a permission
-     * @param player the player to check
+     *
+     * @param player     the player to check
      * @param permission the permission to check
      * @return the result of the check
      */
@@ -22,6 +23,7 @@ public interface PermissionApi {
 
     /**
      * Adds a permission to the auto complete list
+     *
      * @param permission the permission to add
      */
     default void addAutoComplete(String permission) {
@@ -31,13 +33,15 @@ public interface PermissionApi {
 
     /**
      * Adds a permission to the auto complete list
+     *
      * @param permission the permission to add
      */
     void addAutoComplete(Supplier<List<String>> permission);
 
     /**
      * Gets the list of possible auto complete options
-     * @param text the text to auto complete
+     *
+     * @param text        the text to auto complete
      * @param permissions the permissions already found and should not be added
      * @return the auto complete list
      */

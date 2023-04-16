@@ -14,7 +14,8 @@ public class RoleMap implements Iterable<RoleEntry> {
     private RoleEntry defaultRole = new RoleEntry(DefaultRole.DEFAULT_ROLE, DefaultRole.create());
 
     public void set(UUID uuid, Role role) {
-        if (uuid == null) uuid = ModUtils.generate(id -> getIndex(id) == -1 && !DefaultRole.DEFAULT_ROLE.equals(id), UUID::randomUUID);
+        if (uuid == null)
+            uuid = ModUtils.generate(id -> getIndex(id) == -1 && !DefaultRole.DEFAULT_ROLE.equals(id), UUID::randomUUID);
         if (uuid.equals(DefaultRole.DEFAULT_ROLE)) {
             defaultRole = new RoleEntry(uuid, role);
             return;

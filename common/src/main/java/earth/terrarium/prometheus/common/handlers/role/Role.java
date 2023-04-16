@@ -25,10 +25,14 @@ public record Role(Map<String, TriState> permissions, Map<ResourceLocation, Role
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final Codec<TriState> STATE_CODEC = Codec.BYTE.xmap(TriState::of, state -> (byte)state.ordinal());
+    private static final Codec<TriState> STATE_CODEC = Codec.BYTE.xmap(TriState::of, state -> (byte) state.ordinal());
     public static final Codec<Role> CODEC = RecordCodecBuilder.create(instnace -> instnace.group(
-            Codec.unboundedMap(Codec.STRING, STATE_CODEC).fieldOf("permissions").orElse(err -> { LOGGER.error(err); }, new HashMap<>()).forGetter(Role::permissions),
-            new DispatchMapCodec<>(ResourceLocation.CODEC, OptionRegistry.codec()).fieldOf("options").orElse(err -> { LOGGER.error(err); }, new HashMap<>()).forGetter(Role::options)
+        Codec.unboundedMap(Codec.STRING, STATE_CODEC).fieldOf("permissions").orElse(err -> {
+            LOGGER.error(err);
+        }, new HashMap<>()).forGetter(Role::permissions),
+        new DispatchMapCodec<>(ResourceLocation.CODEC, OptionRegistry.codec()).fieldOf("options").orElse(err -> {
+            LOGGER.error(err);
+        }, new HashMap<>()).forGetter(Role::options)
     ).apply(instnace, (perms, ops) -> new Role(new HashMap<>(perms), new HashMap<>(ops))));
     //DO NOT CHANGE THIS CODE. It is wrapped because codecs make immutable maps, and we need to be able to modify them.
 
@@ -78,15 +82,15 @@ public record Role(Map<String, TriState> permissions, Map<ResourceLocation, Role
 
     public CompoundTag toTag() {
         Tag tag = CODEC.encodeStart(NbtOps.INSTANCE, this).
-                resultOrPartial(LOGGER::error)
-                .orElse(new CompoundTag());
+            resultOrPartial(LOGGER::error)
+            .orElse(new CompoundTag());
         return (CompoundTag) tag;
     }
 
     public static Role fromTag(CompoundTag tag) {
         return CODEC.parse(NbtOps.INSTANCE, tag)
-                .resultOrPartial(LOGGER::error)
-                .orElse(new Role());
+            .resultOrPartial(LOGGER::error)
+            .orElse(new Role());
     }
 
     public void toBuffer(FriendlyByteBuf buffer) {
@@ -95,8 +99,8 @@ public record Role(Map<String, TriState> permissions, Map<ResourceLocation, Role
 
     public static Role fromBuffer(FriendlyByteBuf buffer) {
         return PacketHelper.readWithYabn(buffer, Role.CODEC, true).get()
-                .ifRight(error -> LOGGER.error("Error reading role: {}", error))
-                .left()
-                .orElse(null);
+            .ifRight(error -> LOGGER.error("Error reading role: {}", error))
+            .left()
+            .orElse(null);
     }
 }

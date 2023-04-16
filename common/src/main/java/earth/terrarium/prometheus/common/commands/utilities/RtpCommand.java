@@ -27,19 +27,19 @@ public class RtpCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("rtp")
-                .executes(context -> {
-                    ServerPlayer player = context.getSource().getPlayerOrException();
-                    if (CooldownHandler.hasCooldown(player, "rtp")) {
-                        context.getSource().sendFailure(RTP_ON_COOLDOWN);
-                        return 0;
-                    }
-                    TeleportOptions options = RoleApi.API.getNonNullOption(player, TeleportOptions.SERIALIZER);
-                    if (tp(player, options.rtpDistance(), 0)) {
-                        CooldownHandler.setCooldown(player, "rtp", options.rtpCooldown());
-                        return 1;
-                    }
+            .executes(context -> {
+                ServerPlayer player = context.getSource().getPlayerOrException();
+                if (CooldownHandler.hasCooldown(player, "rtp")) {
+                    context.getSource().sendFailure(RTP_ON_COOLDOWN);
                     return 0;
-                }));
+                }
+                TeleportOptions options = RoleApi.API.getNonNullOption(player, TeleportOptions.SERIALIZER);
+                if (tp(player, options.rtpDistance(), 0)) {
+                    CooldownHandler.setCooldown(player, "rtp", options.rtpCooldown());
+                    return 1;
+                }
+                return 0;
+            }));
     }
 
     public static boolean tp(ServerPlayer player, int distance, int tries) {
@@ -78,8 +78,8 @@ public class RtpCommand {
 
     private static boolean isSafe(Player player, BlockPos pos) {
         return player.level.getBlockState(pos).isAir() &&
-                player.level.getBlockState(pos.above()).isAir() &&
-                player.level.getBlockState(pos.above(2)).isAir()
-                && player.level.getBlockState(pos.below()).entityCanStandOn(player.level, pos.below(), player);
+            player.level.getBlockState(pos.above()).isAir() &&
+            player.level.getBlockState(pos.above(2)).isAir()
+            && player.level.getBlockState(pos.below()).entityCanStandOn(player.level, pos.below(), player);
     }
 }

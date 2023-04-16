@@ -32,87 +32,87 @@ public class WarpCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("warps")
-                .requires(source -> source.hasPermission(2))
-                .then(add())
-                .then(remove())
-                .then(list())
-                .executes(context -> {
-                    WarpCommand.openWarpMenu(context.getSource().getPlayerOrException());
-                    return 1;
-                })
+            .requires(source -> source.hasPermission(2))
+            .then(add())
+            .then(remove())
+            .then(list())
+            .executes(context -> {
+                WarpCommand.openWarpMenu(context.getSource().getPlayerOrException());
+                return 1;
+            })
         );
         dispatcher.register(Commands.literal("warp")
-                .then(Commands.argument("name", StringArgumentType.greedyString())
-                        .suggests(SUGGESTION_PROVIDER)
-                        .executes(context -> {
-                            WarpHandler.teleport(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
-                            return 1;
-                        })
-                )
+            .then(Commands.argument("name", StringArgumentType.greedyString())
+                .suggests(SUGGESTION_PROVIDER)
+                .executes(context -> {
+                    WarpHandler.teleport(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
+                    return 1;
+                })
+            )
         );
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> add() {
         return Commands.literal("add")
-                .requires(source -> source.hasPermission(2))
-                .then(Commands.argument("name", StringArgumentType.greedyString())
-                        .executes(context -> {
-                            WarpHandler.add(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
-                            return 1;
-                        })
+            .requires(source -> source.hasPermission(2))
+            .then(Commands.argument("name", StringArgumentType.greedyString())
+                .executes(context -> {
+                    WarpHandler.add(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
+                    return 1;
+                })
 
-                );
+            );
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> remove() {
         return Commands.literal("remove")
-                .requires(source -> source.hasPermission(2))
-                .then(Commands.argument("name", StringArgumentType.greedyString())
-                        .suggests(SUGGESTION_PROVIDER)
-                        .executes(context -> {
-                            WarpHandler.remove(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
-                            return 1;
-                        })
-                );
+            .requires(source -> source.hasPermission(2))
+            .then(Commands.argument("name", StringArgumentType.greedyString())
+                .suggests(SUGGESTION_PROVIDER)
+                .executes(context -> {
+                    WarpHandler.remove(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
+                    return 1;
+                })
+            );
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> list() {
         return Commands.literal("list")
-                .executes(context -> {
-                    context.getSource().sendSuccess(ConstantComponents.WARPS_COMMAND_TITLE, false);
-                    WarpHandler.getWarps(context.getSource().getPlayerOrException())
-                            .keySet()
-                            .stream()
-                            .map(WarpCommand::createListEntry)
-                            .forEach(msg -> context.getSource().sendSuccess(msg, false));
-                    return 1;
-                });
+            .executes(context -> {
+                context.getSource().sendSuccess(ConstantComponents.WARPS_COMMAND_TITLE, false);
+                WarpHandler.getWarps(context.getSource().getPlayerOrException())
+                    .keySet()
+                    .stream()
+                    .map(WarpCommand::createListEntry)
+                    .forEach(msg -> context.getSource().sendSuccess(msg, false));
+                return 1;
+            });
     }
 
     private static Component createListEntry(String name) {
         return Component.literal(" - " + name).setStyle(Style.EMPTY.withHoverEvent(new HoverEvent(
-                HoverEvent.Action.SHOW_TEXT,
-                Component.translatable("prometheus.locations.warp.to", name)
+            HoverEvent.Action.SHOW_TEXT,
+            Component.translatable("prometheus.locations.warp.to", name)
         )).withClickEvent(new ClickEvent(
-                ClickEvent.Action.RUN_COMMAND,
-                "/warp " + name
+            ClickEvent.Action.RUN_COMMAND,
+            "/warp " + name
         )));
     }
 
     public static void openWarpMenu(ServerPlayer player) {
         Map<String, GlobalPos> homes = WarpHandler.getWarps(player);
         List<Location> locations = homes.entrySet()
-                .stream()
-                .map(entry -> new Location(entry.getKey(), entry.getValue()))
-                .toList();
+            .stream()
+            .map(entry -> new Location(entry.getKey(), entry.getValue()))
+            .toList();
 
         int maxAmount = WarpHandler.canModifyWarps(player) ? Integer.MAX_VALUE : -1;
 
         ModUtils.openMenu(
-                player,
-                (i, inventory, playerx) -> new LocationMenu(i, LocationType.WARP, maxAmount, locations),
-                ConstantComponents.WARPS_UI_TITLE,
-                buf -> LocationMenu.write(buf, LocationType.WARP, maxAmount, locations)
+            player,
+            (i, inventory, playerx) -> new LocationMenu(i, LocationType.WARP, maxAmount, locations),
+            ConstantComponents.WARPS_UI_TITLE,
+            buf -> LocationMenu.write(buf, LocationType.WARP, maxAmount, locations)
         );
     }
 }

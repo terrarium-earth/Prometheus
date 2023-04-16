@@ -42,7 +42,7 @@ public class InvseeScreen extends AbstractContainerCursorScreen<InvseeMenu> impl
         })).setTooltip(Tooltip.create(Component.translatable("prometheus.invsee.enderchest")));
         try {
             this.renderedPlayer = new RemotePlayer(this.minecraft.level, new GameProfile(this.menu.getPlayerUUID(), "Fake Inventory Player"));
-        }catch (Exception ignored){}
+        } catch (Exception ignored) {}
     }
 
     @Override
@@ -54,8 +54,8 @@ public class InvseeScreen extends AbstractContainerCursorScreen<InvseeMenu> impl
 
     @Override
     protected void renderLabels(@NotNull PoseStack stack, int i, int j) {
-        this.font.draw(stack, title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
-        this.font.draw(stack, YOUR_INVENTORY, (float)this.inventoryLabelX, (float)this.inventoryLabelY, 4210752);
+        this.font.draw(stack, title, (float) this.titleLabelX, (float) this.titleLabelY, 4210752);
+        this.font.draw(stack, YOUR_INVENTORY, (float) this.inventoryLabelX, (float) this.inventoryLabelY, 4210752);
     }
 
     @Override
@@ -66,8 +66,8 @@ public class InvseeScreen extends AbstractContainerCursorScreen<InvseeMenu> impl
         blit(stack, k, l, 0, 0, this.imageWidth, this.imageHeight);
         if (this.renderedPlayer != null) {
             InventoryScreen.renderEntityInInventoryFollowsMouse(stack,
-                    k + 87, l + 58,
-                    20, (float) (k + 51) - i, (float) (l + 75 - 50) - j, this.renderedPlayer);
+                k + 87, l + 58,
+                20, (float) (k + 51) - i, (float) (l + 75 - 50) - j, this.renderedPlayer);
         }
     }
 }

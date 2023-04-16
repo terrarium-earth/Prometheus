@@ -64,8 +64,8 @@ public class LocationsList extends SelectionList<LocationsList.Entry> {
             CursorUtils.setCursor(hovered, CursorScreen.Cursor.POINTER);
             if (mouseX >= left + 5 && mouseX <= left + 21 && mouseY >= top + 2 && mouseY <= top + 18) {
                 ClientUtils.setTooltip(Component.translatableWithFallback(
-                        location.pos().dimension().location().toLanguageKey("dimension"),
-                        location.pos().dimension().location().toString()
+                    location.pos().dimension().location().toLanguageKey("dimension"),
+                    location.pos().dimension().location().toString()
                 ));
             }
         }

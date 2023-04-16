@@ -12,8 +12,8 @@ import java.util.function.Consumer;
 public class ModUtilsImpl {
     public static void openMenu(ServerPlayer player, MenuConstructor constructor, Component title, Consumer<FriendlyByteBuf> options) {
         NetworkHooks.openScreen(player, new SimpleMenuProvider(
-                constructor,
-                title
+            constructor,
+            title
         ), options);
     }
 }

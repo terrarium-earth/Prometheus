@@ -6,7 +6,6 @@ import com.teamresourceful.resourcefullib.client.screens.AbstractContainerCursor
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.menus.MemberRolesMenu;
-import earth.terrarium.prometheus.common.menus.RoleEditMenu;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
@@ -69,7 +68,7 @@ public class MemberRolesScreen extends AbstractContainerCursorScreen<MemberRoles
 
     @Override
     protected void renderLabels(@NotNull PoseStack stack, int i, int j) {
-        this.font.draw(stack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
+        this.font.draw(stack, this.title, (float) this.titleLabelX, (float) this.titleLabelY, 4210752);
     }
 
     @Override

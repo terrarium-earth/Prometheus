@@ -28,49 +28,49 @@ public class RunCommand {
     private static final Component NO_PERMISSION = Component.translatable("prometheus.run.no_permission");
 
     private static final SuggestionProvider<CommandSourceStack> SUGGEST_IDS = (context, builder) ->
-            SharedSuggestionProvider.suggest(DynamicCommandHandler.getCommands(context.getSource().getLevel()), builder);
+        SharedSuggestionProvider.suggest(DynamicCommandHandler.getCommands(context.getSource().getLevel()), builder);
 
     private static final SuggestionProvider<CommandSourceStack> SUGGEST_NAMES = (context, builder) ->
-            SharedSuggestionProvider.suggest(context.getSource().getOnlinePlayerNames(), builder);
+        SharedSuggestionProvider.suggest(context.getSource().getOnlinePlayerNames(), builder);
 
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("runs")
-                .requires(source -> source.hasPermission(4))
-                .then(Commands.literal("edit").then(Commands.argument("id", StringArgumentType.word())
-                        .suggests(SUGGEST_IDS)
-                        .executes(context -> {
-                            EditCommandMenu.open(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "id"));
-                            return 1;
-                        })))
-                .then(Commands.literal("add").then(Commands.argument("id", StringArgumentType.word())
-                        .executes(context -> {
-                            var id = StringArgumentType.getString(context, "id");
-                            DynamicCommandHandler.putCommand(context.getSource().getLevel(), id, new ArrayList<>());
-                            context.getSource().sendSuccess(
-                                    Component.translatable("prometheus.commands.add", id)
-                                            .withStyle(Style.EMPTY
-                                                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("prometheus.commands.click_edit")))
-                                                    .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "runs edit " + id))
-                                            ),
-                                    false
-                            );
-                            return 1;
-                        })))
-                .then(Commands.literal("remove").then(Commands.argument("id", StringArgumentType.word())
-                        .suggests(SUGGEST_IDS)
-                        .executes(context -> {
-                            var id = StringArgumentType.getString(context, "id");
-                            DynamicCommandHandler.removeCommand(context.getSource().getLevel(), id);
-                            context.getSource().sendSuccess(Component.translatable("prometheus.commands.remove", id), false);
-                            return 1;
-                        })))
+            .requires(source -> source.hasPermission(4))
+            .then(Commands.literal("edit").then(Commands.argument("id", StringArgumentType.word())
+                .suggests(SUGGEST_IDS)
+                .executes(context -> {
+                    EditCommandMenu.open(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "id"));
+                    return 1;
+                })))
+            .then(Commands.literal("add").then(Commands.argument("id", StringArgumentType.word())
+                .executes(context -> {
+                    var id = StringArgumentType.getString(context, "id");
+                    DynamicCommandHandler.putCommand(context.getSource().getLevel(), id, new ArrayList<>());
+                    context.getSource().sendSuccess(
+                        Component.translatable("prometheus.commands.add", id)
+                            .withStyle(Style.EMPTY
+                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("prometheus.commands.click_edit")))
+                                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "runs edit " + id))
+                            ),
+                        false
+                    );
+                    return 1;
+                })))
+            .then(Commands.literal("remove").then(Commands.argument("id", StringArgumentType.word())
+                .suggests(SUGGEST_IDS)
+                .executes(context -> {
+                    var id = StringArgumentType.getString(context, "id");
+                    DynamicCommandHandler.removeCommand(context.getSource().getLevel(), id);
+                    context.getSource().sendSuccess(Component.translatable("prometheus.commands.remove", id), false);
+                    return 1;
+                })))
         );
         dispatcher.register(Commands.literal("run")
-                .then(Commands.argument("id", StringArgumentType.word()).suggests(SUGGEST_IDS)
-                        .then(Commands.argument("args", StringArgumentType.greedyString()).suggests(SUGGEST_NAMES)
-                                .executes(context -> runArgCommand(dispatcher, context)))
-                        .executes(context -> runArgLessCommand(dispatcher, context))));
+            .then(Commands.argument("id", StringArgumentType.word()).suggests(SUGGEST_IDS)
+                .then(Commands.argument("args", StringArgumentType.greedyString()).suggests(SUGGEST_NAMES)
+                    .executes(context -> runArgCommand(dispatcher, context)))
+                .executes(context -> runArgLessCommand(dispatcher, context))));
     }
 
     private static int runArgCommand(CommandDispatcher<CommandSourceStack> dispatcher, CommandContext<CommandSourceStack> context) {

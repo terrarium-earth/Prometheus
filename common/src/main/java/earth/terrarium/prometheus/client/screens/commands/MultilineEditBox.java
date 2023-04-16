@@ -176,11 +176,11 @@ public class MultilineEditBox extends AbstractScrollWidget {
 
     private void scrollToCursor() {
         double d = this.scrollAmount();
-        var view = this.text.getLineView((int)(d / 9.0));
+        var view = this.text.getLineView((int) (d / 9.0));
         if (this.text.cursor() <= view.beginIndex()) {
             d = this.text.getLineAtCursor() * 9;
         } else {
-            MultilineTextField.StringView stringView2 = this.text.getLineView((int)((d + (double)this.height) / 9.0) - 1);
+            MultilineTextField.StringView stringView2 = this.text.getLineView((int) ((d + (double) this.height) / 9.0) - 1);
             if (this.text.cursor() > stringView2.endIndex()) {
                 d = this.text.getLineAtCursor() * 9 - this.height + 9 + this.totalInnerPadding();
             }
@@ -199,8 +199,8 @@ public class MultilineEditBox extends AbstractScrollWidget {
     }
 
     private void seekCursorScreen(double x, double y) {
-        double newX = x - 15 - (double)this.getX() - (double)this.innerPadding();
-        double newY = y - (double)this.getY() - (double)this.innerPadding() + this.scrollAmount();
+        double newX = x - 15 - (double) this.getX() - (double) this.innerPadding();
+        double newY = y - (double) this.getY() - (double) this.innerPadding() + this.scrollAmount();
         this.text.seekCursorToPoint(newX, newY);
     }
 

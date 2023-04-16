@@ -62,7 +62,7 @@ public class TriStateListEntry extends ListEntry {
         }
 
         boolean btnHovered = mouseX >= left + width - 12 - 5 && mouseX <= left + width - 5 && mouseY >= top + 4 && mouseY <= top + 15;
-        Gui.blit(stack, left + width - 12 - 5, top + 4, 19,  btnHovered ? 61 : 49, 12, 12);
+        Gui.blit(stack, left + width - 12 - 5, top + 4, 19, btnHovered ? 61 : 49, 12, 12);
         if (btnHovered) {
             CursorUtils.setCursor(true, CursorScreen.Cursor.POINTER);
             ClientUtils.setTooltip(ConstantComponents.REMOVE);

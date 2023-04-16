@@ -27,6 +27,7 @@ public class RolesMenu extends AbstractContainerMenu {
     public RolesMenu(int i, Inventory inventory, FriendlyByteBuf buf) {
         this(i, read(buf), buf.readVarInt());
     }
+
     public RolesMenu(int id, List<RoleEntry> roles, int starting) {
         super(ModMenus.ROLES.get(), id);
         this.uneditable = new ArrayList<>();

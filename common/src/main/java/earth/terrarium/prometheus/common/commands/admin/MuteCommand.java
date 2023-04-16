@@ -20,27 +20,27 @@ public class MuteCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("mute")
-                .requires(source -> source.hasPermission(2))
-                .then(Commands.argument("player", GameProfileArgument.gameProfile())
-                        .then(
-                                Commands.argument("time", TimeArgument.time()).executes(context -> {
-                                    mute(context, IntegerArgumentType.getInteger(context, "time") * 50L);
-                                    return 1;
-                                })
-                        ).executes(context -> {
-                            mute(context, FIFTY_YEARS);
-                            return 1;
-                        })
-                )
+            .requires(source -> source.hasPermission(2))
+            .then(Commands.argument("player", GameProfileArgument.gameProfile())
+                .then(
+                    Commands.argument("time", TimeArgument.time()).executes(context -> {
+                        mute(context, IntegerArgumentType.getInteger(context, "time") * 50L);
+                        return 1;
+                    })
+                ).executes(context -> {
+                    mute(context, FIFTY_YEARS);
+                    return 1;
+                })
+            )
         );
         dispatcher.register(Commands.literal("unmute")
-                .requires(source -> source.hasPermission(2))
-                .then(Commands.argument("player", GameProfileArgument.gameProfile())
-                        .executes(context -> {
-                            unmute(context);
-                            return 1;
-                        })
-                )
+            .requires(source -> source.hasPermission(2))
+            .then(Commands.argument("player", GameProfileArgument.gameProfile())
+                .executes(context -> {
+                    unmute(context);
+                    return 1;
+                })
+            )
         );
     }
 

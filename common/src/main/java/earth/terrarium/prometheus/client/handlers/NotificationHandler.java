@@ -37,22 +37,22 @@ public class NotificationHandler {
 
         switch (type) {
             case PRIVATE -> SystemNotificationUtils.sendNotification(
-                    "Private Message Received",
-                    "You received a private message from " + senderName + "!"
+                "Private Message Received",
+                "You received a private message from " + senderName + "!"
             );
             case TEAM -> {
-                if (text.contains("@"+name.toLowerCase(Locale.ROOT))) {
+                if (text.contains("@" + name.toLowerCase(Locale.ROOT))) {
                     SystemNotificationUtils.sendNotification(
-                            "You've been mentioned in a team message",
-                            "You were mentioned by " + senderName + "!"
+                        "You've been mentioned in a team message",
+                        "You were mentioned by " + senderName + "!"
                     );
                 }
             }
             default -> {
-                if (text.contains("@"+name.toLowerCase(Locale.ROOT))) {
+                if (text.contains("@" + name.toLowerCase(Locale.ROOT))) {
                     SystemNotificationUtils.sendNotification(
-                            "You've been mentioned in a message",
-                            "You were mentioned by " + senderName + "!"
+                        "You've been mentioned in a message",
+                        "You were mentioned by " + senderName + "!"
                     );
                 }
             }

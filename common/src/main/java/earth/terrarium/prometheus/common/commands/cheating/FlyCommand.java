@@ -13,24 +13,24 @@ public class FlyCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("fly")
-                .requires(source -> source.hasPermission(2))
-                .then(Commands.argument("players", EntityArgument.players())
-                        .executes(context -> {
-                            EntityArgument.getPlayers(context, "players").forEach(FlyCommand::fly);
-                            return 1;
-                        })
-                ).executes(context -> {
-                    if (context.getSource().getEntity() instanceof Player player) {
-                        fly(player);
-                    }
+            .requires(source -> source.hasPermission(2))
+            .then(Commands.argument("players", EntityArgument.players())
+                .executes(context -> {
+                    EntityArgument.getPlayers(context, "players").forEach(FlyCommand::fly);
                     return 1;
                 })
+            ).executes(context -> {
+                if (context.getSource().getEntity() instanceof Player player) {
+                    fly(player);
+                }
+                return 1;
+            })
         );
         dispatcher.register(Commands.literal("flyspeed")
-                .requires(source -> source.hasPermission(2))
-                .then(ModUtils.ofPlayers(Commands.argument("speed", FloatArgumentType.floatArg(0.01f, 2.0f)), (ctx, player) ->
-                        FlyCommand.setFlySpeed(player, FloatArgumentType.getFloat(ctx, "speed"))
-                ))
+            .requires(source -> source.hasPermission(2))
+            .then(ModUtils.ofPlayers(Commands.argument("speed", FloatArgumentType.floatArg(0.01f, 2.0f)), (ctx, player) ->
+                FlyCommand.setFlySpeed(player, FloatArgumentType.getFloat(ctx, "speed"))
+            ))
         );
     }
 

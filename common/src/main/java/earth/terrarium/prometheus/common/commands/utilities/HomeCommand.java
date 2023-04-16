@@ -7,10 +7,10 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import earth.terrarium.prometheus.api.roles.RoleApi;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.HomeHandler;
-import earth.terrarium.prometheus.common.roles.HomeOptions;
 import earth.terrarium.prometheus.common.menus.location.Location;
 import earth.terrarium.prometheus.common.menus.location.LocationMenu;
 import earth.terrarium.prometheus.common.menus.location.LocationType;
+import earth.terrarium.prometheus.common.roles.HomeOptions;
 import earth.terrarium.prometheus.common.utils.ModUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -35,87 +35,87 @@ public class HomeCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("homes")
-                .then(add())
-                .then(remove())
-                .then(list())
-                .executes(context -> {
-                    openHomeMenu(context.getSource().getPlayerOrException());
-                    return 1;
-                })
+            .then(add())
+            .then(remove())
+            .then(list())
+            .executes(context -> {
+                openHomeMenu(context.getSource().getPlayerOrException());
+                return 1;
+            })
         );
         dispatcher.register(Commands.literal("home")
-                .then(Commands.argument("name", StringArgumentType.greedyString())
-                        .suggests(SUGGEST_HOMES)
-                        .executes(context -> {
-                            HomeHandler.teleport(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
-                            return 1;
-                        })
-                )
+            .then(Commands.argument("name", StringArgumentType.greedyString())
+                .suggests(SUGGEST_HOMES)
+                .executes(context -> {
+                    HomeHandler.teleport(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
+                    return 1;
+                })
+            )
         );
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> add() {
         return Commands.literal("add")
-                .requires(source -> source.hasPermission(2))
-                .then(Commands.argument("name", StringArgumentType.greedyString())
-                        .executes(context -> {
-                            HomeHandler.add(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
-                            return 1;
-                        })
+            .requires(source -> source.hasPermission(2))
+            .then(Commands.argument("name", StringArgumentType.greedyString())
+                .executes(context -> {
+                    HomeHandler.add(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
+                    return 1;
+                })
 
-                );
+            );
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> remove() {
         return Commands.literal("remove")
-                .requires(source -> source.hasPermission(2))
-                .then(Commands.argument("name", StringArgumentType.greedyString())
-                        .suggests(SUGGEST_HOMES)
-                        .executes(context -> {
-                            HomeHandler.remove(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
-                            return 1;
-                        })
+            .requires(source -> source.hasPermission(2))
+            .then(Commands.argument("name", StringArgumentType.greedyString())
+                .suggests(SUGGEST_HOMES)
+                .executes(context -> {
+                    HomeHandler.remove(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
+                    return 1;
+                })
 
-                );
+            );
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> list() {
         return Commands.literal("list")
-                .executes(context -> {
-                    context.getSource().sendSuccess(ConstantComponents.HOMES_COMMAND_TITLE, false);
-                    HomeHandler.getHomes(context.getSource().getPlayerOrException())
-                            .keySet()
-                            .stream()
-                            .map(HomeCommand::createListEntry)
-                            .forEach(msg -> context.getSource().sendSuccess(msg, false));
-                    return 1;
-                });
+            .executes(context -> {
+                context.getSource().sendSuccess(ConstantComponents.HOMES_COMMAND_TITLE, false);
+                HomeHandler.getHomes(context.getSource().getPlayerOrException())
+                    .keySet()
+                    .stream()
+                    .map(HomeCommand::createListEntry)
+                    .forEach(msg -> context.getSource().sendSuccess(msg, false));
+                return 1;
+            });
     }
 
     private static Component createListEntry(String name) {
         return Component.literal(" - " + name).setStyle(Style.EMPTY.withHoverEvent(new HoverEvent(
-                HoverEvent.Action.SHOW_TEXT,
-                Component.translatable("prometheus.locations.home.to", name)
+            HoverEvent.Action.SHOW_TEXT,
+            Component.translatable("prometheus.locations.home.to", name)
         )).withClickEvent(new ClickEvent(
-                ClickEvent.Action.RUN_COMMAND,
-                "/home " + name
+            ClickEvent.Action.RUN_COMMAND,
+            "/home " + name
         )));
     }
 
     public static void openHomeMenu(ServerPlayer player) {
         Map<String, GlobalPos> homes = HomeHandler.getHomes(player);
         List<Location> locations = homes.entrySet()
-                .stream()
-                .map(entry -> new Location(entry.getKey(), entry.getValue()))
-                .toList();
+            .stream()
+            .map(entry -> new Location(entry.getKey(), entry.getValue()))
+            .toList();
 
         int maxHomes = Objects.requireNonNull(RoleApi.API.getOption(player, HomeOptions.SERIALIZER)).max();
 
         ModUtils.openMenu(
-                player,
-                (i, inventory, playerx) -> new LocationMenu(i, LocationType.HOME, maxHomes, locations),
-                ConstantComponents.HOMES_UI_TITLE,
-                buf -> LocationMenu.write(buf, LocationType.HOME, maxHomes, locations)
+            player,
+            (i, inventory, playerx) -> new LocationMenu(i, LocationType.HOME, maxHomes, locations),
+            ConstantComponents.HOMES_UI_TITLE,
+            buf -> LocationMenu.write(buf, LocationType.HOME, maxHomes, locations)
         );
     }
 }

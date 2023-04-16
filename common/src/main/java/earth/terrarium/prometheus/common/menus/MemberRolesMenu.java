@@ -1,9 +1,10 @@
 package earth.terrarium.prometheus.common.menus;
 
 import com.mojang.authlib.GameProfile;
-import earth.terrarium.prometheus.common.handlers.role.*;
-import earth.terrarium.prometheus.common.roles.CosmeticOptions;
+import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
+import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import earth.terrarium.prometheus.common.registries.ModMenus;
+import earth.terrarium.prometheus.common.roles.CosmeticOptions;
 import earth.terrarium.prometheus.common.utils.ModUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -63,13 +64,13 @@ public class MemberRolesMenu extends AbstractContainerMenu {
         Set<UUID> selected = RoleHandler.getRolesForPlayer(player, profile.getId());
 
         List<MemberRole> packetRoles = roles.stream()
-                .filter(Predicate.not(RoleEntry::isDefault))
-                .map(entry -> MemberRole.of(entry, selected.contains(entry.id()), editable.contains(entry.id())))
-                .toList();
+            .filter(Predicate.not(RoleEntry::isDefault))
+            .map(entry -> MemberRole.of(entry, selected.contains(entry.id()), editable.contains(entry.id())))
+            .toList();
         ModUtils.openMenu(player,
-                (id, inventory, p) -> new MemberRolesMenu(id, packetRoles, profile.getId()),
-                Component.literal(profile.getName()),
-                buf -> MemberRolesMenu.write(buf, packetRoles, profile.getId())
+            (id, inventory, p) -> new MemberRolesMenu(id, packetRoles, profile.getId()),
+            Component.literal(profile.getName()),
+            buf -> MemberRolesMenu.write(buf, packetRoles, profile.getId())
         );
     }
 

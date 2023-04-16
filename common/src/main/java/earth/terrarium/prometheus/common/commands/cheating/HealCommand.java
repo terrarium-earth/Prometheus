@@ -15,16 +15,16 @@ public class HealCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("heal")
-                .requires(source -> source.hasPermission(2))
-                .then(Commands.argument("entities", EntityArgument.entities())
-                    .executes(context -> {
-                        EntityArgument.getEntities(context, "entities").forEach(HealCommand::heal);
-                        return 1;
-                    })
-                ).executes(context -> {
-                    HealCommand.heal(context.getSource().getEntity());
+            .requires(source -> source.hasPermission(2))
+            .then(Commands.argument("entities", EntityArgument.entities())
+                .executes(context -> {
+                    EntityArgument.getEntities(context, "entities").forEach(HealCommand::heal);
                     return 1;
-                }));
+                })
+            ).executes(context -> {
+                HealCommand.heal(context.getSource().getEntity());
+                return 1;
+            }));
     }
 
     private static void heal(Entity entity) {

@@ -20,33 +20,33 @@ public class InvseeCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         var enderChestCommand = dispatcher.register(Commands.literal("enderchest")
-                .requires(source -> source.hasPermission(2))
-                .then(Commands.argument("player", EntityArgument.player())
-                        .executes(context -> {
-                            InvseeCommand.openEnderChest(context.getSource().getEntity(), EntityArgument.getPlayer(context, "player"));
-                            return 1;
-                        })
-                ).executes(context -> {
-                    InvseeCommand.openEnderChest(context.getSource().getEntity(), context.getSource().getEntity());
+            .requires(source -> source.hasPermission(2))
+            .then(Commands.argument("player", EntityArgument.player())
+                .executes(context -> {
+                    InvseeCommand.openEnderChest(context.getSource().getEntity(), EntityArgument.getPlayer(context, "player"));
                     return 1;
-                }));
+                })
+            ).executes(context -> {
+                InvseeCommand.openEnderChest(context.getSource().getEntity(), context.getSource().getEntity());
+                return 1;
+            }));
         dispatcher.register(Commands.literal("ec").redirect(enderChestCommand));
 
         dispatcher.register(Commands.literal("invsee")
-                .requires(source -> source.hasPermission(2))
-                .then(Commands.argument("player", EntityArgument.player())
-                        .executes(context -> {
-                            Player player = EntityArgument.getPlayer(context, "player");
+            .requires(source -> source.hasPermission(2))
+            .then(Commands.argument("player", EntityArgument.player())
+                .executes(context -> {
+                    Player player = EntityArgument.getPlayer(context, "player");
 
-                            ModUtils.openMenu(
-                                    context.getSource().getPlayerOrException(),
-                                    (i, inventory, playerx) -> new InvseeMenu(i, inventory, player, new WrappedPlayerContainer(player), player.getUUID()),
-                                    Component.translatable("prometheus.invsee.inventory", player.getDisplayName()),
-                                    buf -> buf.writeUUID(player.getUUID())
-                            );
-                            return 1;
-                        })
-                ));
+                    ModUtils.openMenu(
+                        context.getSource().getPlayerOrException(),
+                        (i, inventory, playerx) -> new InvseeMenu(i, inventory, player, new WrappedPlayerContainer(player), player.getUUID()),
+                        Component.translatable("prometheus.invsee.inventory", player.getDisplayName()),
+                        buf -> buf.writeUUID(player.getUUID())
+                    );
+                    return 1;
+                })
+            ));
     }
 
     public static void openEnderChest(Entity opener, Entity target) {
@@ -54,8 +54,8 @@ public class InvseeCommand {
             var title = Component.translatable("prometheus.players.inventory", playerTarget.getDisplayName(), TITLE);
 
             playerOpener.openMenu(new SimpleMenuProvider(
-                    (i, inventory, playerx) -> ChestMenu.threeRows(i, inventory, playerTarget.getEnderChestInventory()),
-                    title
+                (i, inventory, playerx) -> ChestMenu.threeRows(i, inventory, playerTarget.getEnderChestInventory()),
+                title
             ));
         }
     }

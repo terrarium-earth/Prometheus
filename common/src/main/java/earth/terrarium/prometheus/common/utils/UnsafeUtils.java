@@ -7,11 +7,12 @@ import java.lang.reflect.Field;
 public class UnsafeUtils {
 
     private static final Unsafe UNSAFE;
+
     static {
         try {
             Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
             theUnsafe.setAccessible(true);
-            UNSAFE = (Unsafe)theUnsafe.get(null);
+            UNSAFE = (Unsafe) theUnsafe.get(null);
         } catch (Exception e) {
             throw new RuntimeException("Unable to capture unsafe", e);
         }

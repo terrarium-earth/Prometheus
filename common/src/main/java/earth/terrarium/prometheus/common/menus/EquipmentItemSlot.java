@@ -16,14 +16,14 @@ import org.jetbrains.annotations.Nullable;
 public class EquipmentItemSlot extends Slot {
 
     private static final ResourceLocation[] TEXTURE_EMPTY_SLOTS = new ResourceLocation[]{
-            new ResourceLocation("item/empty_armor_slot_boots"),
-            new ResourceLocation("item/empty_armor_slot_leggings"),
-            new ResourceLocation("item/empty_armor_slot_chestplate"),
-            new ResourceLocation("item/empty_armor_slot_helmet")
+        new ResourceLocation("item/empty_armor_slot_boots"),
+        new ResourceLocation("item/empty_armor_slot_leggings"),
+        new ResourceLocation("item/empty_armor_slot_chestplate"),
+        new ResourceLocation("item/empty_armor_slot_helmet")
     };
     private static final ResourceLocation[] TEXTURE_EMPTY_HAND_SLOTS = new ResourceLocation[]{
-            new ResourceLocation("item/empty_armor_slot_shield"),
-            new ResourceLocation("item/empty_armor_slot_shield")
+        new ResourceLocation("item/empty_armor_slot_shield"),
+        new ResourceLocation("item/empty_armor_slot_shield")
     };
 
     private final EquipmentSlot slot;

@@ -28,8 +28,8 @@ public class HeadingEvents {
                 final Heading heading = hook.prometheus$getHeading();
                 if (hook.prometheus$getHeading() == Heading.MUSIC) {
                     hook.prometheus$setHeadingText(heading.getTranslation(
-                            Component.literal((song.length() <= 20 ? song : song.substring(0, 20) + "..."))
-                                    .withStyle(ChatFormatting.BLUE)
+                        Component.literal((song.length() <= 20 ? song : song.substring(0, 20) + "..."))
+                            .withStyle(ChatFormatting.BLUE)
                     ));
                 }
             }

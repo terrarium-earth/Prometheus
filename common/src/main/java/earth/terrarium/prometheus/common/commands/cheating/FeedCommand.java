@@ -11,16 +11,16 @@ public class FeedCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("feed")
-                .requires(source -> source.hasPermission(2))
-                .then(Commands.argument("players", EntityArgument.players())
-                    .executes(context -> {
-                        EntityArgument.getPlayers(context, "players").forEach(FeedCommand::feed);
-                        return 1;
-                    })
-                ).executes(context -> {
-                    FeedCommand.feed(context.getSource().getEntity());
+            .requires(source -> source.hasPermission(2))
+            .then(Commands.argument("players", EntityArgument.players())
+                .executes(context -> {
+                    EntityArgument.getPlayers(context, "players").forEach(FeedCommand::feed);
                     return 1;
-                }));
+                })
+            ).executes(context -> {
+                FeedCommand.feed(context.getSource().getEntity());
+                return 1;
+            }));
     }
 
     private static void feed(Entity entity) {

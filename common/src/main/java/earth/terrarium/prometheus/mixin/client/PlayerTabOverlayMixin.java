@@ -16,16 +16,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PlayerTabOverlayMixin {
 
     @Inject(
-            method = "render",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/components/PlayerFaceRenderer;draw(Lcom/mojang/blaze3d/vertex/PoseStack;IIIZZ)V",
-                    shift = At.Shift.AFTER
-            )
+        method = "render",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/components/PlayerFaceRenderer;draw(Lcom/mojang/blaze3d/vertex/PoseStack;IIIZZ)V",
+            shift = At.Shift.AFTER
+        )
     )
     private void prometheus$onRenderFace(
-            PoseStack poseStack, int i, Scoreboard scoreboard, Objective objective, CallbackInfo ci,
-            @Local(ordinal = 15) int x, @Local(ordinal = 16) int y, @Local GameProfile profile
+        PoseStack poseStack, int i, Scoreboard scoreboard, Objective objective, CallbackInfo ci,
+        @Local(ordinal = 15) int x, @Local(ordinal = 16) int y, @Local GameProfile profile
     ) {
         HeadingRenderer.onRenderIcon(profile.getId(), poseStack, x, y);
     }

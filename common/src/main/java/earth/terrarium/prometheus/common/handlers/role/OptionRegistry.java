@@ -61,8 +61,8 @@ public final class OptionRegistry {
     @SuppressWarnings("unchecked")
     public static Function<ResourceLocation, Codec<RoleOption<?>>> codec() {
         return type -> (Codec<RoleOption<?>>) decode(type)
-                .map(RoleOptionSerializer::codec)
-                .result().orElse(null);
+            .map(RoleOptionSerializer::codec)
+            .result().orElse(null);
     }
 
     private static DataResult<RoleOptionSerializer<?>> decode(ResourceLocation id) {

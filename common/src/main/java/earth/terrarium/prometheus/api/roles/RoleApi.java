@@ -12,8 +12,7 @@ public interface RoleApi {
 
     RoleApi API = ApiHelper.load(RoleApi.class);
 
-    @Nullable
-    <T extends RoleOption<T>> T getOption(Player player, RoleOptionSerializer<T> serializer);
+    @Nullable <T extends RoleOption<T>> T getOption(Player player, RoleOptionSerializer<T> serializer);
 
     /**
      * Returns the option for the player, or throws an exception if the option is null.

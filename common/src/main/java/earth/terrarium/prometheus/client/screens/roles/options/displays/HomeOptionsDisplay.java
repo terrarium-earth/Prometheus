@@ -16,8 +16,8 @@ public record HomeOptionsDisplay(List<ListEntry> entries) implements OptionDispl
     public static HomeOptionsDisplay create(Role role, SelectionList<ListEntry> ignored) {
         HomeOptions home = role.getNonNullOption(HomeOptions.SERIALIZER);
         return new HomeOptionsDisplay(List.of(
-                new TextListEntry(ConstantComponents.HOMES_TITLE),
-                new NumberBoxListEntry(home.max(), false, ConstantComponents.HOMES_MAX)
+            new TextListEntry(ConstantComponents.HOMES_TITLE),
+            new NumberBoxListEntry(home.max(), false, ConstantComponents.HOMES_MAX)
         ));
     }
 

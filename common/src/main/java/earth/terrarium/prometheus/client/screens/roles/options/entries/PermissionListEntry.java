@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-public class PermissionListEntry extends TriStateListEntry{
+public class PermissionListEntry extends TriStateListEntry {
 
     private final String permission;
 

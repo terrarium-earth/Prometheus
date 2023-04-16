@@ -67,7 +67,7 @@ public class LocationScreen extends AbstractContainerCursorScreen<LocationMenu> 
 
     @Override
     protected void renderLabels(@NotNull PoseStack stack, int i, int j) {
-        this.font.draw(stack, title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
+        this.font.draw(stack, title, (float) this.titleLabelX, (float) this.titleLabelY, 4210752);
     }
 
     @Override

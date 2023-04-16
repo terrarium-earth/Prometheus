@@ -4,7 +4,10 @@ import earth.terrarium.prometheus.api.TriState;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import net.minecraft.world.entity.player.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class PermissionApiImpl implements PermissionApi {
@@ -32,13 +35,13 @@ public class PermissionApiImpl implements PermissionApi {
         if (text == null || text.isBlank()) return List.of();
         Set<String> complete = new LinkedHashSet<>();
         AUTO_COMPLETE.stream()
-                .map(Supplier::get)
-                .flatMap(List::stream)
-                .filter(s -> !permissions.contains(s))
-                .filter(s -> s.startsWith(text))
-                .map(s -> s.substring(text.length()))
-                .map(s -> s.split("\\.")[0])
-                .forEach(complete::add);
+            .map(Supplier::get)
+            .flatMap(List::stream)
+            .filter(s -> !permissions.contains(s))
+            .filter(s -> s.startsWith(text))
+            .map(s -> s.substring(text.length()))
+            .map(s -> s.split("\\.")[0])
+            .forEach(complete::add);
         return new ArrayList<>(complete);
     }
 }

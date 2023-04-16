@@ -148,15 +148,15 @@ public class RoleHandler extends Handler {
         roles.load(tag);
         Set<UUID> identifiers = roles.ids();
         ModUtils.mapTag(tag.getCompound("players"), UUID::fromString, (key, t) -> t.getList(key, Tag.TAG_STRING))
-                .forEach((player, roles) -> {
-                    Set<UUID> roleIds = new HashSet<>();
-                    for (Tag role : roles) {
-                        UUID id = UUID.fromString(role.getAsString());
-                        if (identifiers.contains(id)) {
-                            roleIds.add(id);
-                        }
+            .forEach((player, roles) -> {
+                Set<UUID> roleIds = new HashSet<>();
+                for (Tag role : roles) {
+                    UUID id = UUID.fromString(role.getAsString());
+                    if (identifiers.contains(id)) {
+                        roleIds.add(id);
                     }
-                    this.players.put(player, roleIds);
-                });
+                }
+                this.players.put(player, roleIds);
+            });
     }
 }

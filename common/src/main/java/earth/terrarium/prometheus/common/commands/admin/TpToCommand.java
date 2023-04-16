@@ -24,24 +24,24 @@ public class TpToCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         var command = dispatcher.register(Commands.literal("tpto")
-                .requires(source -> source.hasPermission(2))
-                .then(Commands.argument("location", ResourceLocationArgument.id())
-                        .suggests(SUGGESTION_PROVIDER)
-                        .then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(context -> {
-                            BlockPos pos = BlockPosArgument.getBlockPos(context, "pos");
-                            teleport(context, context.getSource().getPlayerOrException(), pos);
-                            return 1;
-                        }))
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayerOrException();
-                            teleport(context, player, player.blockPosition());
-                            return 1;
-                        })
-                )
+            .requires(source -> source.hasPermission(2))
+            .then(Commands.argument("location", ResourceLocationArgument.id())
+                .suggests(SUGGESTION_PROVIDER)
+                .then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(context -> {
+                    BlockPos pos = BlockPosArgument.getBlockPos(context, "pos");
+                    teleport(context, context.getSource().getPlayerOrException(), pos);
+                    return 1;
+                }))
+                .executes(context -> {
+                    final ServerPlayer player = context.getSource().getPlayerOrException();
+                    teleport(context, player, player.blockPosition());
+                    return 1;
+                })
+            )
         );
         dispatcher.register(Commands.literal("teleportto")
-                .requires(source -> source.hasPermission(2))
-                .redirect(command)
+            .requires(source -> source.hasPermission(2))
+            .redirect(command)
         );
     }
 

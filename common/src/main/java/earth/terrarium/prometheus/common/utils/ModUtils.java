@@ -44,10 +44,10 @@ public final class ModUtils {
 
     public static <T extends ArgumentBuilder<CommandSourceStack, T>> T ofPlayers(ArgumentBuilder<CommandSourceStack, T> builder, BiConsumer<CommandContext<CommandSourceStack>, Player> playerConsumer) {
         return builder.then(Commands.argument("players", EntityArgument.players())
-                .executes(context -> {
-                    EntityArgument.getPlayers(context, "players").forEach(player -> playerConsumer.accept(context, player));
-                    return 1;
-                })
+            .executes(context -> {
+                EntityArgument.getPlayers(context, "players").forEach(player -> playerConsumer.accept(context, player));
+                return 1;
+            })
         ).executes(context -> {
             if (context.getSource().getEntity() instanceof Player player) {
                 playerConsumer.accept(context, player);

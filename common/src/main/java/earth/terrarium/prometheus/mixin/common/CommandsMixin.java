@@ -15,11 +15,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Commands.class)
 public class CommandsMixin {
 
-    @Shadow @Final private CommandDispatcher<CommandSourceStack> dispatcher;
+    @Shadow
+    @Final
+    private CommandDispatcher<CommandSourceStack> dispatcher;
 
     @Inject(
-            method = "<init>",
-            at = @At("TAIL")
+        method = "<init>",
+        at = @At("TAIL")
     )
     private void prometheus$onInit(Commands.CommandSelection commandSelection, CommandBuildContext commandBuildContext, CallbackInfo ci) {
         CommandPermissionHandler.registerPermissions(this.dispatcher);

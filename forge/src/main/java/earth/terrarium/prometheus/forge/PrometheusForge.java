@@ -45,6 +45,7 @@ public class PrometheusForge {
             event.setCanceled(true);
         }
     }
+
     private static void onEnityJoin(EntityJoinLevelEvent event) {
         PermissionEvents.onEntityJoin(event.getEntity());
         if (event.getEntity() instanceof ServerPlayer player) {

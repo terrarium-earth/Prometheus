@@ -43,8 +43,8 @@ public class NicknameHandler extends Handler {
     @Nullable
     public static Component get(ServerPlayer player) {
         return names(player)
-                .getOrDefault(player.getUUID(), Nickname.EMPTY)
-                .component();
+            .getOrDefault(player.getUUID(), Nickname.EMPTY)
+            .component();
     }
 
     public static Map<UUID, Nickname> names(Level level) {

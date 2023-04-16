@@ -13,45 +13,45 @@ public class NicknameCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("nickname")
-                .then(Commands.literal("remove").executes(context -> {
-                    NicknameHandler.remove(context.getSource().getPlayerOrException());
+            .then(Commands.literal("remove").executes(context -> {
+                NicknameHandler.remove(context.getSource().getPlayerOrException());
+                return 1;
+            }))
+            .then(Commands.literal("set").then(Commands.argument("nickname", StringArgumentType.string())
+                .executes(context -> {
+                    NicknameHandler.set(context.getSource().getPlayerOrException(), Component.literal(StringArgumentType.getString(context, "nickname")));
                     return 1;
-                }))
-                .then(Commands.literal("set").then(Commands.argument("nickname", StringArgumentType.string())
-                        .executes(context -> {
-                            NicknameHandler.set(context.getSource().getPlayerOrException(), Component.literal(StringArgumentType.getString(context, "nickname")));
-                            return 1;
-                        })
-                )));
+                })
+            )));
         dispatcher.register(Commands.literal("nicknames")
-                .requires(source -> source.hasPermission(2))
-                .then(Commands.literal("set")
-                        .then(Commands.argument("nickname", StringArgumentType.string())
-                                .then(Commands.argument("player", EntityArgument.player())
-                                        .executes(context -> {
-                                            NicknameHandler.set(EntityArgument.getPlayer(context, "player"), Component.literal(StringArgumentType.getString(context, "nickname")));
-                                            return 1;
-                                        })
-                                )
-                        ))
-                .then(Commands.literal("remove")
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .executes(context -> {
-                                    NicknameHandler.remove(EntityArgument.getPlayer(context, "player"));
-                                    return 1;
-                                })
-                        )
-                )
-                .then(Commands.literal("list")
+            .requires(source -> source.hasPermission(2))
+            .then(Commands.literal("set")
+                .then(Commands.argument("nickname", StringArgumentType.string())
+                    .then(Commands.argument("player", EntityArgument.player())
                         .executes(context -> {
-                            context.getSource().sendSuccess(Component.empty().append("Nicknames:"), false);
-                            NicknameHandler.names(context.getSource().getLevel())
-                                    .values()
-                                    .stream().map(NicknameCommand::getNicknameEntry)
-                                    .forEach(component -> context.getSource().sendSuccess(component, false));
+                            NicknameHandler.set(EntityArgument.getPlayer(context, "player"), Component.literal(StringArgumentType.getString(context, "nickname")));
                             return 1;
                         })
-                ));
+                    )
+                ))
+            .then(Commands.literal("remove")
+                .then(Commands.argument("player", EntityArgument.player())
+                    .executes(context -> {
+                        NicknameHandler.remove(EntityArgument.getPlayer(context, "player"));
+                        return 1;
+                    })
+                )
+            )
+            .then(Commands.literal("list")
+                .executes(context -> {
+                    context.getSource().sendSuccess(Component.empty().append("Nicknames:"), false);
+                    NicknameHandler.names(context.getSource().getLevel())
+                        .values()
+                        .stream().map(NicknameCommand::getNicknameEntry)
+                        .forEach(component -> context.getSource().sendSuccess(component, false));
+                    return 1;
+                })
+            ));
     }
 
     private static Component getNicknameEntry(Nickname nickname) {

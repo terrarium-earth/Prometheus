@@ -54,7 +54,8 @@ public class CommandPermissionHandler {
         }
     }
 
-    private record PermissionPredicate(String permission, Predicate<CommandSourceStack> original) implements Predicate<CommandSourceStack> {
+    private record PermissionPredicate(String permission,
+                                       Predicate<CommandSourceStack> original) implements Predicate<CommandSourceStack> {
 
         @Override
         public boolean test(CommandSourceStack stack) {
@@ -66,7 +67,8 @@ public class CommandPermissionHandler {
         }
     }
 
-    private record RedirectedPermissionPredicate(Supplier<String> deferredPermission, PermissionPredicate predicate) implements Predicate<CommandSourceStack> {
+    private record RedirectedPermissionPredicate(Supplier<String> deferredPermission,
+                                                 PermissionPredicate predicate) implements Predicate<CommandSourceStack> {
 
         @Override
         public boolean test(CommandSourceStack stack) {

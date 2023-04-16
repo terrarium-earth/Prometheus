@@ -48,9 +48,9 @@ public class LocationMenu extends AbstractContainerMenu {
                 ServerLevel level = serverPlayer.server.getLevel(location.pos().dimension());
                 if (level != null) {
                     serverPlayer.teleportTo(
-                            level,
-                            location.pos().pos().getX(), location.pos().pos().getY(), location.pos().pos().getZ(),
-                            serverPlayer.getYRot(), serverPlayer.getXRot()
+                        level,
+                        location.pos().pos().getX(), location.pos().pos().getY(), location.pos().pos().getZ(),
+                        serverPlayer.getYRot(), serverPlayer.getXRot()
                     );
                 }
             }

@@ -16,9 +16,9 @@ public record CosmeticOptionsDisplay(List<ListEntry> entries) implements OptionD
     public static CosmeticOptionsDisplay create(Role role, SelectionList<ListEntry> ignored) {
         CosmeticOptions display = role.getNonNullOption(CosmeticOptions.SERIALIZER);
         List<ListEntry> entries = List.of(
-                new TextListEntry(ConstantComponents.COSMETIC_TITLE),
-                new TextBoxListEntry(display.display(), 24, ConstantComponents.COSMETIC_ROLE_NAME, text -> !text.isBlank()),
-                new TextBoxListEntry(display.icon(), 1, ConstantComponents.COSMETIC_ROLE_ICON, text -> text.codePoints().count() == 1 && !text.isBlank())
+            new TextListEntry(ConstantComponents.COSMETIC_TITLE),
+            new TextBoxListEntry(display.display(), 24, ConstantComponents.COSMETIC_ROLE_NAME, text -> !text.isBlank()),
+            new TextBoxListEntry(display.icon(), 1, ConstantComponents.COSMETIC_ROLE_ICON, text -> text.codePoints().count() == 1 && !text.isBlank())
         );
         return new CosmeticOptionsDisplay(entries);
     }
@@ -32,9 +32,9 @@ public record CosmeticOptionsDisplay(List<ListEntry> entries) implements OptionD
     public boolean save(Role role) {
         CosmeticOptions display = role.getNonNullOption(CosmeticOptions.SERIALIZER);
         CosmeticOptions newDisplay = new CosmeticOptions(
-                ((TextBoxListEntry) entries.get(1)).getText(),
-                ((TextBoxListEntry) entries.get(2)).getText(),
-                display.color()
+            ((TextBoxListEntry) entries.get(1)).getText(),
+            ((TextBoxListEntry) entries.get(2)).getText(),
+            display.color()
         );
         if (!newDisplay.display().isBlank() && !newDisplay.icon().isBlank()) {
             role.setData(newDisplay);

@@ -20,6 +20,7 @@ public abstract class Handler extends SavedData {
     }
 
     public abstract void loadData(CompoundTag tag);
+
     public abstract void saveData(CompoundTag tag);
 
     @SuppressWarnings("resource")

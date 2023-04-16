@@ -26,8 +26,8 @@ public class ChatOptionsScreenMixin {
     protected OptionInstance<?>[] smallOptions;
 
     @Inject(
-            method = "<init>",
-            at = @At("RETURN")
+        method = "<init>",
+        at = @At("RETURN")
     )
     @SuppressWarnings("ConstantValue")
     private void prometheus$init(Screen screen, Options options, Component component, OptionInstance<?>[] optionInstances, CallbackInfo ci) {

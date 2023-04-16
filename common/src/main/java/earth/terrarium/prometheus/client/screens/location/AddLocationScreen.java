@@ -32,15 +32,15 @@ public class AddLocationScreen extends Screen {
         int width = window.getGuiScaledWidth();
         int height = window.getGuiScaledHeight();
         EditBox text = addRenderableWidget(new EditBox(Minecraft.getInstance().font,
-                (int) ((width / 2f) - 120),
-                (int) ((height / 2f) - 30), 240, 20, Component.empty()));
+            (int) ((width / 2f) - 120),
+            (int) ((height / 2f) - 30), 240, 20, Component.empty()));
         addRenderableWidget(
             Button.builder(CommonComponents.GUI_CANCEL, button -> ClientUtils.sendCommand(type.editPrefix()))
                 .bounds((int) ((width / 2f) - 120), (int) ((height / 2f) + 10), 100, 20)
                 .build()
         );
         addRenderableWidget(
-                Button.builder(ConstantComponents.SAVE, button -> NetworkHandler.CHANNEL.sendToServer(new AddLocationPacket(type, text.getValue())))
+            Button.builder(ConstantComponents.SAVE, button -> NetworkHandler.CHANNEL.sendToServer(new AddLocationPacket(type, text.getValue())))
                 .bounds((int) ((width / 2f) + 20), (int) ((height / 2f) + 10), 100, 20)
                 .build()
         );

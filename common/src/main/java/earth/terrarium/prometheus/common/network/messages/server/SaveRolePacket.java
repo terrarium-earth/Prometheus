@@ -44,9 +44,9 @@ public record SaveRolePacket(UUID id, Role role) implements Packet<SaveRolePacke
         @Override
         public SaveRolePacket decode(FriendlyByteBuf buffer) {
             Role role = PacketHelper.readWithYabn(buffer, Role.CODEC, true).get()
-                    .ifRight(error -> LOGGER.error("Error reading role: {}", error))
-                    .left()
-                    .orElse(null);
+                .ifRight(error -> LOGGER.error("Error reading role: {}", error))
+                .left()
+                .orElse(null);
             return new SaveRolePacket(buffer.readUUID(), role);
         }
 

@@ -2,8 +2,8 @@ package earth.terrarium.prometheus.mixin.common;
 
 import earth.terrarium.prometheus.api.TriState;
 import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
-import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import earth.terrarium.prometheus.common.handlers.permission.PermissionHolder;
+import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.network.messages.client.CommandPermissionsPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,7 +26,7 @@ public abstract class PermissionPlayerMixin extends LivingEntity implements Perm
 
     @Override
     public void prometheus$updatePermissions() {
-        prometheus$permissions = RoleHandler.getPermissions((Player)((Object) this));
+        prometheus$permissions = RoleHandler.getPermissions((Player) ((Object) this));
         //noinspection ConstantValue
         if (getServer() != null && ((Object) this) instanceof ServerPlayer serverPlayer) {
             getServer().getCommands().sendCommands(serverPlayer);

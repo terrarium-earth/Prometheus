@@ -10,12 +10,12 @@ import net.minecraft.resources.ResourceLocation;
 public record HomeOptions(int max) implements RoleOption<HomeOptions> {
 
     public static final RoleOptionSerializer<HomeOptions> SERIALIZER = RoleOptionSerializer.of(
-            new ResourceLocation(Prometheus.MOD_ID, "homes"),
-            1,
-            RecordCodecBuilder.create(instance -> instance.group(
-                    Codec.INT.fieldOf("max").forGetter(HomeOptions::max)
-            ).apply(instance, HomeOptions::new)),
-            new HomeOptions(5)
+        new ResourceLocation(Prometheus.MOD_ID, "homes"),
+        1,
+        RecordCodecBuilder.create(instance -> instance.group(
+            Codec.INT.fieldOf("max").forGetter(HomeOptions::max)
+        ).apply(instance, HomeOptions::new)),
+        new HomeOptions(5)
     );
 
     @Override

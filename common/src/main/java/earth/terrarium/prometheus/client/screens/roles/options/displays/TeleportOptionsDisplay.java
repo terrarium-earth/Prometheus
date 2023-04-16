@@ -16,10 +16,10 @@ public record TeleportOptionsDisplay(List<ListEntry> entries) implements OptionD
     public static TeleportOptionsDisplay create(Role role, SelectionList<ListEntry> ignored) {
         TeleportOptions tpa = role.getNonNullOption(TeleportOptions.SERIALIZER);
         return new TeleportOptionsDisplay(List.of(
-                new TextListEntry(ConstantComponents.TELEPORT_TITLE),
-                new NumberBoxListEntry(tpa.expire(), false, ConstantComponents.REQUEST_TIMEOUT),
-                new NumberBoxListEntry(tpa.rtpCooldown(), false, ConstantComponents.RTP_COOLDOWN),
-                new NumberBoxListEntry(tpa.rtpDistance(), false, ConstantComponents.RTP_DISTANCE)
+            new TextListEntry(ConstantComponents.TELEPORT_TITLE),
+            new NumberBoxListEntry(tpa.expire(), false, ConstantComponents.REQUEST_TIMEOUT),
+            new NumberBoxListEntry(tpa.rtpCooldown(), false, ConstantComponents.RTP_COOLDOWN),
+            new NumberBoxListEntry(tpa.rtpDistance(), false, ConstantComponents.RTP_DISTANCE)
         ));
     }
 

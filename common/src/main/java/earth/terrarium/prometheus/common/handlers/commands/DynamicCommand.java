@@ -25,7 +25,7 @@ public class DynamicCommand {
             for (ParseResults<CommandSourceStack> result : results) {
                 dispatcher.execute(result);
             }
-        }catch (Exception exception) {
+        } catch (Exception exception) {
             if (exception instanceof DynamicCommandException) throw new DynamicCommandException(exception.getMessage());
             else throw new DynamicCommandException("An error occurred while executing the command");
         }
@@ -42,17 +42,18 @@ public class DynamicCommand {
         }
         return parsedLines;
     }
-    
+
     private static List<String> getArgs(String[] args, String matcher) {
         try {
             IntIntPair range = getRange(args, matcher);
-            if (range.firstInt() >= args.length || range.secondInt() >= args.length) throw new DynamicCommandException("Missing arguments");
+            if (range.firstInt() >= args.length || range.secondInt() >= args.length)
+                throw new DynamicCommandException("Missing arguments");
             if (range.firstInt() > range.secondInt()) throw new DynamicCommandException("Invalid range");
             if (args.length - 1 > range.secondInt()) throw new DynamicCommandException("Too many arguments");
             return new ArrayList<>(Arrays.asList(args).subList(range.firstInt(), range.secondInt() + 1));
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new DynamicCommandException("Failed to parse range");
-        }catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             throw new DynamicCommandException("Missing Arguments");
         }
     }

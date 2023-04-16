@@ -1,8 +1,8 @@
 package earth.terrarium.prometheus.mixin.common;
 
 import earth.terrarium.prometheus.common.handlers.role.Role;
-import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import earth.terrarium.prometheus.common.handlers.role.RoleEntityHook;
+import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
