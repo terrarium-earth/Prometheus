@@ -18,28 +18,25 @@ import java.util.function.Function;
 
 public final class RoleOptionsApiImpl implements RoleOptionsApi {
 
-    public static final RoleOptionsApiImpl INSTANCE = new RoleOptionsApiImpl();
     private static final RoleOptionSerializer<DummyOption> DUMMY_SERIALIZER = RoleOptionSerializer.of(new ResourceLocation("noop"), 0, Codec.unit(DummyOption::new), new DummyOption());
 
     private final Map<ResourceLocation, RoleOptionSerializer<?>> serializers = new HashMap<>();
     private final Object2IntMap<ResourceLocation> types = new Object2IntArrayMap<>();
 
-    private boolean frozen = false;
-
-    private RoleOptionsApiImpl() {}
+    private static boolean frozen = false;
 
     @ApiStatus.Internal
     public static void freeze() {
-        INSTANCE.frozen = true;
+        frozen = true;
     }
 
     @Override
     public <T extends RoleOption<T>> void register(RoleOptionSerializer<T> serializer) {
-        if (this.frozen) {
+        if (RoleOptionsApiImpl.frozen) {
             throw new IllegalStateException("Cannot register role option after the registry has been frozen.");
         }
         if (this.serializers.containsKey(serializer.id())) {
-            throw new IllegalStateException("Attempted to register role option with duplicate id: " + serializer.id());
+            throw new IllegalArgumentException("Attempted to register role option with duplicate id: " + serializer.id());
         }
         this.serializers.put(serializer.id(), serializer);
         int typeVersion = this.types.getInt(serializer.type());
@@ -59,6 +56,11 @@ public final class RoleOptionsApiImpl implements RoleOptionsApi {
         return List.copyOf(this.serializers.values());
     }
 
+    @Override
+    public Object2IntMap<ResourceLocation> versions() {
+        return this.types;
+    }
+
     @SuppressWarnings("unchecked")
     public static Function<ResourceLocation, Codec<RoleOption<?>>> codec() {
         return type -> (Codec<RoleOption<?>>) decode(type)
@@ -67,12 +69,12 @@ public final class RoleOptionsApiImpl implements RoleOptionsApi {
     }
 
     private static DataResult<RoleOptionSerializer<?>> decode(ResourceLocation id) {
-        RoleOptionSerializer<?> serializer = INSTANCE.get(id);
+        RoleOptionSerializer<?> serializer = RoleOptionsApi.API.get(id);
         if (serializer == null) {
             return DataResult.success(DUMMY_SERIALIZER);
         }
-        if (serializer.version() < INSTANCE.types.getInt(serializer.type())) {
-            System.out.println("Serializer " + id + " is outdated the current version is " + INSTANCE.types.getInt(serializer.type()) + ".");
+        if (serializer.version() < RoleOptionsApi.API.versions().getInt(serializer.type())) {
+            System.out.println("Serializer " + id + " is outdated the current version is " + RoleOptionsApi.API.versions().getInt(serializer.type()) + ".");
         }
         return DataResult.success(serializer);
     }

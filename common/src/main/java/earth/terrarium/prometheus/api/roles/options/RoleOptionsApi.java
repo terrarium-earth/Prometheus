@@ -1,6 +1,7 @@
 package earth.terrarium.prometheus.api.roles.options;
 
 import earth.terrarium.prometheus.api.ApiHelper;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,4 +36,11 @@ public interface RoleOptionsApi {
      * @return a list of all registered serializers.
      */
     List<RoleOptionSerializer<?>> getAll();
+
+    /**
+     * Gets the latest versions of the serializer ids.
+     *
+     * @return a map of the latest versions of the serializer ids.
+     */
+    Object2IntMap<ResourceLocation> versions();
 }
