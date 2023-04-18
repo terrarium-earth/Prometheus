@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import earth.terrarium.prometheus.api.roles.options.RoleOption;
 import earth.terrarium.prometheus.api.roles.options.RoleOptionSerializer;
+import earth.terrarium.prometheus.api.roles.options.RoleOptionsApi;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.resources.ResourceLocation;
@@ -15,9 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public final class OptionRegistry {
+public final class RoleOptionsApiImpl implements RoleOptionsApi {
 
-    public static final OptionRegistry INSTANCE = new OptionRegistry();
+    public static final RoleOptionsApiImpl INSTANCE = new RoleOptionsApiImpl();
     private static final RoleOptionSerializer<DummyOption> DUMMY_SERIALIZER = RoleOptionSerializer.of(new ResourceLocation("noop"), 0, Codec.unit(DummyOption::new), new DummyOption());
 
     private final Map<ResourceLocation, RoleOptionSerializer<?>> serializers = new HashMap<>();
@@ -25,16 +26,14 @@ public final class OptionRegistry {
 
     private boolean frozen = false;
 
-    private OptionRegistry() {}
+    private RoleOptionsApiImpl() {}
 
     @ApiStatus.Internal
     public static void freeze() {
         INSTANCE.frozen = true;
     }
 
-    /**
-     * Registers a new role option serializer.
-     */
+    @Override
     public <T extends RoleOption<T>> void register(RoleOptionSerializer<T> serializer) {
         if (this.frozen) {
             throw new IllegalStateException("Cannot register role option after the registry has been frozen.");
@@ -49,11 +48,13 @@ public final class OptionRegistry {
         }
     }
 
+    @Override
     @Nullable
     public RoleOptionSerializer<?> get(ResourceLocation id) {
         return this.serializers.get(id);
     }
 
+    @Override
     public List<RoleOptionSerializer<?>> getAll() {
         return List.copyOf(this.serializers.values());
     }
@@ -68,11 +69,9 @@ public final class OptionRegistry {
     private static DataResult<RoleOptionSerializer<?>> decode(ResourceLocation id) {
         RoleOptionSerializer<?> serializer = INSTANCE.get(id);
         if (serializer == null) {
-            //TODO Add conditional logging here
             return DataResult.success(DUMMY_SERIALIZER);
         }
         if (serializer.version() < INSTANCE.types.getInt(serializer.type())) {
-            //TODO Switch to LOGGER!
             System.out.println("Serializer " + id + " is outdated the current version is " + INSTANCE.types.getInt(serializer.type()) + ".");
         }
         return DataResult.success(serializer);

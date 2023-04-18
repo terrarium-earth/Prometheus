@@ -1,5 +1,6 @@
 package earth.terrarium.prometheus.client.screens.roles.options.entries;
 
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
 import java.util.OptionalDouble;
@@ -8,7 +9,11 @@ import java.util.OptionalInt;
 public class NumberBoxListEntry extends TextBoxListEntry {
 
     public NumberBoxListEntry(int amount, boolean decimals, Component component) {
-        super(String.valueOf(amount), 1000, component, text -> {
+        this(amount, decimals, component, CommonComponents.EMPTY);
+    }
+
+    public NumberBoxListEntry(int amount, boolean decimals, Component component, Component tooltip) {
+        super(String.valueOf(amount), 1000, component, tooltip, text -> {
             try {
                 if (decimals) {
                     Double.parseDouble(text);

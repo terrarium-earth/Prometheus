@@ -1,8 +1,10 @@
 package earth.terrarium.prometheus.client.handlers;
 
 import earth.terrarium.prometheus.client.utils.SystemNotificationUtils;
+import earth.terrarium.prometheus.common.registries.ModSounds;
 import net.minecraft.Optionull;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ChatType;
@@ -23,17 +25,26 @@ public class NotificationHandler {
         if (sender == null) return;
         if (Minecraft.getInstance().player == null) return;
         if (Minecraft.getInstance().player.getGameProfile().getId().equals(sender)) return;
-        if (!ClientOptionHandler.showNotifications.get()) return;
         if (Minecraft.getInstance().getPlayerSocialManager().shouldHideMessageFrom(sender)) return;
         String name = Minecraft.getInstance().player.getGameProfile().getName();
         String senderName = Optionull.mapOrDefault(Minecraft.getInstance().getConnection().getPlayerInfo(sender), info -> info.getProfile().getName(), "");
         Type type = getType(params, Minecraft.getInstance().getConnection().registryAccess());
         String text = message.getString().toLowerCase(Locale.ROOT);
 
+
         if (Minecraft.getInstance().isWindowActive()) {
-            //TODO SEND A PING SOUND
+            switch (ClientOptionHandler.notificationSound.get()) {
+                case PING1 ->
+                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(ModSounds.PING_1.get(), 1.0F));
+                case PING2 ->
+                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(ModSounds.PING_2.get(), 1.0F));
+                case PING3 ->
+                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(ModSounds.PING_3.get(), 1.0F));
+            }
             return;
         }
+
+        if (!ClientOptionHandler.showNotifications.get()) return;
 
         switch (type) {
             case PRIVATE -> SystemNotificationUtils.sendNotification(
@@ -81,8 +92,7 @@ public class NotificationHandler {
         NONE,
         PING1,
         PING2,
-        PING3,
-        PING4;
+        PING3;
 
         private static final IntFunction<PingSound> BY_ID = ByIdMap.continuous(PingSound::getId, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
 

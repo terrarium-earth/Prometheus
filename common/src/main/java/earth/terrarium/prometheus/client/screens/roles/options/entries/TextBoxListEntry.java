@@ -6,11 +6,14 @@ import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import com.teamresourceful.resourcefullib.client.utils.CursorUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import earth.terrarium.prometheus.client.utils.ClientUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,12 +24,18 @@ public class TextBoxListEntry extends ListEntry {
     protected String text;
     protected final int limit;
     protected final Component component;
+    protected final Component tooltip;
     protected final Predicate<String> validator;
 
     public TextBoxListEntry(String text, int limit, Component component, Predicate<String> validator) {
+        this(text, limit, component, CommonComponents.EMPTY, validator);
+    }
+
+    public TextBoxListEntry(String text, int limit, Component component, Component tooltip, Predicate<String> validator) {
         this.text = text;
         this.limit = limit;
         this.component = component;
+        this.tooltip = tooltip;
         this.validator = validator;
     }
 
@@ -42,6 +51,8 @@ public class TextBoxListEntry extends ListEntry {
         renderTextBox(scissorStack, stack, left + (width / 2) - 3, top + 3, (width / 2) - 3, 14, text, color);
         if (mouseX >= left + (width / 2) - 3 && mouseX < left + width - 6 && mouseY >= top + 3 && mouseY <= top + 17) {
             CursorUtils.setCursor(selected, CursorScreen.Cursor.TEXT);
+        } else if (hovered && ComponentUtils.isTranslationResolvable(tooltip) && !tooltip.getString().isBlank()) {
+            ClientUtils.setTooltip(tooltip);
         }
     }
 

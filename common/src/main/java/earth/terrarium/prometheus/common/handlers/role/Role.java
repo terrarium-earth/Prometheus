@@ -30,7 +30,7 @@ public record Role(Map<String, TriState> permissions, Map<ResourceLocation, Role
         Codec.unboundedMap(Codec.STRING, STATE_CODEC).fieldOf("permissions").orElse(err -> {
             LOGGER.error(err);
         }, new HashMap<>()).forGetter(Role::permissions),
-        new DispatchMapCodec<>(ResourceLocation.CODEC, OptionRegistry.codec()).fieldOf("options").orElse(err -> {
+        new DispatchMapCodec<>(ResourceLocation.CODEC, RoleOptionsApiImpl.codec()).fieldOf("options").orElse(err -> {
             LOGGER.error(err);
         }, new HashMap<>()).forGetter(Role::options)
     ).apply(instnace, (perms, ops) -> new Role(new HashMap<>(perms), new HashMap<>(ops))));

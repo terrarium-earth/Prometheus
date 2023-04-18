@@ -17,9 +17,9 @@ public record TeleportOptionsDisplay(List<ListEntry> entries) implements OptionD
         TeleportOptions tpa = role.getNonNullOption(TeleportOptions.SERIALIZER);
         return new TeleportOptionsDisplay(List.of(
             new TextListEntry(ConstantComponents.TELEPORT_TITLE),
-            new NumberBoxListEntry(tpa.expire(), false, ConstantComponents.REQUEST_TIMEOUT),
-            new NumberBoxListEntry(tpa.rtpCooldown(), false, ConstantComponents.RTP_COOLDOWN),
-            new NumberBoxListEntry(tpa.rtpDistance(), false, ConstantComponents.RTP_DISTANCE)
+            new NumberBoxListEntry(tpa.expire(), false, ConstantComponents.REQUEST_TIMEOUT, ConstantComponents.REQUEST_TIMEOUT_TOOLTIP),
+            new NumberBoxListEntry(tpa.rtpCooldown(), false, ConstantComponents.RTP_COOLDOWN, ConstantComponents.RTP_COOLDOWN_TOOLTIP),
+            new NumberBoxListEntry(tpa.rtpDistance(), false, ConstantComponents.RTP_DISTANCE, ConstantComponents.RTP_DISTANCE_TOOLTIP)
         ));
     }
 

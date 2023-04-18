@@ -8,6 +8,7 @@ import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.commands.DynamicCommand;
 import earth.terrarium.prometheus.common.menus.EditCommandMenu;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
@@ -62,7 +63,7 @@ public class EditCommandScreen extends AbstractContainerCursorScreen<EditCommand
 
     @Override
     protected void renderLabels(@NotNull PoseStack stack, int i, int j) {
-        this.font.draw(stack, Component.translatable("prometheus.commands.edit", this.menu.id()), (float) this.titleLabelX, (float) this.titleLabelY, 4210752);
+        this.font.draw(stack, Component.translatable("prometheus.commands.edit", this.menu.id()), (float) this.titleLabelX, (float) this.titleLabelY + 2, 4210752);
     }
 
     @Override
@@ -106,7 +107,7 @@ public class EditCommandScreen extends AbstractContainerCursorScreen<EditCommand
 
     @Override
     public boolean keyPressed(int i, int j, int k) {
-        if (this.minecraft.options.keyInventory.matches(i, j)) return false;
+        if (Minecraft.getInstance().options.keyInventory.matches(i, j)) return false;
         return super.keyPressed(i, j, k);
     }
 

@@ -55,24 +55,24 @@ public class RolesScreen extends AbstractContainerCursorScreen<RolesMenu> implem
             this.list.update(this.menu.getRoles());
         }
 
-        this.saveButton = this.addRenderableWidget(button(this.leftPos + 154, this.topPos + 5, 17, 17, 176, 36, 17, CONTAINER_BACKGROUND, button -> {
+        this.saveButton = this.addRenderableWidget(button(this.leftPos + 154, this.topPos + 5, 17, 17, 176, 36, 17, button -> {
             this.menu.save();
             updateButtons();
         }, ConstantComponents.SAVE));
         this.saveButton.active = false;
 
-        this.undoButton = this.addRenderableWidget(button(this.leftPos + 154, this.topPos + 188, 17, 17, 193, 36, 17, CONTAINER_BACKGROUND, button -> {
+        this.undoButton = this.addRenderableWidget(button(this.leftPos + 154, this.topPos + 188, 17, 17, 193, 36, 17, button -> {
             this.menu.reset();
             this.list.update(this.menu.getRoles());
             updateButtons();
         }, ConstantComponents.UNDO));
         this.undoButton.active = false;
 
-        this.addRenderableWidget(button(this.leftPos + 157, this.topPos + 27, 12, 12, 176, 0, 12, CONTAINER_BACKGROUND, button -> {
-            NetworkHandler.CHANNEL.sendToServer(new AddRolePacket());
-        }, ConstantComponents.ADD)).active = !this.menu.hasError();
+        this.addRenderableWidget(button(this.leftPos + 157, this.topPos + 27, 12, 12, 176, 0, 12, button ->
+            NetworkHandler.CHANNEL.sendToServer(new AddRolePacket())
+        , ConstantComponents.ADD)).active = !this.menu.hasError();
 
-        this.deleteButton = this.addRenderableWidget(button(this.leftPos + 157, this.topPos + 43, 12, 12, 188, 0, 12, CONTAINER_BACKGROUND, button -> {
+        this.deleteButton = this.addRenderableWidget(button(this.leftPos + 157, this.topPos + 43, 12, 12, 188, 0, 12, button -> {
             if (selected != null) {
                 this.menu.remove(selected.id());
                 this.list.update(this.menu.getRoles());
@@ -81,7 +81,7 @@ public class RolesScreen extends AbstractContainerCursorScreen<RolesMenu> implem
         }, ConstantComponents.REMOVE));
         this.deleteButton.active = false;
 
-        this.moveUpButton = this.addRenderableWidget(button(this.leftPos + 157, this.topPos + 64, 12, 12, 200, 0, 12, CONTAINER_BACKGROUND, button -> {
+        this.moveUpButton = this.addRenderableWidget(button(this.leftPos + 157, this.topPos + 64, 12, 12, 200, 0, 12, button -> {
             if (this.selected != null) {
                 this.menu.move(this.selected.id(), true);
                 this.list.update(this.menu.getRoles(), this.selected.id());
@@ -90,7 +90,7 @@ public class RolesScreen extends AbstractContainerCursorScreen<RolesMenu> implem
         }, ConstantComponents.MOVE_UP));
         this.moveUpButton.active = false;
 
-        this.moveDownButton = this.addRenderableWidget(button(this.leftPos + 157, this.topPos + 79, 12, 12, 212, 0, 12, CONTAINER_BACKGROUND, button -> {
+        this.moveDownButton = this.addRenderableWidget(button(this.leftPos + 157, this.topPos + 79, 12, 12, 212, 0, 12, button -> {
             if (this.selected != null) {
                 this.menu.move(this.selected.id(), false);
                 this.list.update(this.menu.getRoles(), this.selected.id());
@@ -99,7 +99,7 @@ public class RolesScreen extends AbstractContainerCursorScreen<RolesMenu> implem
         }, ConstantComponents.MOVE_DOWN));
         this.moveDownButton.active = false;
 
-        this.editButton = this.addRenderableWidget(button(this.leftPos + 157, this.topPos + 99, 12, 12, 224, 0, 12, CONTAINER_BACKGROUND, button -> {
+        this.editButton = this.addRenderableWidget(button(this.leftPos + 157, this.topPos + 99, 12, 12, 224, 0, 12, button -> {
             if (this.saveButton.active) {
                 this.timeSinceLastSaveWarning = System.currentTimeMillis();
             } else if (Minecraft.getInstance().gameMode != null && this.selected != null) {
@@ -139,7 +139,7 @@ public class RolesScreen extends AbstractContainerCursorScreen<RolesMenu> implem
     @Override
     protected void renderLabels(@NotNull PoseStack stack, int i, int j) {
         Component title = this.saveButton.active && System.currentTimeMillis() - this.timeSinceLastSaveWarning < 2500 ? ConstantComponents.UNSAVED_CHANGES : this.title;
-        this.font.draw(stack, title, (float) this.titleLabelX, (float) this.titleLabelY, 4210752);
+        this.font.draw(stack, title, (float) this.titleLabelX, (float) this.titleLabelY + 2, 4210752);
     }
 
     @Override
@@ -152,7 +152,7 @@ public class RolesScreen extends AbstractContainerCursorScreen<RolesMenu> implem
 
     @Override
     public boolean keyPressed(int i, int j, int k) {
-        if (this.minecraft.options.keyInventory.matches(i, j)) {
+        if (Minecraft.getInstance().options.keyInventory.matches(i, j)) {
             return true;
         }
         return super.keyPressed(i, j, k);
@@ -164,8 +164,8 @@ public class RolesScreen extends AbstractContainerCursorScreen<RolesMenu> implem
         MouseLocationFix.setFix(clas -> clas == RolesScreen.class || clas == RoleEditScreen.class);
     }
 
-    private static ImageButton button(int x, int y, int width, int height, int u, int v, int vOffset, ResourceLocation resourceLocation, Button.OnPress onPress, Component component) {
-        ImageButton button = new ImageButton(x, y, width, height, u, v, vOffset, resourceLocation, onPress);
+    private static ImageButton button(int x, int y, int width, int height, int u, int v, int vOffset, Button.OnPress onPress, Component component) {
+        ImageButton button = new ImageButton(x, y, width, height, u, v, vOffset, RolesScreen.CONTAINER_BACKGROUND, onPress);
         button.setTooltip(Tooltip.create(component));
         return button;
     }

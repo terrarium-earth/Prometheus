@@ -28,6 +28,13 @@ public final class CooldownHandler {
         return false;
     }
 
+    public static long getCooldown(Player player, String id) {
+        if (player instanceof CooldownHook hook) {
+            return hook.prometheus$getCooldown(id);
+        }
+        return 0;
+    }
+
     private CooldownHandler() {
     }
 

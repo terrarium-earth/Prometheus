@@ -20,17 +20,21 @@ public class RtpCommand {
 
     private static final int MAX_TRIES = 10;
 
-    private static final Component TELEPORTED = Component.translatable("commands.rtp.success");
+    private static final Component TELEPORTED = Component.translatable("prometheus.rtp.success");
     private static final Component FAILED_WITH_CEILING = Component.translatable("prometheus.rtp.failed_with_ceiling");
     private static final Component FAILED_MAX_TRIES = Component.translatable("prometheus.rtp.failed_max_tries");
-    private static final Component RTP_ON_COOLDOWN = Component.translatable("prometheus.rtp.failed_cooldown");
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("rtp")
             .executes(context -> {
                 ServerPlayer player = context.getSource().getPlayerOrException();
+                if (player.level.dimensionType().hasCeiling()) {
+                    context.getSource().sendFailure(FAILED_WITH_CEILING);
+                    return 0;
+                }
                 if (CooldownHandler.hasCooldown(player, "rtp")) {
-                    context.getSource().sendFailure(RTP_ON_COOLDOWN);
+                    int timeLeft = (int) ((CooldownHandler.getCooldown(player, "rtp") - System.currentTimeMillis()) / 1000);
+                    context.getSource().sendFailure(Component.translatable("prometheus.rtp.failed_cooldown", timeLeft));
                     return 0;
                 }
                 TeleportOptions options = RoleApi.API.getNonNullOption(player, TeleportOptions.SERIALIZER);
@@ -48,10 +52,6 @@ public class RtpCommand {
             return false;
         }
         Level level = player.level;
-        if (level.dimensionType().hasCeiling()) {
-            player.sendSystemMessage(FAILED_WITH_CEILING);
-            return false;
-        }
 
         final int min = distance / 4;
         final int max = distance - min;
@@ -71,7 +71,7 @@ public class RtpCommand {
             return tp(player, distance, tries + 1);
         }
 
-        player.teleportTo(pos.getX(), pos.getY(), pos.getZ());
+        player.teleportTo(pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5);
         player.sendSystemMessage(TELEPORTED);
         return true;
     }

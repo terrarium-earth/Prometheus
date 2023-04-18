@@ -59,8 +59,11 @@ public class ConstantComponents {
 
     public static final Component TELEPORT_TITLE = Component.translatable("prometheus.options.teleport.title");
     public static final Component REQUEST_TIMEOUT = Component.translatable("prometheus.options.teleport.request_timeout");
+    public static final Component REQUEST_TIMEOUT_TOOLTIP = Component.translatable("prometheus.options.teleport.request_timeout.tooltip");
     public static final Component RTP_COOLDOWN = Component.translatable("prometheus.options.teleport.rtp_cooldown");
+    public static final Component RTP_COOLDOWN_TOOLTIP = Component.translatable("prometheus.options.teleport.rtp_cooldown.tooltip");
     public static final Component RTP_DISTANCE = Component.translatable("prometheus.options.teleport.rtp_distance");
+    public static final Component RTP_DISTANCE_TOOLTIP = Component.translatable("prometheus.options.teleport.rtp_distance.tooltip");
 
     public static final Component NOTIFICATION_OPTION_TOOLTIP = Component.translatable("options.prometheus.notifications.tooltip");
     public static final Component SOUND_OPTION_TOOLTIP = Component.translatable("options.prometheus.sound.tooltip");

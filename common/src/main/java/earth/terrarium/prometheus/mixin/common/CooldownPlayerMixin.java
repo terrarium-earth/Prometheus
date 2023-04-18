@@ -19,6 +19,11 @@ public abstract class CooldownPlayerMixin implements CooldownHook {
     }
 
     @Override
+    public long prometheus$getCooldown(String id) {
+        return prometheus$cooldowns.getLong(id);
+    }
+
+    @Override
     public boolean prometheus$hasCooldown(String id) {
         if (!prometheus$cooldowns.containsKey(id)) {
             return false;

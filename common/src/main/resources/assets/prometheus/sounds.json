@@ -1,0 +1,17 @@
+{
+  "ping_1" : {
+    "sounds": [
+      "prometheus:ping1"
+    ]
+  },
+  "ping_2" : {
+    "sounds": [
+      "prometheus:ping2"
+    ]
+  },
+  "ping_3" : {
+    "sounds": [
+      "prometheus:ping3"
+    ]
+  }
+}

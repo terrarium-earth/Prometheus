@@ -13,6 +13,8 @@
     "prometheus.tpa.request": "[TPA] Teleport request sent.",
 
     "prometheus.rtp.failed_with_ceiling": "You can not rtp in a dimension with a ceiling.",
+    "prometheus.rtp.failed_cooldown": "You can not rtp for %s more seconds.",
+    "prometheus.rtp.success" : "Random teleport successful.",
 
     "prometheus.invsee.enderchest": "Open Ender Chest",
 
@@ -65,6 +67,8 @@
     "prometheus.ui.prev": "Previous",
 
     "prometheus.roles.edit": "Edit Role — %s",
+    "prometheus.roles.title": "Prometheus Roles",
+
     "option.prometheus.permissions": "Permissions",
     "option.prometheus.homes/v1": "Homes",
     "option.prometheus.cosmetics/v1": "Cosmetics",
@@ -103,7 +107,11 @@
 
     "prometheus.options.teleport.title": "Teleport Options",
     "prometheus.options.teleport.request_timeout": "Request Timeout",
+    "prometheus.options.teleport.request_timeout.tooltip": "Request timeout in milliseconds.",
     "prometheus.options.teleport.rtp_cooldown": "RTP Cooldown",
+    "prometheus.options.teleport.rtp_cooldown.tooltip": "RTP cooldown in milliseconds.",
+    "prometheus.options.teleport.rtp_distance": "RTP Distance",
+    "prometheus.options.teleport.rtp_distance.tooltip": "RTP distance in blocks.",
 
     "options.prometheusNotificationSound": "Ping Sound",
     "options.prometheus.sound.tooltip": "Play a sound when you receive a message or are mentioned in chat.",
