@@ -8,13 +8,11 @@ import earth.terrarium.prometheus.common.registries.ModSounds;
 import earth.terrarium.prometheus.common.roles.CosmeticOptions;
 import earth.terrarium.prometheus.common.roles.HomeOptions;
 import earth.terrarium.prometheus.common.roles.TeleportOptions;
-import net.minecraft.SharedConstants;
 
 public class Prometheus {
     public static final String MOD_ID = "prometheus";
 
     public static void init() {
-        SharedConstants.IS_RUNNING_IN_IDE = true;
         NetworkHandler.init();
         ModMenus.MENUS.init();
         ModSounds.SOUNDS.init();
