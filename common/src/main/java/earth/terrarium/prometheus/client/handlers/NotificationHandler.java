@@ -31,6 +31,9 @@ public class NotificationHandler {
         Type type = getType(params, Minecraft.getInstance().getConnection().registryAccess());
         String text = message.getString().toLowerCase(Locale.ROOT);
 
+        boolean shouldPing = text.contains("@" + name.toLowerCase(Locale.ROOT)) || type == Type.PRIVATE;
+
+        if (!ClientOptionHandler.showNotifications.get() || !shouldPing) return;
 
         if (Minecraft.getInstance().isWindowActive()) {
             switch (ClientOptionHandler.notificationSound.get()) {
@@ -44,29 +47,19 @@ public class NotificationHandler {
             return;
         }
 
-        if (!ClientOptionHandler.showNotifications.get()) return;
-
         switch (type) {
             case PRIVATE -> SystemNotificationUtils.sendNotification(
                 "Private Message Received",
                 "You received a private message from " + senderName + "!"
             );
-            case TEAM -> {
-                if (text.contains("@" + name.toLowerCase(Locale.ROOT))) {
-                    SystemNotificationUtils.sendNotification(
-                        "You've been mentioned in a team message",
-                        "You were mentioned by " + senderName + "!"
-                    );
-                }
-            }
-            default -> {
-                if (text.contains("@" + name.toLowerCase(Locale.ROOT))) {
-                    SystemNotificationUtils.sendNotification(
-                        "You've been mentioned in a message",
-                        "You were mentioned by " + senderName + "!"
-                    );
-                }
-            }
+            case TEAM -> SystemNotificationUtils.sendNotification(
+                "You've been mentioned in a team message",
+                "You were mentioned by " + senderName + "!"
+            );
+            default -> SystemNotificationUtils.sendNotification(
+                "You've been mentioned in a message",
+                "You were mentioned by " + senderName + "!"
+            );
         }
 
     }
