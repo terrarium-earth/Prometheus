@@ -2,10 +2,18 @@
     "schemaVersion": 1,
     "id": "prometheus",
     "version": "${version}",
-    "name": "prometheus",
-    "description": "",
-    "authors": [],
-    "contact": {},
+    "name": "Prometheus",
+    "description": "Modern Utilities Mod!",
+    "authors": [
+        "ThatGravyBoat"
+    ],
+    "contributors": [
+    ],
+    "contact": {
+        "website": "https://modrinth.com/mod/argonauts",
+        "repo": "https://github.com/terrarium-earth/Prometheus",
+        "issues": "https://github.com/terrarium-earth/Prometheus/issues"
+    },
     "license": "MIT",
     "icon": "icon.png",
     "environment": "*",
@@ -21,12 +29,9 @@
             "earth.terrarium.prometheus.Prometheus::postInit"
         ]
     },
-    "mixins": [
-        "prometheus.mixins.json",
-        "prometheus-common.mixins.json"
-    ],
     "depends": {
-        "fabricloader": ">=0.14.19",
-        "minecraft": ">=1.19.4"
+        "fabric": "*",
+        "minecraft": ">=1.19.4",
+        "resourcefullib": ">=${resourcefullib_version}"
     }
 }

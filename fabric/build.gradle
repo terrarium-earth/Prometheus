@@ -32,10 +32,13 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", project.version
-
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     filesMatching("fabric.mod.json") {
-        expand "version": project.version
+        expand "version": rootProject.version,
+                "fabric_loader_version": rootProject.fabric_loader_version,
+                "github_name": rootProject.github_name,
+                "resourcefullib_version": rootProject.resourcefullib_version,
+                "modrinth_id": rootProject.modrinth_id
     }
 }
 

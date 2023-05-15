@@ -22,7 +22,7 @@ public class SystemNotificationUtils {
         if (Util.getPlatform() == Util.OS.OSX) return;
         System.setProperty("java.awt.headless", "false"); //Client should NEVER be headless
         if (SystemTray.isSupported()) {
-            try (InputStream icon = SystemNotificationUtils.class.getClassLoader().getResourceAsStream("icon.png")) {
+            try (InputStream icon = SystemNotificationUtils.class.getClassLoader().getResourceAsStream("prometheus_icon.png")) {
                 if (icon == null) {
                     throw new NullPointerException("Icon is null");
                 }

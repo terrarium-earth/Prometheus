@@ -64,6 +64,7 @@ public class PrometheusClient {
         api.addAutoComplete("headings.music");
         api.addAutoComplete("roles.manage");
         api.addAutoComplete("warps.manage");
+        api.addAutoComplete("warps.manage");
 
         api.addAutoComplete(() -> CommandPermissionHandler.COMMAND_PERMS);
     }
