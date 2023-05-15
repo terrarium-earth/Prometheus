@@ -1,13 +1,13 @@
 modLoader = "javafml"
 loaderVersion = "[45,)"
 license = "MIT"
-issueTrackerURL = "https://github.com/terrarium-earth/Prometheus/issues"
+issueTrackerURL = "https://github.com/terrarium-earth/${github_name}/issues"
 
 [[mods]]
 modId = "prometheus"
 version = "${version}"
 displayName = "Prometheus"
-updateJSONURL="https://api.modrinth.com/updates/${modrinth_id}/forge_updates.json"
+updateJSONURL = "https://api.modrinth.com/updates/${modrinth_id}/forge_updates.json"
 displayURL = "https://modrinth.com/mod/prometheus"
 logoFile = "icon.png"
 authors = "ThatGravyBoat"

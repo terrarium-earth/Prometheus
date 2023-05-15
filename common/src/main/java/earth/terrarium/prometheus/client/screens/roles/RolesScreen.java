@@ -69,8 +69,8 @@ public class RolesScreen extends AbstractContainerCursorScreen<RolesMenu> implem
         this.undoButton.active = false;
 
         this.addRenderableWidget(button(this.leftPos + 157, this.topPos + 27, 12, 12, 176, 0, 12, button ->
-            NetworkHandler.CHANNEL.sendToServer(new AddRolePacket())
-        , ConstantComponents.ADD)).active = !this.menu.hasError();
+                NetworkHandler.CHANNEL.sendToServer(new AddRolePacket())
+            , ConstantComponents.ADD)).active = !this.menu.hasError();
 
         this.deleteButton = this.addRenderableWidget(button(this.leftPos + 157, this.topPos + 43, 12, 12, 188, 0, 12, button -> {
             if (selected != null) {
