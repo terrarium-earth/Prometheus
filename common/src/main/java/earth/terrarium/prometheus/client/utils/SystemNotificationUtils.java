@@ -41,7 +41,6 @@ public class SystemNotificationUtils {
 
     public static void sendNotification(String notification, String title) {
         switch (Util.getPlatform()) {
-            case WINDOWS -> sendTrayNotification(notification, title);
             case OSX -> sendMacNotification(notification, title);
             case LINUX -> sendLinuxNotification(notification, title);
             default -> sendTrayNotification(notification, title);

@@ -10,7 +10,7 @@
   "contributors": [
   ],
   "contact": {
-    "website": "https://modrinth.com/mod/argonauts",
+    "website": "https://modrinth.com/mod/prometheus",
     "repo": "https://github.com/terrarium-earth/${github_name}",
     "issues": "https://github.com/terrarium-earth/${github_name}/issues"
   },
@@ -29,6 +29,9 @@
       "earth.terrarium.prometheus.Prometheus::postInit"
     ]
   },
+  "mixins": [
+    "prometheus-common.mixins.json"
+  ],
   "depends": {
     "fabric": "*",
     "minecraft": ">=1.19.4",

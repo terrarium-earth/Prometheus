@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefullib.client.screens.AbstractContainerCursor
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.menus.location.Location;
 import earth.terrarium.prometheus.common.menus.location.LocationMenu;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
@@ -34,7 +35,7 @@ public class LocationScreen extends AbstractContainerCursorScreen<LocationMenu> 
     protected void init() {
         super.init();
         ImageButton addButton = this.addRenderableWidget(new ImageButton(this.leftPos + 157, this.topPos + 22, 12, 12, 176, 0, 12, CONTAINER_BACKGROUND, (button) ->
-            this.minecraft.setScreen(new AddLocationScreen(this.menu.getLocationType()))
+            Minecraft.getInstance().setScreen(new AddLocationScreen(this.menu.getLocationType()))
         ));
         addButton.setTooltip(Tooltip.create(Component.translatable("prometheus.locations." + menu.getLocationType().getId() + ".add")));
         if (menu.getLocations().size() >= menu.getMax() || !menu.canModify()) {

@@ -2,6 +2,7 @@ package earth.terrarium.prometheus.common.commands.utilities;
 
 import com.mojang.brigadier.CommandDispatcher;
 import earth.terrarium.prometheus.api.roles.RoleApi;
+import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.cooldowns.CooldownHandler;
 import earth.terrarium.prometheus.common.roles.TeleportOptions;
 import net.minecraft.commands.CommandSourceStack;
@@ -20,16 +21,12 @@ public class RtpCommand {
 
     private static final int MAX_TRIES = 10;
 
-    private static final Component TELEPORTED = Component.translatable("prometheus.rtp.success");
-    private static final Component FAILED_WITH_CEILING = Component.translatable("prometheus.rtp.failed_with_ceiling");
-    private static final Component FAILED_MAX_TRIES = Component.translatable("prometheus.rtp.failed_max_tries");
-
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("rtp")
             .executes(context -> {
                 ServerPlayer player = context.getSource().getPlayerOrException();
                 if (player.level.dimensionType().hasCeiling()) {
-                    context.getSource().sendFailure(FAILED_WITH_CEILING);
+                    context.getSource().sendFailure(ConstantComponents.FAILED_WITH_CEILING);
                     return 0;
                 }
                 if (CooldownHandler.hasCooldown(player, "rtp")) {
@@ -48,7 +45,7 @@ public class RtpCommand {
 
     public static boolean tp(ServerPlayer player, int distance, int tries) {
         if (tries > MAX_TRIES) {
-            player.sendSystemMessage(FAILED_MAX_TRIES);
+            player.sendSystemMessage(ConstantComponents.FAILED_MAX_TRIES);
             return false;
         }
         Level level = player.level;
@@ -72,7 +69,7 @@ public class RtpCommand {
         }
 
         player.teleportTo(pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5);
-        player.sendSystemMessage(TELEPORTED);
+        player.sendSystemMessage(ConstantComponents.TELEPORTED);
         return true;
     }
 

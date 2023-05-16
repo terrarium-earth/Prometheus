@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import earth.terrarium.prometheus.api.TriState;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
+import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.commands.DynamicCommand;
 import earth.terrarium.prometheus.common.handlers.commands.DynamicCommandException;
 import earth.terrarium.prometheus.common.handlers.commands.DynamicCommandHandler;
@@ -24,8 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RunCommand {
-
-    private static final Component NO_PERMISSION = Component.translatable("prometheus.run.no_permission");
 
     private static final SuggestionProvider<CommandSourceStack> SUGGEST_IDS = (context, builder) ->
         SharedSuggestionProvider.suggest(DynamicCommandHandler.getCommands(context.getSource().getLevel()), builder);
@@ -50,7 +49,7 @@ public class RunCommand {
                     context.getSource().sendSuccess(
                         Component.translatable("prometheus.commands.add", id)
                             .withStyle(Style.EMPTY
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("prometheus.commands.click_edit")))
+                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, ConstantComponents.CLICK_EDIT))
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "runs edit " + id))
                             ),
                         false
@@ -76,7 +75,7 @@ public class RunCommand {
     private static int runArgCommand(CommandDispatcher<CommandSourceStack> dispatcher, CommandContext<CommandSourceStack> context) {
         String id = StringArgumentType.getString(context, "id");
         if (!canRun(context.getSource(), id)) {
-            context.getSource().sendFailure(NO_PERMISSION);
+            context.getSource().sendFailure(ConstantComponents.NO_PERMISSION);
             return 0;
         }
         String username = Optionull.mapOrDefault(context.getSource().getPlayer(), player -> player.getGameProfile().getName(), "Unknown");
@@ -93,7 +92,7 @@ public class RunCommand {
     private static int runArgLessCommand(CommandDispatcher<CommandSourceStack> dispatcher, CommandContext<CommandSourceStack> context) {
         String id = StringArgumentType.getString(context, "id");
         if (!canRun(context.getSource(), id)) {
-            context.getSource().sendFailure(NO_PERMISSION);
+            context.getSource().sendFailure(ConstantComponents.NO_PERMISSION);
             return 0;
         }
         String username = Optionull.mapOrDefault(context.getSource().getPlayer(), player -> player.getGameProfile().getName(), "Unknown");

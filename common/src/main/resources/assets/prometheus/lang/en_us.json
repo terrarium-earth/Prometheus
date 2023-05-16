@@ -1,5 +1,5 @@
 {
-    "prometheus.error.logs": "Error occured, check logs for more information.",
+    "prometheus.error.logs": "Error occurred, check logs for more information.",
 
     "prometheus.players.inventory": "%s's %s",
     "prometheus.tpa.request.to": "[TPA] %s has requested to teleport to you: %s",
@@ -45,9 +45,13 @@
     "prometheus.locations.home.to": "Click to teleport to %s",
     "prometheus.locations.warp": "Warps",
     "prometheus.locations.warp.command": "Warps:",
+    "prometheus.warps.error.warp_already_exists": "Warp already exists.",
+    "prometheus.warps.error.warp_does_not_exist": "Warp does not exist.",
     "prometheus.locations.warp.add": "Add a Warp",
     "prometheus.locations.warp.to": "Click to warp to %s",
     "prometheus.locations.add": "Add New Location:",
+
+    "prometheus.chat.error.muted": "You can not send a message while muted.",
 
     "prometheus.commands.edit": "Edit Command — %s",
     "prometheus.commands.add": "Added command %s",
@@ -116,5 +120,10 @@
     "options.prometheusNotificationSound": "Ping Sound",
     "options.prometheus.sound.tooltip": "Play a sound when you receive a message or are mentioned in chat.",
     "options.prometheusShowNotifications": "Show Desktop Notifications",
-    "options.prometheus.notifications.tooltip": "Get desktop notifications when you receive a message or are mentioned in chat."
+    "options.prometheus.notifications.tooltip": "Get desktop notifications when you receive a message or are mentioned in chat.",
+
+    "prometheus.roles.error.cant_give_role": "You do not have permission",
+    "prometheus.run.no_permission": "You do not have permission to run this command.",
+    "prometheus.rtp.failed_max_tries": "Failed after max tries.",
+    "prometheus.roles.member.error": "Only 1 player is allowed"
 }
