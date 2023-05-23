@@ -44,7 +44,7 @@ public class ConstantComponents {
     public static final Component WARP_ALREADY_EXISTS = Component.translatable("prometheus.warps.error.warp_already_exists");
     public static final Component WARP_DOES_NOT_EXIST = Component.translatable("prometheus.warps.error.warp_does_not_exist");
 
-    public static final Component MUTED = Component.translatable("You cannot not message while muted.");
+    public static final Component MUTED = Component.translatable("prometheus.chat.error.muted");
 
     // Option Displays
     public static final Component PERMISSIONS_TITLE = Component.translatable("prometheus.options.permissions.title");
@@ -67,4 +67,13 @@ public class ConstantComponents {
 
     public static final Component NOTIFICATION_OPTION_TOOLTIP = Component.translatable("options.prometheus.notifications.tooltip");
     public static final Component SOUND_OPTION_TOOLTIP = Component.translatable("options.prometheus.sound.tooltip");
+
+    public static final Component CANT_GIVE_ROLE = Component.translatable("prometheus.roles.error.cant_give_role");
+
+    public static final Component NO_PERMISSION = Component.translatable("prometheus.run.no_permission");
+    public static final Component TELEPORTED = Component.translatable("prometheus.rtp.success");
+    public static final Component FAILED_WITH_CEILING = Component.translatable("prometheus.rtp.failed_with_ceiling");
+    public static final Component FAILED_MAX_TRIES = Component.translatable("prometheus.rtp.failed_max_tries");
+    public static final Component MEMBER_ERROR = Component.translatable("prometheus.roles.member.error");
+    public static final Component CLICK_EDIT = Component.translatable("prometheus.commands.click_edit");
 }

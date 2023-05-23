@@ -35,9 +35,7 @@ public class MemberRolesScreen extends AbstractContainerCursorScreen<MemberRoles
     protected void init() {
         super.init();
 
-        this.list = this.addRenderableWidget(new MemberRolesList(this.leftPos + 8, this.topPos + 24, 144, 180, 20, item -> {
-            updateButtons();
-        }));
+        this.list = this.addRenderableWidget(new MemberRolesList(this.leftPos + 8, this.topPos + 24, 144, 180, 20, item -> updateButtons()));
         this.list.update(this.menu.getRoles());
 
         this.saveButton = this.addRenderableWidget(button(this.leftPos + 154, this.topPos + 5, 17, 17, 176, 36, 17, CONTAINER_BACKGROUND, button -> {

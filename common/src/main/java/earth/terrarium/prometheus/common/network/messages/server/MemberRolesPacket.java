@@ -4,11 +4,11 @@ import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import earth.terrarium.prometheus.Prometheus;
+import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.UUID;
@@ -56,7 +56,7 @@ public record MemberRolesPacket(UUID target, Object2BooleanMap<UUID> ids) implem
             return (player, level) -> {
                 for (UUID id : message.ids.keySet()) {
                     if (!RoleHandler.canModifyRole(player, id)) {
-                        player.sendSystemMessage(Component.nullToEmpty("You do not have permission to give this role!"));
+                        player.sendSystemMessage(ConstantComponents.CANT_GIVE_ROLE);
                         return;
                     }
                 }

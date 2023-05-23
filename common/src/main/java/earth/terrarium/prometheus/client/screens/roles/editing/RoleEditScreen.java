@@ -108,7 +108,7 @@ public class RoleEditScreen extends AbstractContainerCursorScreen<RoleEditMenu> 
     @Override
     public boolean keyPressed(int i, int j, int k) {
         //Ignore Closing
-        if (this.minecraft.options.keyInventory.matches(i, j)) {
+        if (Minecraft.getInstance().options.keyInventory.matches(i, j)) {
             return true;
         }
         return super.keyPressed(i, j, k);

@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -78,7 +79,7 @@ public class MemberRolesMenu extends AbstractContainerMenu {
 
         public static MemberRole of(RoleEntry entry, boolean selected, boolean canGive) {
             CosmeticOptions options = entry.role().getOption(CosmeticOptions.SERIALIZER);
-            return new MemberRole(entry.id(), options.display(), selected, canGive);
+            return new MemberRole(entry.id(), Objects.requireNonNull(options).display(), selected, canGive);
         }
 
         public static MemberRole of(FriendlyByteBuf buf) {

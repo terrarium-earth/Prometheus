@@ -2,6 +2,7 @@ package earth.terrarium.prometheus.common.commands.admin;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import earth.terrarium.prometheus.common.menus.MemberRolesMenu;
@@ -32,7 +33,7 @@ public class RolesCommand {
                 .executes(context -> {
                     var player = GameProfileArgument.getGameProfiles(context, "player");
                     if (player.size() != 1) {
-                        context.getSource().sendFailure(Component.translatable("prometheus.roles.member.error"));
+                        context.getSource().sendFailure(ConstantComponents.MEMBER_ERROR);
                         return 0;
                     }
                     GameProfile profile = player.iterator().next();

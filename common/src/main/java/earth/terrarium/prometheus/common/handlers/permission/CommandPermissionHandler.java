@@ -44,7 +44,7 @@ public class CommandPermissionHandler {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private static <T extends CommandSourceStack> void setRequirement(CommandNode<T> node, Predicate<T> requirement) {
         if (node instanceof CommandNodeAccessor accessor) {
             accessor.setRequirement(requirement);
