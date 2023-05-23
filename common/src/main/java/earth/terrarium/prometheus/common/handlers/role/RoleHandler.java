@@ -103,8 +103,12 @@ public class RoleHandler extends Handler {
     }
 
     public static Role getHighestRole(Player player) {
-        RoleHandler data = read(player.level);
-        List<RoleEntry> roles = data.roles.roles(data.players.getOrDefault(player.getUUID(), Set.of()));
+        return getHighestRole(player.level, player.getUUID());
+    }
+
+    public static Role getHighestRole(Level level, UUID player) {
+        RoleHandler data = read(level);
+        List<RoleEntry> roles = data.roles.roles(data.players.getOrDefault(player, Set.of()));
         return roles.get(0).role();
     }
 
