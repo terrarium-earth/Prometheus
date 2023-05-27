@@ -2,13 +2,12 @@ package earth.terrarium.prometheus.client.screens.commands;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefullib.client.scissor.ClosingScissorBox;
+import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
+import com.teamresourceful.resourcefullib.client.scissor.CloseableScissorStack;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractScrollWidget;
 import net.minecraft.client.gui.components.MultilineTextField;
 import net.minecraft.client.gui.components.Whence;
@@ -34,81 +33,89 @@ public class MultilineEditBox extends AbstractScrollWidget {
     }
 
     @Override
-    protected void renderContents(@NotNull PoseStack stack, int i, int j, float f) {
-        ClosingScissorBox scissor = RenderUtils.createScissorBox(Minecraft.getInstance(), stack, getX(), getY() + innerPadding(), 15, this.height - this.innerPadding());
-        stack.pushPose();
-        stack.translate(0.0, -this.scrollAmount(), 0.0);
-        for (int lineNum = 1; lineNum <= this.text.getLineCount(); lineNum++) {
-            int lWidth = Minecraft.getInstance().font.width(String.valueOf(lineNum));
-            Minecraft.getInstance().font.draw(stack, String.valueOf(lineNum), this.getX() + 14 - lWidth, this.getY() + this.innerPadding() + (lineNum - 1) * 9, 0x57546d);
+    protected void renderContents(@NotNull GuiGraphics graphics, int i, int j, float f) {
+        CloseableScissorStack scissor = RenderUtils.createScissor(Minecraft.getInstance(), graphics, getX(), getY() + innerPadding(), 15, this.height - this.innerPadding());
+        try (var ignored = new CloseablePoseStack(graphics)) {
+            graphics.pose().translate(0.0, -this.scrollAmount(), 0.0);
+            for (int lineNum = 1; lineNum <= this.text.getLineCount(); lineNum++) {
+                int lWidth = Minecraft.getInstance().font.width(String.valueOf(lineNum));
+                graphics.drawString(
+                    Minecraft.getInstance().font,
+                    String.valueOf(lineNum), this.getX() + 14 - lWidth, this.getY() + this.innerPadding() + (lineNum - 1) * 9, 0x57546d,
+                    false
+                );
+            }
         }
-        stack.popPose();
         scissor.close();
 
-        Gui.fill(stack, this.getX() + this.innerPadding() + 13, this.getY(), this.getX() + this.innerPadding() + 14, this.getY() + this.height, 0xff393747);
+        graphics.fill(this.getX() + this.innerPadding() + 13, this.getY(), this.getX() + this.innerPadding() + 14, this.getY() + this.height, 0xff393747);
 
-        scissor = RenderUtils.createScissorBox(Minecraft.getInstance(), stack, getX() + 15 + this.innerPadding(), getY(), this.width - 15 - (this.innerPadding() * 2), this.height);
+        scissor = RenderUtils.createScissor(Minecraft.getInstance(), graphics, getX() + 15 + this.innerPadding(), getY(), this.width - 15 - (this.innerPadding() * 2), this.height);
 
-        stack.pushPose();
-        stack.translate(0.0, -this.scrollAmount(), 0.0);
-        String string = this.text.value();
-        if (!string.isEmpty()) {
-            int k = this.text.cursor();
+        try (var ignored = new CloseablePoseStack(graphics)) {
+            graphics.pose().translate(0.0, -this.scrollAmount(), 0.0);
+            String string = this.text.value();
+            if (!string.isEmpty()) {
+                int k = this.text.cursor();
 
-            int linesUpToCursor = this.text.value().substring(0, k).replaceAll("[^\\n]", "").length() + 1;
-            var split = this.text.value().substring(0, k).split("\\R");
-            int lineCursor = k > 0 && this.text.value().charAt(k - 1) == '\n' ? 0 : split[split.length - 1].length();
+                int linesUpToCursor = this.text.value().substring(0, k).replaceAll("[^\\n]", "").length() + 1;
+                var split = this.text.value().substring(0, k).split("\\R");
+                int lineCursor = k > 0 && this.text.value().charAt(k - 1) == '\n' ? 0 : split[split.length - 1].length();
 
-            int realWidth = this.width - 15;
-            int avgCharWidth = Minecraft.getInstance().font.width("3".repeat(lineCursor + 1)) + (this.innerPadding() * 2);
-            int xStart = this.getX() + 15 + this.innerPadding() - (avgCharWidth > realWidth ? avgCharWidth - realWidth : 0);
+                int realWidth = this.width - 15;
+                int avgCharWidth = Minecraft.getInstance().font.width("3".repeat(lineCursor + 1)) + (this.innerPadding() * 2);
+                int xStart = this.getX() + 15 + this.innerPadding() - (avgCharWidth > realWidth ? avgCharWidth - realWidth : 0);
 
-            int lineYStart = this.getY() + this.innerPadding();
-            int line = 0;
-            List<String> lines = new ArrayList<>(this.text.value().lines().toList());
-            if (this.text.value().charAt(this.text.value().length() - 1) == '\n') {
-                lines.add("");
-            }
-            for (String s : lines) {
-                if (this.withinContentAreaTopBottom(lineYStart, lineYStart + 9) && !s.isBlank()) {
-                    Minecraft.getInstance().font.drawShadow(stack, syntaxHighlighter.apply(s), (float) (xStart), (float) lineYStart, 0xffe0e0e0);
+                int lineYStart = this.getY() + this.innerPadding();
+                int line = 0;
+                List<String> lines = new ArrayList<>(this.text.value().lines().toList());
+                if (this.text.value().charAt(this.text.value().length() - 1) == '\n') {
+                    lines.add("");
                 }
-                if (line == linesUpToCursor - 1) {
-                    int start = Minecraft.getInstance().font.width(s.substring(0, lineCursor));
-                    GuiComponent.fill(stack, xStart + start, lineYStart - 1, xStart + start + 1, lineYStart + 10, 0xffd0d0d0);
+                for (String s : lines) {
+                    if (this.withinContentAreaTopBottom(lineYStart, lineYStart + 9) && !s.isBlank()) {
+                        graphics.drawString(
+                            Minecraft.getInstance().font,
+                            syntaxHighlighter.apply(s), xStart, lineYStart, 0xffe0e0e0,
+                            false
+                        );
+                    }
+                    if (line == linesUpToCursor - 1) {
+                        int start = Minecraft.getInstance().font.width(s.substring(0, lineCursor));
+                        graphics.fill(xStart + start, lineYStart - 1, xStart + start + 1, lineYStart + 10, 0xffd0d0d0);
+                    }
+                    lineYStart += 9;
+                    line++;
                 }
-                lineYStart += 9;
-                line++;
-            }
 
-            if (this.text.hasSelection()) {
-                MultilineTextField.StringView stringView2 = this.text.getSelected();
-                int yStart = this.getY() + this.innerPadding();
+                if (this.text.hasSelection()) {
+                    MultilineTextField.StringView stringView2 = this.text.getSelected();
+                    int yStart = this.getY() + this.innerPadding();
 
-                for (MultilineTextField.StringView stringView3 : this.text.iterateLines()) {
-                    if (stringView2.beginIndex() <= stringView3.endIndex()) {
-                        if (stringView3.beginIndex() > stringView2.endIndex()) {
-                            break;
-                        }
-
-                        if (this.withinContentAreaTopBottom(yStart, yStart + 9)) {
-                            int p = Minecraft.getInstance().font.width(string.substring(stringView3.beginIndex(), Math.max(stringView2.beginIndex(), stringView3.beginIndex())));
-                            int q;
-                            if (stringView2.endIndex() > stringView3.endIndex()) {
-                                q = realWidth - this.innerPadding();
-                            } else {
-                                q = Minecraft.getInstance().font.width(string.substring(stringView3.beginIndex(), stringView2.endIndex()));
+                    for (MultilineTextField.StringView stringView3 : this.text.iterateLines()) {
+                        if (stringView2.beginIndex() <= stringView3.endIndex()) {
+                            if (stringView3.beginIndex() > stringView2.endIndex()) {
+                                break;
                             }
 
-                            this.renderHighlight(stack, xStart + p, yStart, xStart + q, yStart + 9);
-                        }
-                    }
-                    yStart += 9;
-                }
-            }
+                            if (this.withinContentAreaTopBottom(yStart, yStart + 9)) {
+                                int p = Minecraft.getInstance().font.width(string.substring(stringView3.beginIndex(), Math.max(stringView2.beginIndex(), stringView3.beginIndex())));
+                                int q;
+                                if (stringView2.endIndex() > stringView3.endIndex()) {
+                                    q = realWidth - this.innerPadding();
+                                } else {
+                                    q = Minecraft.getInstance().font.width(string.substring(stringView3.beginIndex(), stringView2.endIndex()));
+                                }
 
+                                this.renderHighlight(graphics, xStart + p, yStart, xStart + q, yStart + 9);
+                            }
+                        }
+                        yStart += 9;
+                    }
+                }
+
+            }
         }
-        stack.popPose();
         scissor.close();
     }
 
@@ -167,10 +174,10 @@ public class MultilineEditBox extends AbstractScrollWidget {
         return 9.0 / 2.0;
     }
 
-    private void renderHighlight(PoseStack poseStack, int i, int j, int k, int l) {
+    private void renderHighlight(GuiGraphics graphics, int i, int j, int k, int l) {
         RenderSystem.enableColorLogicOp();
         RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
-        fill(poseStack, i, j, k, l, -16776961);
+        graphics.fill(i, j, k, l, -16776961);
         RenderSystem.disableColorLogicOp();
     }
 
@@ -190,11 +197,11 @@ public class MultilineEditBox extends AbstractScrollWidget {
     }
 
     @Override
-    public void renderWidget(@NotNull PoseStack stack, int x, int y, float partialTicks) {
+    public void renderWidget(@NotNull GuiGraphics graphics, int x, int y, float partialTicks) {
         if (this.visible) {
-            fill(stack, this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0xff393747);
-            fill(stack, this.getX() + 1, this.getY() + 1, this.getX() + this.width - 1, this.getY() + this.height - 1, 0xff1d1d26);
-            this.renderContents(stack, x, y, partialTicks);
+            graphics.fill(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, 0xff393747);
+            graphics.fill(this.getX() + 1, this.getY() + 1, this.getX() + this.width - 1, this.getY() + this.height - 1, 0xff1d1d26);
+            this.renderContents(graphics, x, y, partialTicks);
         }
     }
 

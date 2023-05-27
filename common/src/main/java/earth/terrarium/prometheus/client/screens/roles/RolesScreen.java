@@ -1,16 +1,15 @@
 package earth.terrarium.prometheus.client.screens.roles;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.screens.AbstractContainerCursorScreen;
+import com.teamresourceful.resourcefullib.client.utils.MouseLocationFix;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.client.screens.roles.editing.RoleEditScreen;
-import earth.terrarium.prometheus.client.utils.MouseLocationFix;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.menus.RolesMenu;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.network.messages.server.AddRolePacket;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
@@ -38,7 +37,6 @@ public class RolesScreen extends AbstractContainerCursorScreen<RolesMenu> implem
 
     public RolesScreen(RolesMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
-        this.passEvents = false;
         this.imageHeight = 212;
         this.imageWidth = 176;
     }
@@ -126,28 +124,27 @@ public class RolesScreen extends AbstractContainerCursorScreen<RolesMenu> implem
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int i, int j, float f) {
-        this.renderBackground(stack);
-        super.render(stack, i, j, f);
-        this.renderTooltip(stack, i, j);
+    public void render(@NotNull GuiGraphics graphics, int i, int j, float f) {
+        this.renderBackground(graphics);
+        super.render(graphics, i, j, f);
+        this.renderTooltip(graphics, i, j);
         if (this.menu.hasError()) {
-            fill(stack, 0, 0, this.width, this.height, 0x88000000);
-            drawCenteredString(stack, this.font, ConstantComponents.ERROR_IN_LOGS, this.width / 2, this.height / 2, 0xFF0000);
+            graphics.fill(0, 0, this.width, this.height, 0x88000000);
+            graphics.drawCenteredString(this.font, ConstantComponents.ERROR_IN_LOGS, this.width / 2, this.height / 2, 0xFF0000);
         }
     }
 
     @Override
-    protected void renderLabels(@NotNull PoseStack stack, int i, int j) {
+    protected void renderLabels(@NotNull GuiGraphics graphics, int i, int j) {
         Component title = this.saveButton.active && System.currentTimeMillis() - this.timeSinceLastSaveWarning < 2500 ? ConstantComponents.UNSAVED_CHANGES : this.title;
-        this.font.draw(stack, title, (float) this.titleLabelX, (float) this.titleLabelY + 2, 4210752);
+        graphics.drawString(this.font, title, this.titleLabelX, this.titleLabelY + 2, 4210752, false);
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack stack, float f, int i, int j) {
-        RenderSystem.setShaderTexture(0, CONTAINER_BACKGROUND);
+    protected void renderBg(@NotNull GuiGraphics graphics, float f, int i, int j) {
         int k = (this.width - this.imageWidth) / 2;
         int l = (this.height - this.imageHeight) / 2;
-        blit(stack, k, l, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(CONTAINER_BACKGROUND, k, l, 0, 0, this.imageWidth, this.imageHeight);
     }
 
     @Override

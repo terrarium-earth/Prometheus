@@ -2,7 +2,6 @@ package earth.terrarium.prometheus.client.screens.roles.adding;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
@@ -15,6 +14,7 @@ import earth.terrarium.prometheus.common.network.messages.server.MemberRolesPack
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -78,26 +78,29 @@ public class MemberRolesList extends SelectionList<MemberRolesList.Entry> {
         }
 
         @Override
-        protected void render(@NotNull ScissorBoxStack scissorStack, @NotNull PoseStack stack, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
-            RenderSystem.setShaderTexture(0, CONTAINER_BACKGROUND);
-            blit(stack, left, top, 0, 0, 144, 20);
+        protected void render(@NotNull GuiGraphics graphics, @NotNull ScissorBoxStack scissor, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
+            graphics.blit(CONTAINER_BACKGROUND, left, top, 0, 0, 144, 20);
 
-            Minecraft.getInstance().font.drawShadow(stack, this.display, left + 5, top + 5, 0xFFFFFF);
+            graphics.drawString(
+                Minecraft.getInstance().font,
+                this.display, left + 5, top + 5, 0xFFFFFF,
+                false
+            );
 
 
             RenderSystem.setShaderTexture(0, BUTTONS);
-            blit(stack, left + width - 33 - 4, top + 4, 0, 36, 23, 12);
+            graphics.blit(CONTAINER_BACKGROUND, left + width - 33 - 4, top + 4, 0, 36, 23, 12);
             if (this.selected) {
-                blit(stack, left + width - 26, top + 4, 24, 12, 12, 12);
+                graphics.blit(CONTAINER_BACKGROUND, left + width - 26, top + 4, 24, 12, 12, 12);
             } else {
-                blit(stack, left + width - 33 - 4, top + 4, 0, 12, 12, 12);
+                graphics.blit(CONTAINER_BACKGROUND, left + width - 33 - 4, top + 4, 0, 12, 12, 12);
             }
             if (hovered && mouseY >= top + 4 && mouseY <= top + 4 + 12) {
                 if (mouseX >= left + width - 33 - 4 && mouseX < left + width - 33 - 4 + 11) {
-                    blit(stack, left + width - 33 - 4, top + 4, 0, 0, 12, 12);
+                    graphics.blit(CONTAINER_BACKGROUND, left + width - 33 - 4, top + 4, 0, 0, 12, 12);
                     CursorUtils.setCursor(true, CursorScreen.Cursor.POINTER);
                 } else if (mouseX >= left + width - 26 && mouseX < left + width - 26 + 11) {
-                    blit(stack, left + width - 26, top + 4, 24, 0, 12, 12);
+                    graphics.blit(CONTAINER_BACKGROUND, left + width - 26, top + 4, 24, 0, 12, 12);
                     CursorUtils.setCursor(true, CursorScreen.Cursor.POINTER);
                 }
             }

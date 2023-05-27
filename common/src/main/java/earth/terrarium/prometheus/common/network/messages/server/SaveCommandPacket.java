@@ -43,7 +43,7 @@ public record SaveCommandPacket(String id, List<String> lines) implements Packet
         public PacketContext handle(SaveCommandPacket message) {
             return (player, level) -> {
                 if (player instanceof ServerPlayer serverPlayer && serverPlayer.hasPermissions(4)) {
-                    DynamicCommandHandler.putCommand(serverPlayer.getLevel(), message.id, message.lines);
+                    DynamicCommandHandler.putCommand(serverPlayer.serverLevel(), message.id, message.lines);
                 }
             };
         }

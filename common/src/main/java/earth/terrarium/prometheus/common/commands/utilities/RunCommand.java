@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import earth.terrarium.prometheus.api.TriState;
+import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.commands.DynamicCommand;
@@ -46,12 +46,12 @@ public class RunCommand {
                 .executes(context -> {
                     var id = StringArgumentType.getString(context, "id");
                     DynamicCommandHandler.putCommand(context.getSource().getLevel(), id, new ArrayList<>());
-                    context.getSource().sendSuccess(
-                        Component.translatable("prometheus.commands.add", id)
-                            .withStyle(Style.EMPTY
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, ConstantComponents.CLICK_EDIT))
-                                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "runs edit " + id))
-                            ),
+                    context.getSource().sendSuccess(() ->
+                            Component.translatable("prometheus.commands.add", id)
+                                .withStyle(Style.EMPTY
+                                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, ConstantComponents.CLICK_EDIT))
+                                    .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "runs edit " + id))
+                                ),
                         false
                     );
                     return 1;
@@ -61,7 +61,7 @@ public class RunCommand {
                 .executes(context -> {
                     var id = StringArgumentType.getString(context, "id");
                     DynamicCommandHandler.removeCommand(context.getSource().getLevel(), id);
-                    context.getSource().sendSuccess(Component.translatable("prometheus.commands.remove", id), false);
+                    context.getSource().sendSuccess(() -> Component.translatable("prometheus.commands.remove", id), false);
                     return 1;
                 })))
         );

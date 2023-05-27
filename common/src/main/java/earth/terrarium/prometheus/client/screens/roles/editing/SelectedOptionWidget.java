@@ -1,7 +1,7 @@
 package earth.terrarium.prometheus.client.screens.roles.editing;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.CommonComponents;
@@ -18,8 +18,8 @@ public class SelectedOptionWidget extends AbstractWidget {
     }
 
     @Override
-    public void renderWidget(@NotNull PoseStack stack, int i, int j, float f) {
-        this.renderScrollingString(stack, Minecraft.getInstance().font, 0, 0xffffff);
+    public void renderWidget(@NotNull GuiGraphics graphics, int i, int j, float f) {
+        this.renderScrollingString(graphics, Minecraft.getInstance().font, 0, 0xffffff);
     }
 
     @Override

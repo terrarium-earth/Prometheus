@@ -1,8 +1,8 @@
 package earth.terrarium.prometheus.common.handlers.role;
 
-import earth.terrarium.prometheus.api.TriState;
+import com.teamresourceful.resourcefullib.common.utils.SaveHandler;
+import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
-import earth.terrarium.prometheus.common.handlers.base.Handler;
 import earth.terrarium.prometheus.common.handlers.permission.PermissionHolder;
 import earth.terrarium.prometheus.common.utils.ModUtils;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class RoleHandler extends Handler {
+public class RoleHandler extends SaveHandler {
 
     private static final RoleHandler CLIENT_SIDE = new RoleHandler();
 
@@ -30,7 +30,7 @@ public class RoleHandler extends Handler {
     }
 
     public static Map<String, TriState> getPermissions(Player player) {
-        RoleHandler data = read(player.level);
+        RoleHandler data = read(player.level());
         List<RoleEntry> roles = data.roles.roles(data.players.getOrDefault(player.getUUID(), Set.of()));
         Map<String, TriState> permissions = new HashMap<>();
         for (RoleEntry entry : roles) {
@@ -40,7 +40,7 @@ public class RoleHandler extends Handler {
     }
 
     public static void changeRoles(Player player, UUID target, Object2BooleanMap<UUID> roles) {
-        handle(player.level, RoleHandler::read, data ->
+        handle(player.level(), RoleHandler::read, data ->
             data.players.compute(target, (key, value) -> {
                 final Set<UUID> map = value == null ? new HashSet<>() : new HashSet<>(value);
                 roles.forEach((id, has) -> {
@@ -59,25 +59,25 @@ public class RoleHandler extends Handler {
     }
 
     public static void setRole(Player player, UUID uuid, Role role) {
-        handle(player.level, RoleHandler::read, data -> data.roles.set(uuid, role));
+        handle(player.level(), RoleHandler::read, data -> data.roles.set(uuid, role));
         if (uuid != null) {
             updatePlayers(player.getServer());
         }
     }
 
     public static RoleMap roles(Player player) {
-        return read(player.level).roles;
+        return read(player.level()).roles;
     }
 
     public static void reorder(Player player, List<UUID> newOrder) {
-        RoleHandler data = read(player.level);
+        RoleHandler data = read(player.level());
         data.roles.reorder(newOrder);
         data.setDirty();
         updatePlayers(player.getServer());
     }
 
     public static Set<UUID> getEditableRoles(Player player) {
-        RoleHandler data = read(player.level);
+        RoleHandler data = read(player.level());
         if (player.getServer() != null && player.getServer().getPlayerList().isOp(player.getGameProfile())) {
             Set<UUID> roles = new HashSet<>(data.roles.ids());
             roles.add(DefaultRole.DEFAULT_ROLE);
@@ -103,7 +103,7 @@ public class RoleHandler extends Handler {
     }
 
     public static Role getHighestRole(Player player) {
-        return getHighestRole(player.level, player.getUUID());
+        return getHighestRole(player.level(), player.getUUID());
     }
 
     public static Role getHighestRole(Level level, UUID player) {
@@ -113,7 +113,7 @@ public class RoleHandler extends Handler {
     }
 
     public static Set<UUID> getRolesForPlayer(Player player, UUID id) {
-        RoleHandler data = read(player.level);
+        RoleHandler data = read(player.level());
         return data.players.getOrDefault(id, Set.of());
     }
 

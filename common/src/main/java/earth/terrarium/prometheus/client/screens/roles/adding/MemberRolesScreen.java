@@ -1,11 +1,10 @@
 package earth.terrarium.prometheus.client.screens.roles.adding;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.screens.AbstractContainerCursorScreen;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.menus.MemberRolesMenu;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
@@ -26,7 +25,6 @@ public class MemberRolesScreen extends AbstractContainerCursorScreen<MemberRoles
 
     public MemberRolesScreen(MemberRolesMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
-        this.passEvents = false;
         this.imageHeight = 212;
         this.imageWidth = 176;
     }
@@ -58,23 +56,26 @@ public class MemberRolesScreen extends AbstractContainerCursorScreen<MemberRoles
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int i, int j, float f) {
-        this.renderBackground(stack);
-        super.render(stack, i, j, f);
-        this.renderTooltip(stack, i, j);
+    public void render(@NotNull GuiGraphics graphics, int i, int j, float f) {
+        this.renderBackground(graphics);
+        super.render(graphics, i, j, f);
+        this.renderTooltip(graphics, i, j);
     }
 
     @Override
-    protected void renderLabels(@NotNull PoseStack stack, int i, int j) {
-        this.font.draw(stack, this.title, (float) this.titleLabelX, (float) this.titleLabelY, 4210752);
+    protected void renderLabels(@NotNull GuiGraphics graphics, int i, int j) {
+        graphics.drawString(
+            this.font,
+            this.title, this.titleLabelX, this.titleLabelY, 4210752,
+            false
+        );
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack stack, float f, int i, int j) {
-        RenderSystem.setShaderTexture(0, CONTAINER_BACKGROUND);
+    protected void renderBg(@NotNull GuiGraphics graphics, float f, int i, int j) {
         int k = (this.width - this.imageWidth) / 2;
         int l = (this.height - this.imageHeight) / 2;
-        blit(stack, k, l, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
+        graphics.blit(CONTAINER_BACKGROUND, k, l, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
     }
 
     @Override

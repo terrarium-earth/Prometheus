@@ -14,7 +14,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 public class RtpCommand {
@@ -25,7 +24,7 @@ public class RtpCommand {
         dispatcher.register(Commands.literal("rtp")
             .executes(context -> {
                 ServerPlayer player = context.getSource().getPlayerOrException();
-                if (player.level.dimensionType().hasCeiling()) {
+                if (player.level().dimensionType().hasCeiling()) {
                     context.getSource().sendFailure(ConstantComponents.FAILED_WITH_CEILING);
                     return 0;
                 }
@@ -48,7 +47,7 @@ public class RtpCommand {
             player.sendSystemMessage(ConstantComponents.FAILED_MAX_TRIES);
             return false;
         }
-        Level level = player.level;
+        Level level = player.level();
 
         final int min = distance / 4;
         final int max = distance - min;
@@ -60,7 +59,7 @@ public class RtpCommand {
             return tp(player, distance, tries + 1);
         }
 
-        level.getChunk(SectionPos.blockToSectionCoord(x), SectionPos.blockToSectionCoord(z), ChunkStatus.HEIGHTMAPS);
+        level.getChunk(SectionPos.blockToSectionCoord(x), SectionPos.blockToSectionCoord(z));
 
         BlockPos pos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
 
@@ -74,9 +73,9 @@ public class RtpCommand {
     }
 
     private static boolean isSafe(Player player, BlockPos pos) {
-        return player.level.getBlockState(pos).isAir() &&
-            player.level.getBlockState(pos.above()).isAir() &&
-            player.level.getBlockState(pos.above(2)).isAir()
-            && player.level.getBlockState(pos.below()).entityCanStandOn(player.level, pos.below(), player);
+        return player.level().getBlockState(pos).isAir() &&
+            player.level().getBlockState(pos.above()).isAir() &&
+            player.level().getBlockState(pos.above(2)).isAir()
+            && player.level().getBlockState(pos.below()).entityCanStandOn(player.level(), pos.below(), player);
     }
 }

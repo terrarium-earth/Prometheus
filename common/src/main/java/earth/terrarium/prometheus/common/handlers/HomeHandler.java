@@ -1,8 +1,8 @@
 package earth.terrarium.prometheus.common.handlers;
 
+import com.teamresourceful.resourcefullib.common.utils.SaveHandler;
 import earth.terrarium.prometheus.api.roles.RoleApi;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
-import earth.terrarium.prometheus.common.handlers.base.Handler;
 import earth.terrarium.prometheus.common.roles.HomeOptions;
 import earth.terrarium.prometheus.common.utils.ModUtils;
 import net.minecraft.core.GlobalPos;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class HomeHandler extends Handler {
+public class HomeHandler extends SaveHandler {
 
     private static final HomeHandler CLIENT_SIDE = new HomeHandler();
 
@@ -28,7 +28,7 @@ public class HomeHandler extends Handler {
     }
 
     public static boolean add(ServerPlayer player, String name) {
-        Map<String, GlobalPos> homes = getHomes(player.level).computeIfAbsent(player.getUUID(), uuid -> new HashMap<>());
+        Map<String, GlobalPos> homes = getHomes(player.level()).computeIfAbsent(player.getUUID(), uuid -> new HashMap<>());
         if (homes.size() >= RoleApi.API.getNonNullOption(player, HomeOptions.SERIALIZER).max()) {
             player.sendSystemMessage(ConstantComponents.MAX_HOMES);
             return false;
@@ -36,8 +36,8 @@ public class HomeHandler extends Handler {
             player.sendSystemMessage(ConstantComponents.HOME_ALREADY_EXISTS);
             return false;
         }
-        homes.put(name, GlobalPos.of(player.level.dimension(), player.blockPosition()));
-        read(player.level).setDirty();
+        homes.put(name, GlobalPos.of(player.level().dimension(), player.blockPosition()));
+        read(player.level()).setDirty();
         return true;
     }
 
@@ -48,7 +48,7 @@ public class HomeHandler extends Handler {
             return;
         }
         homes.remove(name);
-        read(player.level).setDirty();
+        read(player.level()).setDirty();
     }
 
     public static void teleport(ServerPlayer player, String name) {
@@ -72,7 +72,7 @@ public class HomeHandler extends Handler {
     }
 
     public static Map<String, GlobalPos> getHomes(Player player) {
-        return getHomes(player.level).getOrDefault(player.getUUID(), Map.of());
+        return getHomes(player.level()).getOrDefault(player.getUUID(), Map.of());
     }
 
     public static Map<UUID, Map<String, GlobalPos>> getHomes(Level level) {

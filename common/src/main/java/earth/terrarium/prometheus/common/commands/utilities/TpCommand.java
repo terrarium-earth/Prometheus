@@ -32,7 +32,7 @@ public class TpCommand {
         dispatcher.register(Commands.literal("spawn")
             .executes(context -> {
                 ServerPlayer player = context.getSource().getPlayerOrException();
-                BlockPos pos = player.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, player.level.getSharedSpawnPos());
+                BlockPos pos = player.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, player.level().getSharedSpawnPos());
                 player.teleportTo(player.server.overworld(), pos.getX(), pos.getY(), pos.getZ(), player.getYRot(), player.getXRot());
                 return 1;
             }));

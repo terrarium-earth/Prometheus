@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
 import com.teamresourceful.resourcefullib.common.networking.PacketHelper;
-import earth.terrarium.prometheus.api.TriState;
+import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.prometheus.api.roles.options.RoleOption;
 import earth.terrarium.prometheus.api.roles.options.RoleOptionSerializer;
 import net.minecraft.nbt.CompoundTag;

@@ -1,6 +1,6 @@
 package earth.terrarium.prometheus.common.handlers.commands;
 
-import earth.terrarium.prometheus.common.handlers.base.Handler;
+import com.teamresourceful.resourcefullib.common.utils.SaveHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DynamicCommandHandler extends Handler {
+public class DynamicCommandHandler extends SaveHandler {
 
     private static final DynamicCommandHandler CLIENT_SIDE = new DynamicCommandHandler();
 

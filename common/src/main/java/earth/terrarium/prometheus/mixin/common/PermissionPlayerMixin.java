@@ -1,6 +1,6 @@
 package earth.terrarium.prometheus.mixin.common;
 
-import earth.terrarium.prometheus.api.TriState;
+import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
 import earth.terrarium.prometheus.common.handlers.permission.PermissionHolder;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;

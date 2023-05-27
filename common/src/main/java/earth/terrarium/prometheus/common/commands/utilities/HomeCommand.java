@@ -82,12 +82,12 @@ public class HomeCommand {
     private static ArgumentBuilder<CommandSourceStack, ?> list() {
         return Commands.literal("list")
             .executes(context -> {
-                context.getSource().sendSuccess(ConstantComponents.HOMES_COMMAND_TITLE, false);
+                context.getSource().sendSuccess(() -> ConstantComponents.HOMES_COMMAND_TITLE, false);
                 HomeHandler.getHomes(context.getSource().getPlayerOrException())
                     .keySet()
                     .stream()
                     .map(HomeCommand::createListEntry)
-                    .forEach(msg -> context.getSource().sendSuccess(msg, false));
+                    .forEach(msg -> context.getSource().sendSuccess(() -> msg, false));
                 return 1;
             });
     }

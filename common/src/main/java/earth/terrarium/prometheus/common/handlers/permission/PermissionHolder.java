@@ -1,6 +1,6 @@
 package earth.terrarium.prometheus.common.handlers.permission;
 
-import earth.terrarium.prometheus.api.TriState;
+import com.teamresourceful.resourcefullib.common.utils.TriState;
 
 import java.util.Map;
 

@@ -1,7 +1,7 @@
 package earth.terrarium.prometheus.common.handlers.role;
 
 import com.teamresourceful.resourcefullib.common.color.Color;
-import earth.terrarium.prometheus.api.TriState;
+import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.prometheus.api.roles.options.RoleOption;
 import earth.terrarium.prometheus.common.roles.CosmeticOptions;
 import earth.terrarium.prometheus.common.roles.HomeOptions;

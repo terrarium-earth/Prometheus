@@ -1,7 +1,7 @@
 package earth.terrarium.prometheus.api.permissions;
 
+import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.prometheus.api.ApiHelper;
-import earth.terrarium.prometheus.api.TriState;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;

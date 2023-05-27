@@ -79,12 +79,12 @@ public class WarpCommand {
     private static ArgumentBuilder<CommandSourceStack, ?> list() {
         return Commands.literal("list")
             .executes(context -> {
-                context.getSource().sendSuccess(ConstantComponents.WARPS_COMMAND_TITLE, false);
+                context.getSource().sendSuccess(() -> ConstantComponents.WARPS_COMMAND_TITLE, false);
                 WarpHandler.getWarps(context.getSource().getPlayerOrException())
                     .keySet()
                     .stream()
                     .map(WarpCommand::createListEntry)
-                    .forEach(msg -> context.getSource().sendSuccess(msg, false));
+                    .forEach(msg -> context.getSource().sendSuccess(() -> msg, false));
                 return 1;
             });
     }

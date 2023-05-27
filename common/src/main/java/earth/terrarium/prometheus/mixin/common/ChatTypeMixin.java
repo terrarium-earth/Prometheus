@@ -30,7 +30,7 @@ public class ChatTypeMixin {
                         .withInsertion(username)
                 );
 
-                cir.setReturnValue(ChatType.bind(resourceKey, entity.level.registryAccess(), name));
+                cir.setReturnValue(ChatType.bind(resourceKey, entity.level().registryAccess(), name));
             }
         }
     }

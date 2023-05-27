@@ -1,6 +1,6 @@
 package earth.terrarium.prometheus.common.handlers.role;
 
-import earth.terrarium.prometheus.common.utils.ModUtils;
+import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -15,7 +15,7 @@ public class RoleMap implements Iterable<RoleEntry> {
 
     public void set(UUID uuid, Role role) {
         if (uuid == null)
-            uuid = ModUtils.generate(id -> getIndex(id) == -1 && !DefaultRole.DEFAULT_ROLE.equals(id), UUID::randomUUID);
+            uuid = CommonUtils.generate(id -> getIndex(id) == -1 && !DefaultRole.DEFAULT_ROLE.equals(id), UUID::randomUUID);
         if (uuid.equals(DefaultRole.DEFAULT_ROLE)) {
             defaultRole = new RoleEntry(uuid, role);
             return;

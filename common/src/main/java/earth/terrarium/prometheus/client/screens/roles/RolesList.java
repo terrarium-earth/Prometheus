@@ -1,7 +1,5 @@
 package earth.terrarium.prometheus.client.screens.roles;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
@@ -11,6 +9,7 @@ import earth.terrarium.prometheus.common.handlers.role.Role;
 import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
 import earth.terrarium.prometheus.common.roles.CosmeticOptions;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,12 +62,15 @@ public class RolesList extends SelectionList<RolesList.Entry> {
         }
 
         @Override
-        protected void render(@NotNull ScissorBoxStack scissorStack, @NotNull PoseStack stack, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
-            RenderSystem.setShaderTexture(0, CONTAINER_BACKGROUND);
+        protected void render(@NotNull GuiGraphics graphics, @NotNull ScissorBoxStack scissor, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
             int offset = selected ? 40 : 0;
-            blit(stack, left, top, 0, hovered ? offset + 20 : offset, 144, 20);
+            graphics.blit(CONTAINER_BACKGROUND, left, top, 0, hovered ? offset + 20 : offset, 144, 20);
 
-            Minecraft.getInstance().font.drawShadow(stack, this.display.display(), left + 5, top + 5, 0xFFFFFF);
+            graphics.drawString(
+                Minecraft.getInstance().font,
+                this.display.display(), left + 5, top + 5, 0xFFFFFF,
+                false
+            );
             if (Minecraft.getInstance().screen instanceof CursorScreen cursorScreen && hovered) {
                 cursorScreen.setCursor(CursorScreen.Cursor.POINTER);
             }

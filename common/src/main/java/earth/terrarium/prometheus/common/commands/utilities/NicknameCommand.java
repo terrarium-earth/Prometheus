@@ -44,11 +44,11 @@ public class NicknameCommand {
             )
             .then(Commands.literal("list")
                 .executes(context -> {
-                    context.getSource().sendSuccess(Component.empty().append("Nicknames:"), false);
+                    context.getSource().sendSuccess(() -> Component.empty().append("Nicknames:"), false);
                     NicknameHandler.names(context.getSource().getLevel())
                         .values()
                         .stream().map(NicknameCommand::getNicknameEntry)
-                        .forEach(component -> context.getSource().sendSuccess(component, false));
+                        .forEach(component -> context.getSource().sendSuccess(() -> component, false));
                     return 1;
                 })
             ));

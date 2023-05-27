@@ -62,7 +62,7 @@ public class EditCommandMenu extends AbstractContainerMenu {
     }
 
     public static void open(ServerPlayer player, String commandId) {
-        List<String> lines = DynamicCommandHandler.getCommand(player.getLevel(), commandId);
+        List<String> lines = DynamicCommandHandler.getCommand(player.serverLevel(), commandId);
         ModUtils.openMenu(player,
             (id, inventory, p) -> new EditCommandMenu(id, lines, commandId),
             CommonComponents.EMPTY,

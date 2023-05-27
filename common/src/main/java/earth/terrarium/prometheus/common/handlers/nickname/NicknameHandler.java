@@ -1,6 +1,6 @@
 package earth.terrarium.prometheus.common.handlers.nickname;
 
-import earth.terrarium.prometheus.common.handlers.base.Handler;
+import com.teamresourceful.resourcefullib.common.utils.SaveHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class NicknameHandler extends Handler {
+public class NicknameHandler extends SaveHandler {
 
     private static final NicknameHandler CLIENT_SIDE = new NicknameHandler();
 
@@ -23,7 +23,7 @@ public class NicknameHandler extends Handler {
     }
 
     public static void set(ServerPlayer player, Component name) {
-        NicknameHandler data = read(player.level);
+        NicknameHandler data = read(player.level());
         names(player).put(player.getUUID(), Nickname.of(player, name));
         data.setDirty();
         if (player instanceof NickedEntityHook hook) {
@@ -32,7 +32,7 @@ public class NicknameHandler extends Handler {
     }
 
     public static void remove(ServerPlayer player) {
-        NicknameHandler data = read(player.level);
+        NicknameHandler data = read(player.level());
         names(player).remove(player.getUUID());
         data.setDirty();
         if (player instanceof NickedEntityHook hook) {
@@ -52,7 +52,7 @@ public class NicknameHandler extends Handler {
     }
 
     public static Map<UUID, Nickname> names(ServerPlayer player) {
-        return names(player.level);
+        return names(player.level());
     }
 
     @Override

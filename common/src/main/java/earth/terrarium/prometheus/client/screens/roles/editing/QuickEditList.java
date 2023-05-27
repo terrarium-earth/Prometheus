@@ -1,19 +1,17 @@
 package earth.terrarium.prometheus.client.screens.roles.editing;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import com.teamresourceful.resourcefullib.client.utils.CursorUtils;
+import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
 import earth.terrarium.prometheus.Prometheus;
-import earth.terrarium.prometheus.client.utils.ClientUtils;
 import earth.terrarium.prometheus.common.handlers.role.Role;
 import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
 import earth.terrarium.prometheus.common.roles.CosmeticOptions;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -57,14 +55,13 @@ public class QuickEditList extends SelectionList<QuickEditList.Entry> {
         }
 
         @Override
-        protected void render(@NotNull ScissorBoxStack scissorStack, @NotNull PoseStack stack, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
-            RenderSystem.setShaderTexture(0, CONTAINER_BACKGROUND);
-            blit(stack, left, top, 300, hovered ? 20 : 0, 42, 20, 512, 512);
+        protected void render(@NotNull GuiGraphics graphics, @NotNull ScissorBoxStack scissor, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
+            graphics.blit(CONTAINER_BACKGROUND, left, top, 300, hovered ? 20 : 0, 42, 20, 512, 512);
 
-            Gui.drawCenteredString(stack, Minecraft.getInstance().font, String.valueOf(display.icon()), left + 21, top + 5, 0xFFFFFF);
+            graphics.drawCenteredString(Minecraft.getInstance().font, String.valueOf(display.icon()), left + 21, top + 5, 0xFFFFFF);
             if (hovered) {
                 CursorUtils.setCursor(true, CursorScreen.Cursor.POINTER);
-                ClientUtils.setTooltip(Component.literal(display.display()));
+                ScreenUtils.setTooltip(Component.literal(display.display()));
             }
         }
 

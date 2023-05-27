@@ -62,7 +62,7 @@ public class TpaHandler {
 
             from.sendSystemMessage(ConstantComponents.TELEPORTING, true);
 
-            from.teleportTo(to.getLevel(), to.getX(), to.getY(), to.getZ(), to.getYRot(), to.getXRot());
+            from.teleportTo(to.serverLevel(), to.getX(), to.getY(), to.getZ(), to.getYRot(), to.getXRot());
         }
     }
 }

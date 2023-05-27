@@ -1,8 +1,8 @@
 package earth.terrarium.prometheus.common.handlers;
 
 import com.mojang.authlib.GameProfile;
+import com.teamresourceful.resourcefullib.common.utils.SaveHandler;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
-import earth.terrarium.prometheus.common.handlers.base.Handler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class MuteHandler extends Handler {
+public class MuteHandler extends SaveHandler {
 
     private static final MuteHandler CLIENT_SIDE = new MuteHandler();
 
@@ -35,10 +35,10 @@ public class MuteHandler extends Handler {
     }
 
     public static boolean canMessageGoThrough(ServerPlayer sender) {
-        Instant time = getMutedPlayers(sender.level).get(sender.getUUID());
+        Instant time = getMutedPlayers(sender.level()).get(sender.getUUID());
         if (time == null) return true;
         if (time.isBefore(Instant.now())) {
-            unmute(sender.level, sender.getGameProfile());
+            unmute(sender.level(), sender.getGameProfile());
             return true;
         }
         sender.sendSystemMessage(ConstantComponents.MUTED);

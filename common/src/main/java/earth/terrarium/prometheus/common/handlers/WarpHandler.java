@@ -1,8 +1,8 @@
 package earth.terrarium.prometheus.common.handlers;
 
+import com.teamresourceful.resourcefullib.common.utils.SaveHandler;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
-import earth.terrarium.prometheus.common.handlers.base.Handler;
 import earth.terrarium.prometheus.common.utils.ModUtils;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WarpHandler extends Handler {
+public class WarpHandler extends SaveHandler {
 
     private static final WarpHandler CLIENT_SIDE = new WarpHandler();
 
@@ -32,8 +32,8 @@ public class WarpHandler extends Handler {
                 player.sendSystemMessage(ConstantComponents.WARP_ALREADY_EXISTS);
                 return false;
             }
-            warps.put(name, GlobalPos.of(player.level.dimension(), player.blockPosition()));
-            read(player.level).setDirty();
+            warps.put(name, GlobalPos.of(player.level().dimension(), player.blockPosition()));
+            read(player.level()).setDirty();
             return true;
         }
         return false;
@@ -41,11 +41,11 @@ public class WarpHandler extends Handler {
 
     public static void remove(ServerPlayer player, String name) {
         getWarps(player).remove(name);
-        read(player.level).setDirty();
+        read(player.level()).setDirty();
     }
 
     public static void teleport(ServerPlayer player, String name) {
-        WarpHandler data = read(player.level);
+        WarpHandler data = read(player.level());
         GlobalPos pos = data.warps.get(name);
         if (pos == null) {
             player.sendSystemMessage(ConstantComponents.WARP_DOES_NOT_EXIST);
@@ -61,7 +61,7 @@ public class WarpHandler extends Handler {
     }
 
     public static Map<String, GlobalPos> getWarps(Player player) {
-        return read(player.level).warps;
+        return read(player.level()).warps;
     }
 
     public static boolean canModifyWarps(ServerPlayer player) {

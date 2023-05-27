@@ -2,7 +2,7 @@ package earth.terrarium.prometheus.client.screens.roles.options.entries;
 
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
-import earth.terrarium.prometheus.api.TriState;
+import com.teamresourceful.resourcefullib.common.utils.TriState;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;

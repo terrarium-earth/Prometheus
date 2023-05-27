@@ -1,13 +1,13 @@
 package earth.terrarium.prometheus.client.screens.location;
 
 import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.vertex.PoseStack;
-import earth.terrarium.prometheus.client.utils.ClientUtils;
+import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.menus.location.LocationType;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.network.messages.server.AddLocationPacket;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -35,7 +35,7 @@ public class AddLocationScreen extends Screen {
             (int) ((width / 2f) - 120),
             (int) ((height / 2f) - 30), 240, 20, Component.empty()));
         addRenderableWidget(
-            Button.builder(CommonComponents.GUI_CANCEL, button -> ClientUtils.sendCommand(type.editPrefix()))
+            Button.builder(CommonComponents.GUI_CANCEL, button -> ScreenUtils.sendCommand(type.editPrefix()))
                 .bounds((int) ((width / 2f) - 120), (int) ((height / 2f) + 10), 100, 20)
                 .build()
         );
@@ -47,10 +47,14 @@ public class AddLocationScreen extends Screen {
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.renderBackground(stack);
-        super.render(stack, mouseX, mouseY, partialTicks);
-        this.font.drawShadow(stack, TITLE, (width / 2f) - 120, (height / 2f) - 45, 0xFFFFFF);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        graphics.drawString(
+            this.font,
+            TITLE, (int) (width / 2f) - 120, (int) (height / 2f) - 45, 0xFFFFFF,
+            false
+        );
     }
 
     @Override

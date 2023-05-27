@@ -2,7 +2,7 @@ package earth.terrarium.prometheus.client.screens.roles.options.displays;
 
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
-import earth.terrarium.prometheus.api.TriState;
+import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.prometheus.api.roles.client.OptionDisplay;
 import earth.terrarium.prometheus.client.screens.roles.options.entries.PermissionHeaderListEntry;
 import earth.terrarium.prometheus.client.screens.roles.options.entries.PermissionListEntry;

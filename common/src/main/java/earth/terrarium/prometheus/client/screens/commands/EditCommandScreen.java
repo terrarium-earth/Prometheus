@@ -1,7 +1,5 @@
 package earth.terrarium.prometheus.client.screens.commands;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.screens.AbstractContainerCursorScreen;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
@@ -9,6 +7,7 @@ import earth.terrarium.prometheus.common.handlers.commands.DynamicCommand;
 import earth.terrarium.prometheus.common.menus.EditCommandMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
@@ -62,21 +61,24 @@ public class EditCommandScreen extends AbstractContainerCursorScreen<EditCommand
     }
 
     @Override
-    protected void renderLabels(@NotNull PoseStack stack, int i, int j) {
-        this.font.draw(stack, Component.translatable("prometheus.commands.edit", this.menu.id()), (float) this.titleLabelX, (float) this.titleLabelY + 2, 4210752);
+    protected void renderLabels(@NotNull GuiGraphics graphics, int i, int j) {
+        graphics.drawString(
+            this.font,
+            Component.translatable("prometheus.commands.edit", this.menu.id()), this.titleLabelX, this.titleLabelY + 2, 4210752,
+            false
+        );
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack stack, float f, int i, int j) {
-        RenderSystem.setShaderTexture(0, CONTAINER_BACKGROUND);
+    protected void renderBg(@NotNull GuiGraphics graphics, float f, int i, int j) {
         int k = (this.width - this.imageWidth) / 2;
         int l = (this.height - this.imageHeight) / 2;
-        blit(stack, k, l, 0, 0, this.imageWidth, this.imageHeight, 512, 512);
+        graphics.blit(CONTAINER_BACKGROUND, k, l, 0, 0, this.imageWidth, this.imageHeight, 512, 512);
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int i, int j, float f) {
-        super.render(stack, i, j, f);
+    public void render(@NotNull GuiGraphics graphics, int i, int j, float f) {
+        super.render(graphics, i, j, f);
         for (GuiEventListener child : children()) {
             if (child instanceof AbstractWidget widget && widget.isHovered()) {
                 if (widget.active) {

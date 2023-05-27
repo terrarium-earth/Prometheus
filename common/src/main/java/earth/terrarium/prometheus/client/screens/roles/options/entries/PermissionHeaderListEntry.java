@@ -1,19 +1,17 @@
 package earth.terrarium.prometheus.client.screens.roles.options.entries;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import com.teamresourceful.resourcefullib.client.utils.CursorUtils;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
-import earth.terrarium.prometheus.client.utils.ClientUtils;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -39,14 +37,13 @@ public class PermissionHeaderListEntry extends TextBoxListEntry {
     }
 
     @Override
-    protected void render(@NotNull ScissorBoxStack scissorStack, @NotNull PoseStack stack, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
-        Gui.drawString(stack, Minecraft.getInstance().font, component, left + 7, top + 7, 0xFFFFFF);
-        RenderUtils.bindTexture(TEXTURE);
+    protected void render(@NotNull GuiGraphics graphics, @NotNull ScissorBoxStack scissor, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
+        graphics.drawString(Minecraft.getInstance().font, component, left + 7, top + 7, 0xFFFFFF);
         boolean btnHovered = mouseX >= left + width - 14 - 7 && mouseX < left + width - 7 && mouseY >= top + 3 && mouseY < top + 17;
-        Gui.blit(stack, left + width - 14 - 7, top + 3, 0, canAdd() ? btnHovered ? 63 : 49 : 77, 14, 14);
+        graphics.blit(TEXTURE, left + width - 14 - 7, top + 3, 0, canAdd() ? btnHovered ? 63 : 49 : 77, 14, 14);
         if (btnHovered) {
             CursorUtils.setCursor(true, canAdd() ? CursorScreen.Cursor.POINTER : CursorScreen.Cursor.DISABLED);
-            ClientUtils.setTooltip(ConstantComponents.PERMISSIONS_ADD);
+            ScreenUtils.setTooltip(ConstantComponents.PERMISSIONS_ADD);
         }
 
         MutableComponent tempText = Component.literal(text);
@@ -61,13 +58,13 @@ public class PermissionHeaderListEntry extends TextBoxListEntry {
             }
         }
 
-        TextBoxListEntry.renderTextBox(scissorStack, stack, left + (width / 2) + 3, top + 3, width / 2 - 29, 14, tempText, selected ? 0xFFFFFFFF : 0xFF505050);
+        TextBoxListEntry.renderTextBox(graphics, scissor, left + (width / 2) + 3, top + 3, width / 2 - 29, 14, tempText, selected ? 0xFFFFFFFF : 0xFF505050);
 
         if (mouseX >= left + (width / 2) - 3 && mouseX < left + width - 14 - 9 && mouseY >= top + 3 && mouseY < top + 17) {
             CursorUtils.setCursor(true, CursorScreen.Cursor.TEXT);
         }
 
-        Gui.fill(stack, left + 5, top + 19, left + width - 5, top + 20, 0xFF505050);
+        graphics.fill(left + 5, top + 19, left + width - 5, top + 20, 0xFF505050);
     }
 
     @Override

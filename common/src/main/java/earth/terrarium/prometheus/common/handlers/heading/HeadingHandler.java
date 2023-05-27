@@ -1,6 +1,6 @@
 package earth.terrarium.prometheus.common.handlers.heading;
 
-import earth.terrarium.prometheus.common.handlers.base.Handler;
+import com.teamresourceful.resourcefullib.common.utils.SaveHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class HeadingHandler extends Handler {
+public class HeadingHandler extends SaveHandler {
 
     private static final HeadingHandler CLIENT_SIDE = new HeadingHandler();
 
@@ -22,17 +22,17 @@ public class HeadingHandler extends Handler {
 
     public static boolean set(Player player, Heading heading) {
         if (!heading.hasPermission(player)) return false;
-        read(player.level).headings.put(player.getUUID(), heading);
+        read(player.level()).headings.put(player.getUUID(), heading);
         if (player instanceof HeadingEntityHook hook) {
             hook.prometheus$setHeadingAndUpdate(heading);
             HeadingEvents.sendToOnlinePlayers(player.getServer(), player, heading);
         }
-        read(player.level).setDirty();
+        read(player.level()).setDirty();
         return true;
     }
 
     public static Heading get(Player player) {
-        return read(player.level).headings.getOrDefault(player.getUUID(), Heading.NONE);
+        return read(player.level()).headings.getOrDefault(player.getUUID(), Heading.NONE);
     }
 
     @Override
