@@ -29,7 +29,7 @@ public class PrometheusForge {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(PrometheusForge::onCommonSetup);
         MinecraftForge.EVENT_BUS.addListener(PrometheusForge::registerCommands);
         MinecraftForge.EVENT_BUS.addListener(PrometheusForge::onChatMessage);
-        MinecraftForge.EVENT_BUS.addListener(PrometheusForge::onEnityJoin);
+        MinecraftForge.EVENT_BUS.addListener(PrometheusForge::onEntityJoin);
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
@@ -46,7 +46,7 @@ public class PrometheusForge {
         }
     }
 
-    private static void onEnityJoin(EntityJoinLevelEvent event) {
+    private static void onEntityJoin(EntityJoinLevelEvent event) {
         PermissionEvents.onEntityJoin(event.getEntity());
         if (event.getEntity() instanceof ServerPlayer player) {
             HeadingEvents.onJoin(player);

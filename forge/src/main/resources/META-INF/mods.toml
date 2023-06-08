@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[45,)"
+loaderVersion = "[46,)"
 license = "MIT"
 issueTrackerURL = "https://github.com/terrarium-earth/${github_name}/issues"
 
@@ -12,19 +12,19 @@ displayURL = "https://modrinth.com/mod/prometheus"
 logoFile = "icon.png"
 authors = "ThatGravyBoat"
 credits = ""
-description = "Modern Utilities Mod!"
+description = "Modern Ranks/Utilities Mod!"
 
 [[dependencies.prometheus]]
 modId = "forge"
 mandatory = true
-versionRange = "[45,)"
+versionRange = "[46,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.prometheus]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19.4,)"
+versionRange = "[1.20,)"
 ordering = "NONE"
 side = "BOTH"
 

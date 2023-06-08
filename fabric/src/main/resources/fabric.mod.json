@@ -3,7 +3,7 @@
   "id": "prometheus",
   "version": "${version}",
   "name": "Prometheus",
-  "description": "Modern Utilities Mod!",
+  "description": "Modern Ranks/Utilities Mod!",
   "authors": [
     "ThatGravyBoat"
   ],
@@ -34,7 +34,7 @@
   ],
   "depends": {
     "fabric": "*",
-    "minecraft": ">=1.19.4",
+    "minecraft": ">=1.20",
     "resourcefullib": ">=${resourcefullib_version}"
   }
 }
