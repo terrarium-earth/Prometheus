@@ -15,7 +15,7 @@
     "issues": "https://github.com/terrarium-earth/${github_name}/issues"
   },
   "license": "MIT",
-  "icon": "icon.png",
+  "icon": "prometheus_icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
