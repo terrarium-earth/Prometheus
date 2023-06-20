@@ -6,7 +6,6 @@ import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.client.screens.location.LocationScreen;
 import earth.terrarium.prometheus.common.menus.content.location.LocationContent;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
@@ -39,7 +38,7 @@ public record OpenLocationScreenPacket(LocationContent content) implements Packe
 
         @Override
         public PacketContext handle(OpenLocationScreenPacket message) {
-            return (player, level) -> Minecraft.getInstance().setScreen(new LocationScreen(message.content()));
+            return (player, level) -> LocationScreen.open(message.content());
         }
     }
 }

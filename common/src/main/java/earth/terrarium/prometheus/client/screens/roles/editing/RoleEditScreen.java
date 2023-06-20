@@ -37,6 +37,10 @@ public class RoleEditScreen extends BaseCursorScreen {
         this.content = content;
     }
 
+    public static void open(RoleEditContent content) {
+        Minecraft.getInstance().setScreen(new RoleEditScreen(content));
+    }
+
     @Override
     protected void init() {
         int leftPos = (this.width - WIDTH) / 2;

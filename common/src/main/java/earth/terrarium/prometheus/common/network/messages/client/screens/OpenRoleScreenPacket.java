@@ -6,7 +6,6 @@ import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.client.screens.roles.editing.RoleEditScreen;
 import earth.terrarium.prometheus.common.menus.content.RoleEditContent;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
@@ -39,7 +38,7 @@ public record OpenRoleScreenPacket(RoleEditContent content) implements Packet<Op
 
         @Override
         public PacketContext handle(OpenRoleScreenPacket message) {
-            return (player, level) -> Minecraft.getInstance().setScreen(new RoleEditScreen(message.content()));
+            return (player, level) -> RoleEditScreen.open(message.content());
         }
     }
 }

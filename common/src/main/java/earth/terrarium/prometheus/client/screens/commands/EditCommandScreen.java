@@ -6,6 +6,7 @@ import earth.terrarium.prometheus.client.screens.widgets.editor.TextEditor;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.network.messages.server.OpenCommandPacket;
 import earth.terrarium.prometheus.common.network.messages.server.SaveCommandPacket;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ImageButton;
@@ -35,6 +36,10 @@ public class EditCommandScreen extends BaseCursorScreen {
         this.commands.addAll(commands);
         this.lines.addAll(lines);
         this.command = command;
+    }
+
+    public static void open(Collection<String> commands, Collection<String> lines, String command) {
+        Minecraft.getInstance().setScreen(new EditCommandScreen(commands, lines, command));
     }
 
     @Override

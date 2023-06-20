@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.menus.content.MemberRolesContent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
@@ -27,6 +28,10 @@ public class MemberRolesScreen extends BaseCursorScreen {
     public MemberRolesScreen(MemberRolesContent content) {
         super(CommonComponents.EMPTY);
         this.content = content;
+    }
+
+    public static void open(MemberRolesContent content) {
+        Minecraft.getInstance().setScreen(new MemberRolesScreen(content));
     }
 
     @Override

@@ -31,6 +31,10 @@ public class LocationScreen extends BaseCursorScreen {
         this.content = content;
     }
 
+    public static void open(LocationContent content) {
+        Minecraft.getInstance().setScreen(new LocationScreen(content));
+    }
+
     @Override
     protected void init() {
         super.init();
