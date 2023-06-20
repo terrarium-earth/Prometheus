@@ -1,35 +1,24 @@
-package earth.terrarium.prometheus.common.menus;
+package earth.terrarium.prometheus.common.menus.content;
 
 import earth.terrarium.prometheus.common.handlers.role.Role;
 import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.server.ChangeRolesPacket;
-import earth.terrarium.prometheus.common.registries.ModMenus;
+import earth.terrarium.prometheus.common.network.messages.server.roles.ChangeRolesPacket;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class RolesMenu extends AbstractContainerMenu {
+public class RolesContent {
 
     private final List<RoleEntry> uneditable;
 
     private List<RoleEntry> roles;
     private List<RoleEntry> newRoles;
 
-    public RolesMenu(int i, Inventory inventory, FriendlyByteBuf buf) {
-        this(i, read(buf), buf.readVarInt());
-    }
 
-    public RolesMenu(int id, List<RoleEntry> roles, int starting) {
-        super(ModMenus.ROLES.get(), id);
+    public RolesContent(List<RoleEntry> roles, int starting) {
         this.uneditable = new ArrayList<>();
         this.roles = new ArrayList<>();
         if (roles != null) {
@@ -45,25 +34,6 @@ public class RolesMenu extends AbstractContainerMenu {
             this.roles = null;
             this.newRoles = null;
         }
-    }
-
-    @Override
-    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int i) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public boolean stillValid(@NotNull Player player) {
-        return true;
-    }
-
-    @Override
-    public boolean clickMenuButton(@NotNull Player player, int i) {
-        if (i < newRoles.size() && i >= 0 && player instanceof ServerPlayer serverPlayer) {
-            RoleEditMenu.open(serverPlayer, newRoles.get(i).id());
-            return true;
-        }
-        return false;
     }
 
     public boolean hasError() {
@@ -90,15 +60,6 @@ public class RolesMenu extends AbstractContainerMenu {
         NetworkHandler.CHANNEL.sendToServer(new ChangeRolesPacket(ids));
     }
 
-    public int getIndexOf(UUID id) {
-        for (int i = 0; i < newRoles.size(); i++) {
-            if (newRoles.get(i).id().equals(id)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     public boolean areRolesDifferent() {
         return !newRoles.equals(roles);
     }
@@ -123,21 +84,23 @@ public class RolesMenu extends AbstractContainerMenu {
         }
     }
 
-    public static void write(FriendlyByteBuf buf, List<RoleEntry> roles, int starting) {
-        buf.writeCollection(roles, (buffer, entry) -> {
-            buffer.writeUUID(entry.id());
-            entry.role().toBuffer(buffer);
+    public void write(FriendlyByteBuf buf) {
+        List<RoleEntry> roles = new ArrayList<>(uneditable);
+        roles.addAll(newRoles);
+        buf.writeCollection(roles, (buffer, pair) -> {
+            buffer.writeUUID(pair.id());
+            pair.role().toBuffer(buffer);
         });
-        buf.writeVarInt(starting);
+        buf.writeVarInt(uneditable.size());
     }
 
-    public static List<RoleEntry> read(FriendlyByteBuf buf) {
+    public static RolesContent read(FriendlyByteBuf buf) {
         List<RoleEntry> roles = buf.readList(buffer -> new RoleEntry(buffer.readUUID(), Role.fromBuffer(buffer)));
         for (RoleEntry role : roles) {
             if (role.role() == null) {
-                return null;
+                return new RolesContent(null, buf.readVarInt());
             }
         }
-        return roles;
+        return new RolesContent(roles, buf.readVarInt());
     }
 }

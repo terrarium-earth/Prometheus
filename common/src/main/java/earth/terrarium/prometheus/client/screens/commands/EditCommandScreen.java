@@ -1,187 +1,130 @@
 package earth.terrarium.prometheus.client.screens.commands;
 
-import com.teamresourceful.resourcefullib.client.screens.AbstractContainerCursorScreen;
+import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen;
 import earth.terrarium.prometheus.Prometheus;
-import earth.terrarium.prometheus.common.constants.ConstantComponents;
-import earth.terrarium.prometheus.common.handlers.commands.DynamicCommand;
-import earth.terrarium.prometheus.common.menus.EditCommandMenu;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
+import earth.terrarium.prometheus.client.screens.widgets.editor.TextEditor;
+import earth.terrarium.prometheus.common.network.NetworkHandler;
+import earth.terrarium.prometheus.common.network.messages.server.OpenCommandPacket;
+import earth.terrarium.prometheus.common.network.messages.server.SaveCommandPacket;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentUtils;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Inventory;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.regex.Pattern;
+import java.util.Set;
 
-public class EditCommandScreen extends AbstractContainerCursorScreen<EditCommandMenu> implements MenuAccess<EditCommandMenu> {
+public class EditCommandScreen extends BaseCursorScreen {
 
-    private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/edit_command.png");
-    private static final ResourceLocation BUTTONS = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/buttons.png");
+    public static final ResourceLocation HEADING = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/heading.png");
 
-    private MultilineEditBox box;
-    private ImageButton save;
-    private ImageButton undo;
+    private final List<String> commands = new ArrayList<>();
+    private final List<String> lines = new ArrayList<>();
+    private final String command;
+    private final CommandEditorTheme.Theme theme = CommandEditorTheme.getTextTheme();
 
-    public EditCommandScreen(EditCommandMenu abstractContainerMenu, Inventory inventory, Component component) {
-        super(abstractContainerMenu, inventory, component);
-        this.imageHeight = 223;
-        this.imageWidth = 276;
+    private EditBox addBox;
+
+    public EditCommandScreen(Collection<String> commands, Collection<String> lines, String command) {
+        super(CommonComponents.EMPTY);
+        this.commands.addAll(commands);
+        this.lines.addAll(lines);
+        this.command = command;
     }
 
     @Override
     protected void init() {
-        super.init();
-        box = addRenderableWidget(new MultilineEditBox(this.leftPos + 8, this.topPos + 29, 260, 180, CommonComponents.EMPTY));
-        box.setValue(String.join("\n", this.menu.lines()));
-        box.setSyntaxHighlighter(this::highlight);
-        box.setListener((text) -> updateButtons());
-        save = addRenderableWidget(new ImageButton(this.leftPos + 252, this.topPos + 7, 17, 17, 18, 97, 17, BUTTONS, 256, 256, (button) -> {
-            this.menu.saveLines(List.of(box.getValue().split("\\R")));
-            updateButtons();
+        int sidebar = (int) (this.width * 0.25f) - 2;
+        TextEditor editor = addRenderableWidget(new TextEditor(
+            sidebar + 2, 15, this.width - sidebar + 2, this.height - 15,
+            this.theme.cursor(),
+            this.theme.lineNums(),
+            new CommandsHighlighter(this.theme)
+        ));
+        editor.setContent(String.join("\n", lines));
+        CommandsList list = addRenderableWidget(new CommandsList(0, 15, sidebar, this.height - 15, command -> {
+            if (command != null && !command.equals(this.command)) {
+                NetworkHandler.CHANNEL.sendToServer(new OpenCommandPacket(command));
+            }
         }));
-        save.setTooltip(Tooltip.create(ConstantComponents.SAVE));
-        undo = addRenderableWidget(new ImageButton(this.leftPos + 231, this.topPos + 7, 17, 17, 36, 97, 17, BUTTONS, 256, 256, (button) -> {
-            box.setValue(String.join("\n", this.menu.lines()));
-            updateButtons();
-        }));
-        undo.setTooltip(Tooltip.create(ConstantComponents.UNDO));
-        updateButtons();
+        list.update(this.command, commands);
+
+        this.addBox = addRenderableWidget(new EditBox(this.font, 2, 2, sidebar - 15, 10, CommonComponents.EMPTY));
+        this.addBox.setMaxLength(100);
+        this.addBox.setBordered(false);
+        this.addBox.setTextColor(-1);
+
+        // Buttons
+
+        addRenderableWidget(new ImageButton(sidebar - 12, 1, 11, 11, 245, 0, 11, HEADING, 256, 256, (button) -> {
+            Set<String> commands = this.commands.stream().map(String::toLowerCase).collect(java.util.stream.Collectors.toSet());
+            boolean invalid = commands.contains(this.addBox.getValue().toLowerCase()) || this.addBox.getValue().isEmpty();
+            if (!invalid) {
+                NetworkHandler.CHANNEL.sendToServer(new OpenCommandPacket(this.addBox.getValue().toLowerCase()));
+            }
+        })).setTooltip(Tooltip.create(Component.literal("Add")));
+
+        addRenderableWidget(new ImageButton(this.width - 38, 1, 11, 11, 245, 88, 11, HEADING, 256, 256, (button) -> {
+            editor.setContent(String.join("\n", lines));
+            if (list.getSelected().isDeleted()) {
+                NetworkHandler.CHANNEL.sendToServer(new SaveCommandPacket(command, editor.lines()));
+                list.getSelected().setDeleted(false);
+            }
+        })).setTooltip(Tooltip.create(Component.literal("Undo")));
+
+        addRenderableWidget(new ImageButton(this.width - 25, 1, 11, 11, 245, 66, 11, HEADING, 256, 256, (button) -> {
+            NetworkHandler.CHANNEL.sendToServer(new SaveCommandPacket(command, editor.lines()));
+            list.add(command);
+        })).setTooltip(Tooltip.create(Component.literal("Save")));
+
+        addRenderableWidget(new ImageButton(this.width - 12, 1, 11, 11, 245, 22, 11, HEADING, 256, 256, (button) -> {
+            if (this.minecraft != null && this.minecraft.player != null) {
+                this.minecraft.setScreen(null);
+            }
+        })).setTooltip(Tooltip.create(Component.literal("Close")));
     }
 
     @Override
-    protected void renderLabels(@NotNull GuiGraphics graphics, int i, int j) {
+    public void render(GuiGraphics graphics, int i, int j, float f) {
+        graphics.fill(0, 0, width, height, 0xD0000000);
+        graphics.blitRepeating(HEADING, 0, 0, this.width, 15, 0, 0, 128, 15);
+        int sidebar = (int) (this.width * 0.25f) - 2;
+        graphics.blitRepeating(HEADING, sidebar, 15, 2, this.height - 15, 243, 0, 2, 256);
+        graphics.blitRepeating(HEADING,
+            0, 15,
+            sidebar, this.height - 15,
+            0, 15,
+            122, 241
+        );
+        graphics.blitRepeating(HEADING,
+            sidebar + 2, 15,
+            this.width - sidebar, this.height - 15,
+            122, 15,
+            121, 241
+        );
+        int textX = (int) (this.width * 0.25f) + ((int) (this.width * 0.75f) / 2) - font.width("Command - " + command) / 2;
         graphics.drawString(
-            this.font,
-            Component.translatable("prometheus.commands.edit", this.menu.id()), this.titleLabelX, this.titleLabelY + 2, 4210752,
+            font,
+            "Command - " + command, textX, 3, 0x404040,
             false
         );
-    }
 
-    @Override
-    protected void renderBg(@NotNull GuiGraphics graphics, float f, int i, int j) {
-        int k = (this.width - this.imageWidth) / 2;
-        int l = (this.height - this.imageHeight) / 2;
-        graphics.blit(CONTAINER_BACKGROUND, k, l, 0, 0, this.imageWidth, this.imageHeight, 512, 512);
-    }
+        Set<String> commands = this.commands.stream().map(String::toLowerCase).collect(java.util.stream.Collectors.toSet());
 
-    @Override
-    public void render(@NotNull GuiGraphics graphics, int i, int j, float f) {
+        boolean invalid = (commands.contains(this.addBox.getValue().toLowerCase()) || this.addBox.getValue().isEmpty()) && this.addBox.isFocused();
+
+        graphics.fill(1, 11, sidebar - 13, 12, invalid ? 0xFFFF8080 : 0xFFFFFFFF);
+
         super.render(graphics, i, j, f);
-        for (GuiEventListener child : children()) {
-            if (child instanceof AbstractWidget widget && widget.isHovered()) {
-                if (widget.active) {
-                    if (widget instanceof MultilineEditBox) {
-                        super.setCursor(Cursor.TEXT);
-                    } else {
-                        super.setCursor(Cursor.POINTER);
-                    }
-                } else {
-                    super.setCursor(Cursor.DEFAULT);
-                }
-                break;
-            }
-        }
     }
 
     @Override
-    public void setCursor(Cursor cursor) {
-
-    }
-
-    public void updateButtons() {
-        if (save != null && undo != null && box != null) {
-            save.active = !String.join("\n", this.menu.lines()).equals(box.getValue());
-            undo.active = !String.join("\n", this.menu.lines()).equals(box.getValue());
-        }
-    }
-
-    @Override
-    public boolean keyPressed(int i, int j, int k) {
-        if (Minecraft.getInstance().options.keyInventory.matches(i, j)) return false;
-        return super.keyPressed(i, j, k);
-    }
-
-    private static final Pattern NUMBER = Pattern.compile("-?\\d+(\\.\\d+)?");
-
-    private Component highlight(String text) {
-        if (text.startsWith("#")) {
-            return Component.literal(text).withStyle(style -> style.withColor(0x5b6668));
-        }
-        List<Component> components = new ArrayList<>();
-        String[] split = text.split(" ");
-        boolean quote = false;
-        for (String part : split) {
-            if (DynamicCommand.USER_PARAMETER_PATTERN.matcher(part).matches()) {
-                components.add(Component.literal(part).withStyle(ChatFormatting.BLUE));
-            } else if (DynamicCommand.CUSTOM_PARAMETER_PATTERN.matcher(part).matches()) {
-                components.add(Component.literal(part).withStyle(ChatFormatting.GOLD));
-            } else if (components.isEmpty()) {
-                components.add(Component.literal(part).withStyle(Style.EMPTY.withColor(0xdf946c)));
-            } else if (part.contains("\"")) {
-                List<Component> tempComponents = new ArrayList<>();
-                StringBuilder theText = new StringBuilder();
-                for (char c : part.toCharArray()) {
-                    if (c == '"') {
-                        if (quote) {
-                            theText.append(c);
-                            tempComponents.add(Component.literal(formatArgs(theText.toString())).withStyle(Style.EMPTY.withColor(0x618941)));
-                            theText = new StringBuilder();
-                        } else if (theText.length() > 0) {
-                            tempComponents.add(Component.literal(formatArgs(theText.toString())).withStyle(Style.EMPTY.withColor(0x94b8d0)));
-                            theText = new StringBuilder();
-                            theText.append(c);
-                        } else {
-                            theText.append(c);
-                        }
-                        quote = !quote;
-                    } else {
-                        theText.append(c);
-                    }
-                }
-                if (theText.length() > 0) {
-                    tempComponents.add(Component.literal(formatArgs(theText.toString())).withStyle(Style.EMPTY.withColor(quote ? 0x618941 : 0x94b8d0)));
-                }
-                components.add(ComponentUtils.formatList(tempComponents, CommonComponents.EMPTY));
-            } else if (quote) {
-                components.add(Component.literal(part).withStyle(Style.EMPTY.withColor(0x618941)));
-            } else if (NUMBER.matcher(part).find()) {
-                List<Component> tempComponents = new ArrayList<>();
-                var matcher = NUMBER.matcher(part);
-                int last = 0;
-                while (matcher.find()) {
-                    if (matcher.start() > last) {
-                        tempComponents.add(Component.literal(part.substring(last, matcher.start())).withStyle(Style.EMPTY.withColor(0x94b8d0)));
-                    }
-                    tempComponents.add(Component.literal(part.substring(matcher.start(), matcher.end())).withStyle(Style.EMPTY.withColor(0x49abda)));
-                    last = matcher.end();
-                }
-                if (last < part.length()) {
-                    tempComponents.add(Component.literal(part.substring(last)).withStyle(Style.EMPTY.withColor(0x94b8d0)));
-                }
-                components.add(ComponentUtils.formatList(tempComponents, CommonComponents.EMPTY));
-            } else {
-                components.add(Component.literal(formatArgs(part)).withStyle(Style.EMPTY.withColor(0x94b8d0)));
-            }
-        }
-
-        return ComponentUtils.formatList(components, CommonComponents.SPACE);
-    }
-
-    private static String formatArgs(String text) {
-        text = DynamicCommand.USER_PARAMETER_PATTERN.matcher(text).replaceAll("§9$0§r");
-        text = DynamicCommand.CUSTOM_PARAMETER_PATTERN.matcher(text).replaceAll("§6$0§r");
-        return text;
+    public boolean isPauseScreen() {
+        return false;
     }
 }

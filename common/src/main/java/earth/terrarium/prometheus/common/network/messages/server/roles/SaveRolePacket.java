@@ -1,4 +1,4 @@
-package earth.terrarium.prometheus.common.network.messages.server;
+package earth.terrarium.prometheus.common.network.messages.server.roles;
 
 import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefullib.common.networking.PacketHelper;

@@ -1,16 +1,15 @@
 package earth.terrarium.prometheus.client.screens.roles.adding;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import com.teamresourceful.resourcefullib.client.utils.CursorUtils;
 import earth.terrarium.prometheus.Prometheus;
-import earth.terrarium.prometheus.common.menus.MemberRolesMenu;
+import earth.terrarium.prometheus.common.menus.content.MemberRolesContent;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.server.MemberRolesPacket;
+import earth.terrarium.prometheus.common.network.messages.server.roles.MemberRolesPacket;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minecraft.client.Minecraft;
@@ -31,7 +30,7 @@ public class MemberRolesList extends SelectionList<MemberRolesList.Entry> {
         super(x, y, width, height, itemHeight, onSelection, true);
     }
 
-    public void update(List<MemberRolesMenu.MemberRole> roles) {
+    public void update(List<MemberRolesContent.MemberRole> roles) {
         updateEntries(List.of());
         for (var role : roles) {
             addEntry(new Entry(role.id(), role.name(), role.selected()));
@@ -87,20 +86,18 @@ public class MemberRolesList extends SelectionList<MemberRolesList.Entry> {
                 false
             );
 
-
-            RenderSystem.setShaderTexture(0, BUTTONS);
-            graphics.blit(CONTAINER_BACKGROUND, left + width - 33 - 4, top + 4, 0, 36, 23, 12);
+            graphics.blit(BUTTONS, left + width - 33 - 4, top + 4, 0, 36, 23, 12);
             if (this.selected) {
-                graphics.blit(CONTAINER_BACKGROUND, left + width - 26, top + 4, 24, 12, 12, 12);
+                graphics.blit(BUTTONS, left + width - 26, top + 4, 24, 12, 12, 12);
             } else {
-                graphics.blit(CONTAINER_BACKGROUND, left + width - 33 - 4, top + 4, 0, 12, 12, 12);
+                graphics.blit(BUTTONS, left + width - 33 - 4, top + 4, 0, 12, 12, 12);
             }
             if (hovered && mouseY >= top + 4 && mouseY <= top + 4 + 12) {
                 if (mouseX >= left + width - 33 - 4 && mouseX < left + width - 33 - 4 + 11) {
-                    graphics.blit(CONTAINER_BACKGROUND, left + width - 33 - 4, top + 4, 0, 0, 12, 12);
+                    graphics.blit(BUTTONS, left + width - 33 - 4, top + 4, 0, 0, 12, 12);
                     CursorUtils.setCursor(true, CursorScreen.Cursor.POINTER);
                 } else if (mouseX >= left + width - 26 && mouseX < left + width - 26 + 11) {
-                    graphics.blit(CONTAINER_BACKGROUND, left + width - 26, top + 4, 24, 0, 12, 12);
+                    graphics.blit(BUTTONS, left + width - 26, top + 4, 24, 0, 12, 12);
                     CursorUtils.setCursor(true, CursorScreen.Cursor.POINTER);
                 }
             }

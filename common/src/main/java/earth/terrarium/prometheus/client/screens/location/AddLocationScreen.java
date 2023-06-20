@@ -3,7 +3,7 @@ package earth.terrarium.prometheus.client.screens.location;
 import com.mojang.blaze3d.platform.Window;
 import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
-import earth.terrarium.prometheus.common.menus.location.LocationType;
+import earth.terrarium.prometheus.common.menus.content.location.LocationType;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.network.messages.server.AddLocationPacket;
 import net.minecraft.client.Minecraft;

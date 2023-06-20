@@ -1,10 +1,9 @@
-package earth.terrarium.prometheus.common.network.messages.server;
+package earth.terrarium.prometheus.common.network.messages.server.roles;
 
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import earth.terrarium.prometheus.Prometheus;
-import earth.terrarium.prometheus.common.commands.admin.RolesCommand;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import net.minecraft.network.FriendlyByteBuf;
@@ -54,7 +53,7 @@ public record ChangeRolesPacket(List<UUID> ids) implements Packet<ChangeRolesPac
                         serverPlayer.closeContainer();
                     } else {
                         RoleHandler.reorder(player, message.ids);
-                        RolesCommand.openRolesMenu(serverPlayer);
+                        OpenRolesPacket.openScreen(serverPlayer);
                     }
                 }
             };

@@ -1,56 +1,61 @@
 package earth.terrarium.prometheus.client.screens.location;
 
-import com.teamresourceful.resourcefullib.client.screens.AbstractContainerCursorScreen;
+import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen;
+import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
 import earth.terrarium.prometheus.Prometheus;
-import earth.terrarium.prometheus.common.menus.location.Location;
-import earth.terrarium.prometheus.common.menus.location.LocationMenu;
+import earth.terrarium.prometheus.common.menus.content.location.Location;
+import earth.terrarium.prometheus.common.menus.content.location.LocationContent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-public class LocationScreen extends AbstractContainerCursorScreen<LocationMenu> implements MenuAccess<LocationMenu> {
+public class LocationScreen extends BaseCursorScreen {
 
     private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/location.png");
+    private static final int HEIGHT = 211;
+    private static final int WIDTH = 176;
 
-    public LocationScreen(LocationMenu menu, Inventory inventory, Component component) {
-        super(menu, inventory, component);
-        this.imageHeight = 211;
-        this.imageWidth = 176;
+    private final LocationContent content;
+
+    public LocationScreen(LocationContent content) {
+        super(content.type().title());
+        this.content = content;
     }
 
     @Override
     protected void init() {
         super.init();
-        ImageButton addButton = this.addRenderableWidget(new ImageButton(this.leftPos + 157, this.topPos + 22, 12, 12, 176, 0, 12, CONTAINER_BACKGROUND, (button) ->
-            Minecraft.getInstance().setScreen(new AddLocationScreen(this.menu.getLocationType()))
+        int leftPos = (this.width - WIDTH) / 2;
+        int topPos = (this.height - HEIGHT) / 2;
+
+        ImageButton addButton = this.addRenderableWidget(new ImageButton(leftPos + 157, topPos + 22, 12, 12, 176, 0, 12, CONTAINER_BACKGROUND, (button) ->
+            Minecraft.getInstance().setScreen(new AddLocationScreen(this.content.type()))
         ));
-        addButton.setTooltip(Tooltip.create(Component.translatable("prometheus.locations." + menu.getLocationType().getId() + ".add")));
-        if (menu.getLocations().size() >= menu.getMax() || !menu.canModify()) {
+        addButton.setTooltip(Tooltip.create(Component.translatable("prometheus.locations." + content.type().getId() + ".add")));
+        if (content.locations().size() >= content.max() || !content.canModify()) {
             addButton.active = false;
         }
 
-        LocationsList list = this.addRenderableWidget(new LocationsList(this.leftPos + 8, this.topPos + 43, 160, 160, 20, item -> {
+        LocationsList list = this.addRenderableWidget(new LocationsList(leftPos + 8, topPos + 43, 160, 160, 20, item -> {
             if (item != null) {
-                sendClick(item.id());
+                ScreenUtils.sendCommand(this.content.type().tpPrefix() + " " + item.id());
             }
         }));
-        list.update(getEntries(menu.getLocations(), ""));
+        list.update(getEntries(content.locations(), ""));
 
-        EditBox searchBar = this.addRenderableWidget(new EditBox(this.font, this.leftPos + 9, this.topPos + 24, 143, 11, CommonComponents.EMPTY));
+        EditBox searchBar = this.addRenderableWidget(new EditBox(this.font, leftPos + 9, topPos + 24, 143, 11, CommonComponents.EMPTY));
         searchBar.setMaxLength(32);
         searchBar.setBordered(false);
-        searchBar.setResponder(text -> list.update(getEntries(menu.getLocations(), text)));
+        searchBar.setResponder(text -> list.update(getEntries(content.locations(), text)));
     }
 
     private static Stream<Location> getEntries(List<Location> locations, String filter) {
@@ -59,42 +64,20 @@ public class LocationScreen extends AbstractContainerCursorScreen<LocationMenu> 
 
     @Override
     public void render(@NotNull GuiGraphics graphics, int i, int j, float f) {
+        int leftPos = (this.width - WIDTH) / 2;
+        int topPos = (this.height - HEIGHT) / 2;
         this.renderBackground(graphics);
+        graphics.blit(CONTAINER_BACKGROUND, leftPos, topPos, 0, 0, WIDTH, HEIGHT);
         super.render(graphics, i, j, f);
-        this.renderTooltip(graphics, i, j);
-    }
-
-    @Override
-    protected void renderLabels(@NotNull GuiGraphics graphics, int i, int j) {
         graphics.drawString(
             this.font,
-            title, this.titleLabelX, this.titleLabelY, 4210752,
+            title, leftPos + 8, topPos + 6, 4210752,
             false
         );
     }
 
     @Override
-    protected void renderBg(@NotNull GuiGraphics graphics, float f, int i, int j) {
-        int k = (this.width - this.imageWidth) / 2;
-        int l = (this.height - this.imageHeight) / 2;
-        graphics.blit(CONTAINER_BACKGROUND, k, l, 0, 0, this.imageWidth, this.imageHeight);
-    }
-
-    @Override
-    public boolean keyPressed(int i, int j, int k) {
-        if (this.minecraft.options.keyInventory.matches(i, j)) {
-            return true;
-        }
-        return super.keyPressed(i, j, k);
-    }
-
-    public void sendClick(String name) {
-        if (this.minecraft.gameMode == null) return;
-        for (int i = 0; i < this.menu.getLocations().size(); i++) {
-            if (this.menu.getLocations().get(i).name().equals(name)) {
-                this.minecraft.gameMode.handleInventoryButtonClick(menu.containerId, i);
-                break;
-            }
-        }
+    public boolean isPauseScreen() {
+        return false;
     }
 }

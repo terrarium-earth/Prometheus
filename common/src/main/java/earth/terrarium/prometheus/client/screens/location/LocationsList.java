@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefullib.client.utils.CursorUtils;
 import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.api.locations.client.LocationDisplayApi;
-import earth.terrarium.prometheus.common.menus.location.Location;
+import earth.terrarium.prometheus.common.menus.content.location.Location;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;

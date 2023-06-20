@@ -1,9 +1,16 @@
 package earth.terrarium.prometheus.client.fabric;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import earth.terrarium.prometheus.client.PrometheusClient;
+import earth.terrarium.prometheus.client.commands.ModClientCommands;
 import earth.terrarium.prometheus.client.handlers.NotificationHandler;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
@@ -20,5 +27,31 @@ public class PrometheusFabricClient implements ClientModInitializer {
         ClientReceiveMessageEvents.CHAT.register((Component message, @Nullable PlayerChatMessage signedMessage, @Nullable GameProfile sender, ChatType.Bound params, Instant receptionTimestamp) ->
             NotificationHandler.onChatMessage(message, sender == null ? null : sender.getId(), params)
         );
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, dedicated) ->
+            ModClientCommands.register(dispatcher, new FabricCommandBuilder())
+        );
+    }
+
+    private static class FabricCommandBuilder implements ModClientCommands.ClientCommandBuilder<FabricClientCommandSource> {
+
+        @Override
+        public LiteralArgumentBuilder<FabricClientCommandSource> literal(String name) {
+            return ClientCommandManager.literal(name);
+        }
+
+        @Override
+        public <I> RequiredArgumentBuilder<FabricClientCommandSource, I> argument(String name, ArgumentType<I> type) {
+            return ClientCommandManager.argument(name, type);
+        }
+
+        @Override
+        public boolean hasPermission(FabricClientCommandSource source, int permissionLevel) {
+            return source.hasPermission(permissionLevel);
+        }
+
+        @Override
+        public void sendFailure(FabricClientCommandSource source, Component component) {
+            source.sendError(component);
+        }
     }
 }

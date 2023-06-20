@@ -1,10 +1,9 @@
-package earth.terrarium.prometheus.common.network.messages.server;
+package earth.terrarium.prometheus.common.network.messages.server.roles;
 
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import earth.terrarium.prometheus.Prometheus;
-import earth.terrarium.prometheus.common.commands.admin.RolesCommand;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.role.Role;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
@@ -42,7 +41,7 @@ public record AddRolePacket() implements Packet<AddRolePacket> {
             return (player, level) -> {
                 if (player instanceof ServerPlayer serverPlayer && RoleHandler.canModifyRoles(player)) {
                     RoleHandler.setRole(player, null, new Role());
-                    RolesCommand.openRolesMenu(serverPlayer);
+                    OpenRolesPacket.openScreen(serverPlayer);
                 } else {
                     player.sendSystemMessage(ConstantComponents.NOT_ALLOWED_TO_EDIT_ROLES);
                 }

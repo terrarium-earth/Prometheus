@@ -4,11 +4,9 @@ import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import earth.terrarium.prometheus.Prometheus;
-import earth.terrarium.prometheus.common.commands.admin.WarpCommand;
-import earth.terrarium.prometheus.common.commands.utilities.HomeCommand;
 import earth.terrarium.prometheus.common.handlers.HomeHandler;
 import earth.terrarium.prometheus.common.handlers.WarpHandler;
-import earth.terrarium.prometheus.common.menus.location.LocationType;
+import earth.terrarium.prometheus.common.menus.content.location.LocationType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -48,12 +46,12 @@ public record AddLocationPacket(LocationType type, String name) implements Packe
                     switch (message.type) {
                         case HOME -> {
                             if (HomeHandler.add(serverPlayer, message.name)) {
-                                HomeCommand.openHomeMenu(serverPlayer);
+                                OpenLocationPacket.openHomes(serverPlayer);
                             }
                         }
                         case WARP -> {
                             if (WarpHandler.add(serverPlayer, message.name)) {
-                                WarpCommand.openWarpMenu(serverPlayer);
+                                OpenLocationPacket.openWarps(serverPlayer);
                             }
                         }
                     }
