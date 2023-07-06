@@ -24,7 +24,7 @@ public class PrometheusForge {
     public PrometheusForge() {
         Prometheus.init();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () ->
-            earth.terrarium.prometheus.client.forge.PrometheusForgeClient.init()
+            PrometheusForgeClient.init()
         );
         FMLJavaModLoadingContext.get().getModEventBus().addListener(PrometheusForge::onCommonSetup);
         MinecraftForge.EVENT_BUS.addListener(PrometheusForge::registerCommands);

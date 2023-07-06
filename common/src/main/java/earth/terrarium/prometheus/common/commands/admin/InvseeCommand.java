@@ -3,7 +3,10 @@ package earth.terrarium.prometheus.common.commands.admin;
 import com.mojang.brigadier.CommandDispatcher;
 import earth.terrarium.prometheus.common.menus.InvseeMenu;
 import earth.terrarium.prometheus.common.menus.WrappedPlayerContainer;
-import earth.terrarium.prometheus.common.utils.ModUtils;
+import earth.terrarium.prometheus.common.network.NetworkHandler;
+import earth.terrarium.prometheus.common.network.messages.client.screens.OpenInvseeScreenPacket;
+import earth.terrarium.prometheus.mixin.common.ServerPlayerAccessor;
+import earth.terrarium.prometheus.mixin.common.ServerPlayerInvoker;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -36,14 +39,37 @@ public class InvseeCommand {
             .requires(source -> source.hasPermission(2))
             .then(Commands.argument("player", EntityArgument.player())
                 .executes(context -> {
-                    Player player = EntityArgument.getPlayer(context, "player");
+                    if (!NetworkHandler.CHANNEL.canSendPlayerPackets(context.getSource().getPlayerOrException())) {
+                        context.getSource().sendFailure(Component.literal("You cant use invsee unless you have the client installed"));
+                        return 0;
+                    }
 
-                    ModUtils.openMenu(
-                        context.getSource().getPlayerOrException(),
-                        (i, inventory, playerx) -> new InvseeMenu(i, inventory, player, new WrappedPlayerContainer(player), player.getUUID()),
-                        Component.translatable("prometheus.invsee.inventory", player.getDisplayName()),
-                        buf -> buf.writeUUID(player.getUUID())
+
+                    ServerPlayer player = EntityArgument.getPlayer(context, "player");
+
+                    if (player.containerMenu != player.inventoryMenu) {
+                        player.closeContainer();
+                    }
+
+
+                    ((ServerPlayerInvoker)player).invokeNextContainerCounter();
+                    NetworkHandler.CHANNEL.sendToPlayer(
+                        new OpenInvseeScreenPacket(
+                            ((ServerPlayerAccessor)player).getContainerCounter(),
+                            player.getInventory().getContainerSize(),
+                            player.getUUID(),
+                            Component.translatable("prometheus.invsee.inventory", player.getDisplayName())
+                        ),
+                        player
                     );
+                    player.containerMenu = new InvseeMenu(
+                        ((ServerPlayerAccessor)player).getContainerCounter(),
+                        player.getInventory(),
+                        player,
+                        new WrappedPlayerContainer(player),
+                        player.getUUID()
+                    );
+                    ((ServerPlayerInvoker)player).invokeInitMenu(player.containerMenu);
                     return 1;
                 })
             ));

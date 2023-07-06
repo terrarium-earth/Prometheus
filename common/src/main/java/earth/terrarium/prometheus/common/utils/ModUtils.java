@@ -2,8 +2,6 @@ package earth.terrarium.prometheus.common.utils;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -12,14 +10,10 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.MenuConstructor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -27,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public final class ModUtils {
@@ -73,10 +66,5 @@ public final class ModUtils {
             map.put(keyMapper.apply(key), valueMapper.apply(key, tag));
         }
         return map;
-    }
-
-    @ExpectPlatform
-    public static void openMenu(ServerPlayer player, MenuConstructor constructor, Component title, Consumer<FriendlyByteBuf> options) {
-        throw new NotImplementedException();
     }
 }

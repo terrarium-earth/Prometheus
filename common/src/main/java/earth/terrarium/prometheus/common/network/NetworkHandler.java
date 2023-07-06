@@ -11,7 +11,7 @@ import earth.terrarium.prometheus.common.network.messages.server.roles.*;
 
 public class NetworkHandler {
 
-    public static final NetworkChannel CHANNEL = new NetworkChannel(Prometheus.MOD_ID, 1, "main");
+    public static final NetworkChannel CHANNEL = new NetworkChannel(Prometheus.MOD_ID, 1, "main", true);
 
     public static void init() {
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, AddLocationPacket.ID, AddLocationPacket.HANDLER, AddLocationPacket.class);
@@ -35,5 +35,6 @@ public class NetworkHandler {
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, OpenRoleScreenPacket.ID, OpenRoleScreenPacket.HANDLER, OpenRoleScreenPacket.class);
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, OpenLocationScreenPacket.ID, OpenLocationScreenPacket.HANDLER, OpenLocationScreenPacket.class);
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, OpenMemberRolesScreenPacket.ID, OpenMemberRolesScreenPacket.HANDLER, OpenMemberRolesScreenPacket.class);
+        CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, OpenInvseeScreenPacket.ID, OpenInvseeScreenPacket.HANDLER, OpenInvseeScreenPacket.class);
     }
 }

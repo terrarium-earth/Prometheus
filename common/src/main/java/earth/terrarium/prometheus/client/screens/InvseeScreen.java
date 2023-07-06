@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.teamresourceful.resourcefullib.client.screens.AbstractContainerCursorScreen;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.menus.InvseeMenu;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
@@ -65,6 +66,13 @@ public class InvseeScreen extends AbstractContainerCursorScreen<InvseeMenu> impl
             InventoryScreen.renderEntityInInventoryFollowsMouse(graphics,
                 k + 87, l + 58,
                 20, (float) (k + 51) - i, (float) (l + 75 - 50) - j, this.renderedPlayer);
+        }
+    }
+
+    public static void open(InvseeMenu menu, Component title) {
+        if (Minecraft.getInstance().player != null) {
+            Minecraft.getInstance().player.containerMenu = menu;
+            Minecraft.getInstance().setScreen(new InvseeScreen(menu, Minecraft.getInstance().player.getInventory(), title));
         }
     }
 }

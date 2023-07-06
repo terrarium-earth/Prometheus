@@ -52,7 +52,13 @@ public class HeadingEvents {
 
     public static void sendToOnlinePlayers(MinecraftServer server, Player player, Heading heading) {
         if (server == null) return;
-        NetworkHandler.CHANNEL.sendToPlayers(new UpdateHeadingPacket(List.of(Pair.of(player.getUUID(), heading))), server.getPlayerList().getPlayers());
+        List<Player> players = new ArrayList<>();
+        for (ServerPlayer serverPlayer : server.getPlayerList().getPlayers()) {
+            if (NetworkHandler.CHANNEL.canSendPlayerPackets(serverPlayer)) {
+                players.add(serverPlayer);
+            }
+        }
+        NetworkHandler.CHANNEL.sendToPlayers(new UpdateHeadingPacket(List.of(Pair.of(player.getUUID(), heading))), players);
     }
 
     public static void sendAllHeadings(ServerPlayer player) {

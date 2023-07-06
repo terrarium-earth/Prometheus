@@ -1,4 +1,4 @@
-package earth.terrarium.prometheus.client.fabric;
+package earth.terrarium.prometheus.fabric;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.arguments.ArgumentType;

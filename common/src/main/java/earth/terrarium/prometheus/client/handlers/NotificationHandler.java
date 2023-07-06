@@ -1,7 +1,7 @@
 package earth.terrarium.prometheus.client.handlers;
 
+import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.client.utils.SystemNotificationUtils;
-import earth.terrarium.prometheus.common.registries.ModSounds;
 import net.minecraft.Optionull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -9,6 +9,8 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.OptionEnum;
 import org.jetbrains.annotations.NotNull;
@@ -38,11 +40,17 @@ public class NotificationHandler {
         if (Minecraft.getInstance().isWindowActive()) {
             switch (ClientOptionHandler.notificationSound.get()) {
                 case PING1 ->
-                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(ModSounds.PING_1.get(), 1.0F));
+                    Minecraft.getInstance().getSoundManager().play(
+                        SimpleSoundInstance.forUI(SoundEvent.createFixedRangeEvent(new ResourceLocation(Prometheus.MOD_ID, "ping_1"), 1.0F), 1.0F)
+                    );
                 case PING2 ->
-                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(ModSounds.PING_2.get(), 1.0F));
+                    Minecraft.getInstance().getSoundManager().play(
+                        SimpleSoundInstance.forUI(SoundEvent.createFixedRangeEvent(new ResourceLocation(Prometheus.MOD_ID, "ping_2"), 1.0F), 1.0F)
+                    );
                 case PING3 ->
-                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(ModSounds.PING_3.get(), 1.0F));
+                    Minecraft.getInstance().getSoundManager().play(
+                        SimpleSoundInstance.forUI(SoundEvent.createFixedRangeEvent(new ResourceLocation(Prometheus.MOD_ID, "ping_3"), 1.0F), 1.0F)
+                    );
             }
             return;
         }

@@ -1,14 +1,16 @@
 package earth.terrarium.prometheus.client.handlers;
 
 import com.mojang.serialization.Codec;
+import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.client.utils.SystemNotificationUtils;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
-import earth.terrarium.prometheus.common.registries.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,11 +45,17 @@ public class ClientOptionHandler {
             type -> {
                 switch (type) {
                     case PING1 ->
-                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(ModSounds.PING_1.get(), 1.0F));
+                        Minecraft.getInstance().getSoundManager().play(
+                            SimpleSoundInstance.forUI(SoundEvent.createFixedRangeEvent(new ResourceLocation(Prometheus.MOD_ID, "ping_1"), 1.0F), 1.0F)
+                        );
                     case PING2 ->
-                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(ModSounds.PING_2.get(), 1.0F));
+                        Minecraft.getInstance().getSoundManager().play(
+                            SimpleSoundInstance.forUI(SoundEvent.createFixedRangeEvent(new ResourceLocation(Prometheus.MOD_ID, "ping_2"), 1.0F), 1.0F)
+                        );
                     case PING3 ->
-                        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(ModSounds.PING_3.get(), 1.0F));
+                        Minecraft.getInstance().getSoundManager().play(
+                            SimpleSoundInstance.forUI(SoundEvent.createFixedRangeEvent(new ResourceLocation(Prometheus.MOD_ID, "ping_3"), 1.0F), 1.0F)
+                        );
                 }
             }
         );

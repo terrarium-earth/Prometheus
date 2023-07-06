@@ -11,8 +11,8 @@
   ],
   "contact": {
     "website": "https://modrinth.com/mod/prometheus",
-    "repo": "https://github.com/terrarium-earth/${github_name}",
-    "issues": "https://github.com/terrarium-earth/${github_name}/issues"
+    "repo": "https://github.com/terrarium-earth/prometheus",
+    "issues": "https://github.com/terrarium-earth/prometheus/issues"
   },
   "license": "MIT",
   "icon": "prometheus_icon.png",
@@ -22,7 +22,7 @@
       "earth.terrarium.prometheus.fabric.PrometheusFabric"
     ],
     "client": [
-      "earth.terrarium.prometheus.client.fabric.PrometheusFabricClient",
+      "earth.terrarium.prometheus.fabric.PrometheusFabricClient",
       "earth.terrarium.prometheus.Prometheus::postInit"
     ],
     "server": [
@@ -35,6 +35,6 @@
   "depends": {
     "fabric": "*",
     "minecraft": ">=1.20",
-    "resourcefullib": ">=${resourcefullib_version}"
+    "resourcefullib": ">=2.1.1"
   }
 }

@@ -1,10 +1,7 @@
 package earth.terrarium.prometheus.common.menus;
 
 import earth.terrarium.prometheus.common.commands.admin.InvseeCommand;
-import earth.terrarium.prometheus.common.registries.ModMenus;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -20,12 +17,8 @@ public class InvseeMenu extends AbstractContainerMenu {
     private final Container openedContainer;
     private final UUID playerUUID;
 
-    public InvseeMenu(int i, Inventory inventory, FriendlyByteBuf buf) {
-        this(i, inventory, inventory.player, new SimpleContainer(inventory.getContainerSize()), buf.readUUID());
-    }
-
     public InvseeMenu(int id, Inventory inventory, Player player, Container container, UUID uuid) {
-        super(ModMenus.INVSEE.get(), id);
+        super(null, id);
         this.openedContainer = container;
         this.playerUUID = uuid;
 

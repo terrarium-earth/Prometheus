@@ -1,4 +1,4 @@
-package earth.terrarium.prometheus.client.forge;
+package earth.terrarium.prometheus.forge;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;

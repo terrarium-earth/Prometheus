@@ -28,7 +28,7 @@ public abstract class PermissionPlayerMixin extends LivingEntity implements Perm
     public void prometheus$updatePermissions() {
         prometheus$permissions = RoleHandler.getPermissions((Player) ((Object) this));
         //noinspection ConstantValue
-        if (getServer() != null && ((Object) this) instanceof ServerPlayer serverPlayer) {
+        if (getServer() != null && ((Object) this) instanceof ServerPlayer serverPlayer && NetworkHandler.CHANNEL.canSendPlayerPackets(serverPlayer)) {
             getServer().getCommands().sendCommands(serverPlayer);
             NetworkHandler.CHANNEL.sendToPlayer(new CommandPermissionsPacket(CommandPermissionHandler.COMMAND_PERMS), serverPlayer);
         }
