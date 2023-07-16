@@ -27,6 +27,9 @@
     ],
     "server": [
       "earth.terrarium.prometheus.Prometheus::postInit"
+    ],
+    "rei_client": [
+      "earth.terrarium.prometheus.client.compat.rei.PrometheusReiClientPlugin"
     ]
   },
   "mixins": [

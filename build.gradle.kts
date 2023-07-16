@@ -47,6 +47,7 @@ subprojects {
     dependencies {
         val resourcefulLibVersion: String by project
         val mixinExtrasVersion: String by project
+        val reiVersion: String by project
 
         "minecraft"("::${minecraftVersion}")
 
@@ -68,6 +69,13 @@ subprojects {
                 implementation(this)
                 "include"(this)
             }
+
+            "modRuntimeOnly"("me.shedaniel:RoughlyEnoughItems-$modLoader:$reiVersion")
+            "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api-$modLoader:$reiVersion")
+            "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-default-plugin-$modLoader:$reiVersion")
+        } else {
+            "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api:$reiVersion")
+            "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-default-plugin:$reiVersion")
         }
     }
 

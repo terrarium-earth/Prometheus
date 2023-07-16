@@ -88,6 +88,7 @@
     "prometheus.homes.error.home_does_not_exist": "Home does not exist.",
     "prometheus.homes.error.home_already_exists": "Home already exists.",
     "prometheus.homes.error.no_homes": "You do not have any homes.",
+    "prometheus.homes.error.multiple_homes": "You have multiple homes. Default home can only go to homes marked as 'home' or 'bed'",
     "prometheus.location.error.cant_find_dimension": "Could not find dimension.",
     "prometheus.roles.error.cant_edit_role": "You can't edit that role.",
     "prometheus.roles.error.cant_edit_role_in_list": "You can't edit a role in this list.",
@@ -125,5 +126,8 @@
     "prometheus.roles.error.cant_give_role": "You do not have permission",
     "prometheus.run.no_permission": "You do not have permission to run this command.",
     "prometheus.rtp.failed_max_tries": "Failed after max tries.",
-    "prometheus.roles.member.error": "Only 1 player is allowed"
+    "prometheus.roles.member.error": "Only 1 player is allowed",
+
+    "rei.sections.odyssey": "Project Odyssey",
+    "rei.prometheus.prometheus.tooltip": "Teleport Home"
 }

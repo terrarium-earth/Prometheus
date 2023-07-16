@@ -71,6 +71,25 @@ public class HomeHandler extends SaveHandler {
         player.teleportTo(level, pos.pos().getX(), pos.pos().getY(), pos.pos().getZ(), player.getYRot(), player.getXRot());
     }
 
+    public static boolean teleport(ServerPlayer player) {
+        Map<String, GlobalPos> homes = getHomes(player);
+        if (homes.size() == 1) {
+            teleport(player, homes.keySet().iterator().next());
+            return true;
+        }
+        if (homes.isEmpty()) {
+            player.sendSystemMessage(ConstantComponents.NO_HOMES);
+            return true;
+        }
+        for (String home : homes.keySet()) {
+            if (home.equalsIgnoreCase("home") || home.equalsIgnoreCase("bed")) {
+                teleport(player, home);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static Map<String, GlobalPos> getHomes(Player player) {
         return getHomes(player.level()).getOrDefault(player.getUUID(), Map.of());
     }

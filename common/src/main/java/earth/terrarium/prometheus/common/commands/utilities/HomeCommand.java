@@ -13,6 +13,7 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerPlayer;
 
 public class HomeCommand {
 
@@ -34,7 +35,13 @@ public class HomeCommand {
                     HomeHandler.teleport(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
                     return 1;
                 })
-            )
+            ).executes(context -> {
+                ServerPlayer player = context.getSource().getPlayerOrException();
+                if (!HomeHandler.teleport(player)) {
+                    player.sendSystemMessage(ConstantComponents.MULTIPLE_HOMES);
+                }
+                return 1;
+            })
         );
     }
 

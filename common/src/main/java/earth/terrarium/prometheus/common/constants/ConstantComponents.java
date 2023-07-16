@@ -32,6 +32,7 @@ public class ConstantComponents {
     public static final Component HOME_DOES_NOT_EXIST = Component.translatable("prometheus.homes.error.home_does_not_exist");
     public static final Component HOME_ALREADY_EXISTS = Component.translatable("prometheus.homes.error.home_already_exists");
     public static final Component NO_HOMES = Component.translatable("prometheus.homes.error.no_homes");
+    public static final Component MULTIPLE_HOMES = Component.translatable("prometheus.homes.error.multiple_homes");
 
     public static final Component NO_DIMENSION = Component.translatable("prometheus.location.error.cant_find_dimension");
 
