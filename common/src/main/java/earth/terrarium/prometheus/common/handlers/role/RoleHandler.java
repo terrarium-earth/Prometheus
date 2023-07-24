@@ -1,10 +1,10 @@
 package earth.terrarium.prometheus.common.handlers.role;
 
+import com.teamresourceful.resourcefullib.common.nbt.TagUtils;
 import com.teamresourceful.resourcefullib.common.utils.SaveHandler;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.common.handlers.permission.PermissionHolder;
-import earth.terrarium.prometheus.common.utils.ModUtils;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -151,7 +151,7 @@ public class RoleHandler extends SaveHandler {
     public void loadData(CompoundTag tag) {
         roles.load(tag);
         Set<UUID> identifiers = roles.ids();
-        ModUtils.mapTag(tag.getCompound("players"), UUID::fromString, (key, t) -> t.getList(key, Tag.TAG_STRING))
+        TagUtils.mapTag(tag.getCompound("players"), UUID::fromString, (key, t) -> t.getList(key, Tag.TAG_STRING))
             .forEach((player, roles) -> {
                 Set<UUID> roleIds = new HashSet<>();
                 for (Tag role : roles) {

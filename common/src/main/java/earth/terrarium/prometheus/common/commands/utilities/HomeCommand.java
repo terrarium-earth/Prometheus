@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.HomeHandler;
 import net.minecraft.commands.CommandSourceStack;
@@ -23,12 +24,10 @@ public class HomeCommand {
     };
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("homes")
+        dispatcher.register(Commands.literal("home")
             .then(add())
             .then(remove())
             .then(list())
-        );
-        dispatcher.register(Commands.literal("home")
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .suggests(SUGGEST_HOMES)
                 .executes(context -> {
@@ -86,7 +85,7 @@ public class HomeCommand {
     private static Component createListEntry(String name) {
         return Component.literal(" - " + name).setStyle(Style.EMPTY.withHoverEvent(new HoverEvent(
             HoverEvent.Action.SHOW_TEXT,
-            Component.translatable("prometheus.locations.home.to", name)
+            CommonUtils.serverTranslatable("prometheus.locations.home.to", name)
         )).withClickEvent(new ClickEvent(
             ClickEvent.Action.RUN_COMMAND,
             "/home " + name

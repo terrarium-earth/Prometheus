@@ -19,6 +19,8 @@
   "client": [
     "client.ChatOptionsScreenMixin",
     "client.ClientPacketListenerMixin",
+    "client.FontManagerAccessor",
+    "client.MinecraftAccessor",
     "client.OptionsMixin",
     "client.PlayerRendererMixin",
     "client.PlayerTabOverlayMixin"

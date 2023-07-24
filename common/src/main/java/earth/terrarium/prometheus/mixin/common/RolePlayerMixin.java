@@ -8,10 +8,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(Player.class)
 public abstract class RolePlayerMixin extends LivingEntity implements RoleEntityHook {
 
+    @Unique
     private Role prometheus$highestRole;
 
     protected RolePlayerMixin(EntityType<? extends LivingEntity> entityType, Level level) {

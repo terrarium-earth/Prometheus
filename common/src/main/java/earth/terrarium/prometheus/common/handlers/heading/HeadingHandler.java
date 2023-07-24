@@ -25,7 +25,7 @@ public class HeadingHandler extends SaveHandler {
         read(player.level()).headings.put(player.getUUID(), heading);
         if (player instanceof HeadingEntityHook hook) {
             hook.prometheus$setHeadingAndUpdate(heading);
-            HeadingEvents.sendToOnlinePlayers(player.getServer(), player, heading);
+            HeadingEvents.sendToOnlinePlayers(player.getServer(), player, heading, null);
         }
         read(player.level()).setDirty();
         return true;

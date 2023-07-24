@@ -1,6 +1,7 @@
 package earth.terrarium.prometheus.common.commands.utilities;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import earth.terrarium.prometheus.api.roles.RoleApi;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.cooldowns.CooldownHandler;
@@ -9,7 +10,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.player.Player;
@@ -30,7 +30,7 @@ public class RtpCommand {
                 }
                 if (CooldownHandler.hasCooldown(player, "rtp")) {
                     int timeLeft = (int) ((CooldownHandler.getCooldown(player, "rtp") - System.currentTimeMillis()) / 1000);
-                    context.getSource().sendFailure(Component.translatable("prometheus.rtp.failed_cooldown", timeLeft));
+                    context.getSource().sendFailure(CommonUtils.serverTranslatable("prometheus.rtp.failed_cooldown", timeLeft));
                     return 0;
                 }
                 TeleportOptions options = RoleApi.API.getNonNullOption(player, TeleportOptions.SERIALIZER);

@@ -3,12 +3,12 @@ package earth.terrarium.prometheus.common.commands.utilities;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import earth.terrarium.prometheus.common.handlers.heading.Heading;
 import earth.terrarium.prometheus.common.handlers.heading.HeadingHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
@@ -31,12 +31,12 @@ public class HeadingCommand {
                     if (heading != null) {
                         ServerPlayer player = context.getSource().getPlayerOrException();
                         if (HeadingHandler.set(player, heading)) {
-                            player.sendSystemMessage(Component.translatable("prometheus.heading.set", heading.getDisplayName()));
+                            player.sendSystemMessage(CommonUtils.serverTranslatable("prometheus.heading.set", heading.getDisplayName()));
                         } else {
-                            player.sendSystemMessage(Component.translatable("prometheus.heading.invalid_permission", heading.getDisplayName()));
+                            player.sendSystemMessage(CommonUtils.serverTranslatable("prometheus.heading.invalid_permission", heading.getDisplayName()));
                         }
                     } else {
-                        context.getSource().sendFailure(Component.translatable("prometheus.heading.invalid", StringArgumentType.getString(context, "name")));
+                        context.getSource().sendFailure(CommonUtils.serverTranslatable("prometheus.heading.invalid", StringArgumentType.getString(context, "name")));
                     }
                     return 1;
                 })));

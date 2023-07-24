@@ -17,11 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public final class ModUtils {
 
@@ -58,13 +54,5 @@ public final class ModUtils {
         player.setItemSlot(first, secondItem);
         player.setItemSlot(second, firstItem);
         player.inventoryMenu.broadcastChanges();
-    }
-
-    public static <K, V> Map<K, V> mapTag(CompoundTag tag, Function<String, K> keyMapper, BiFunction<String, CompoundTag, V> valueMapper) {
-        Map<K, V> map = new HashMap<>();
-        for (String key : tag.getAllKeys()) {
-            map.put(keyMapper.apply(key), valueMapper.apply(key, tag));
-        }
-        return map;
     }
 }

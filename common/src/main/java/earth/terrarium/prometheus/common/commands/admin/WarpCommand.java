@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.WarpHandler;
 import net.minecraft.commands.CommandSourceStack;
@@ -22,13 +23,10 @@ public class WarpCommand {
     };
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("warps")
-            .requires(source -> source.hasPermission(2))
+        dispatcher.register(Commands.literal("warp")
             .then(add())
             .then(remove())
             .then(list())
-        );
-        dispatcher.register(Commands.literal("warp")
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .suggests(SUGGESTION_PROVIDER)
                 .executes(context -> {
@@ -79,7 +77,7 @@ public class WarpCommand {
     private static Component createListEntry(String name) {
         return Component.literal(" - " + name).setStyle(Style.EMPTY.withHoverEvent(new HoverEvent(
             HoverEvent.Action.SHOW_TEXT,
-            Component.translatable("prometheus.locations.warp.to", name)
+            CommonUtils.serverTranslatable("prometheus.locations.warp.to", name)
         )).withClickEvent(new ClickEvent(
             ClickEvent.Action.RUN_COMMAND,
             "/warp " + name

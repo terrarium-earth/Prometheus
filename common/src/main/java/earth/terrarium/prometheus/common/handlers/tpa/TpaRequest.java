@@ -1,5 +1,6 @@
 package earth.terrarium.prometheus.common.handlers.tpa;
 
+import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;
 import net.minecraft.world.entity.player.Player;
@@ -13,7 +14,7 @@ public record TpaRequest(long time, int expires, UUID sender, UUID receiver, Dir
     }
 
     public Component getMessage(Player sender) {
-        return Component.translatable(
+        return CommonUtils.serverTranslatable(
             "prometheus.tpa.request." + direction().name().toLowerCase(),
             sender.getDisplayName(),
             Component.empty().append(getAcceptComponent()).append(" ").append(getRejectComponent())

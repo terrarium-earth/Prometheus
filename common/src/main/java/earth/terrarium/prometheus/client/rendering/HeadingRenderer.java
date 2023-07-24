@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.client.utils.ClientListenerHook;
 import earth.terrarium.prometheus.common.handlers.heading.Heading;
-import earth.terrarium.prometheus.common.handlers.heading.HeadingEntityHook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -30,15 +29,15 @@ public class HeadingRenderer {
     }
 
     public static void onRender(AbstractClientPlayer abstractClientPlayer, PoseStack stack, MultiBufferSource multiBufferSource, int i, double distance, RendererInterface renderer) {
-        if (abstractClientPlayer instanceof HeadingEntityHook hook) {
-            hook.prometheus$getHeadingText().ifPresent(component -> {
-                if (distance <= 4096.0D) {
-                    stack.pushPose();
-                    stack.translate(0.0D, (9.0F * 1.15F * 0.025F) * 1.5F, 0.0D);
-                    renderer.render(abstractClientPlayer, component, stack, multiBufferSource, i);
-                    stack.popPose();
-                }
-            });
+        if (Minecraft.getInstance().getConnection() instanceof ClientListenerHook hook) {
+            Component title = hook.prometheus$getHeadingTexts().get(abstractClientPlayer.getUUID());
+            if (title == null) return;
+            if (distance <= 4096.0D) {
+                stack.pushPose();
+                stack.translate(0.0D, (9.0F * 1.15F * 0.025F) * 1.5F, 0.0D);
+                renderer.render(abstractClientPlayer, title, stack, multiBufferSource, i);
+                stack.popPose();
+            }
         }
     }
 

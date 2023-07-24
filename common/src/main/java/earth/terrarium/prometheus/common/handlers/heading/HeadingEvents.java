@@ -1,6 +1,6 @@
 package earth.terrarium.prometheus.common.handlers.heading;
 
-import com.mojang.datafixers.util.Pair;
+import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.network.messages.client.UpdateHeadingPacket;
 import net.minecraft.ChatFormatting;
@@ -14,7 +14,6 @@ import net.minecraft.world.entity.player.Player;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 
 public class HeadingEvents {
@@ -26,11 +25,12 @@ public class HeadingEvents {
             String song = new String(bytes, StandardCharsets.UTF_8);
             if (player instanceof HeadingEntityHook hook) {
                 final Heading heading = hook.prometheus$getHeading();
-                if (hook.prometheus$getHeading() == Heading.MUSIC) {
+                if (heading == Heading.MUSIC) {
                     hook.prometheus$setHeadingText(heading.getTranslation(
                         Component.literal((song.length() <= 20 ? song : song.substring(0, 20) + "..."))
                             .withStyle(ChatFormatting.BLUE)
                     ));
+                    sendToOnlinePlayers(player.getServer(), player, heading, hook.prometheus$getHeadingText());
                 }
             }
             return true;
@@ -43,14 +43,14 @@ public class HeadingEvents {
             Heading heading = HeadingHandler.get(player);
             if (heading != null && heading != hook.prometheus$getHeading()) {
                 hook.prometheus$setHeadingAndUpdate(heading);
-                player.sendSystemMessage(Component.translatable("prometheus.heading.join", heading.getDisplayName()));
-                sendToOnlinePlayers(player.getServer(), player, heading);
+                player.sendSystemMessage(CommonUtils.serverTranslatable("prometheus.heading.join", heading.getDisplayName()));
+                sendToOnlinePlayers(player.getServer(), player, heading, null);
             }
             sendAllHeadings(player);
         }
     }
 
-    public static void sendToOnlinePlayers(MinecraftServer server, Player player, Heading heading) {
+    public static void sendToOnlinePlayers(MinecraftServer server, Player player, Heading heading, Component text) {
         if (server == null) return;
         List<Player> players = new ArrayList<>();
         for (ServerPlayer serverPlayer : server.getPlayerList().getPlayers()) {
@@ -58,15 +58,15 @@ public class HeadingEvents {
                 players.add(serverPlayer);
             }
         }
-        NetworkHandler.CHANNEL.sendToPlayers(new UpdateHeadingPacket(List.of(Pair.of(player.getUUID(), heading))), players);
+        NetworkHandler.CHANNEL.sendToPlayers(new UpdateHeadingPacket(List.of(new HeadingData(player.getUUID(), heading, text))), players);
     }
 
     public static void sendAllHeadings(ServerPlayer player) {
         if (player.getServer() == null) return;
-        List<Pair<UUID, Heading>> headings = new ArrayList<>();
+        List<HeadingData> headings = new ArrayList<>();
         player.getServer().getPlayerList().getPlayers().forEach(p -> {
             if (p instanceof HeadingEntityHook hook) {
-                headings.add(Pair.of(p.getUUID(), hook.prometheus$getHeading()));
+                headings.add(new HeadingData(p.getUUID(), hook.prometheus$getHeading(), hook.prometheus$getHeadingText()));
             }
         });
         NetworkHandler.CHANNEL.sendToPlayer(new UpdateHeadingPacket(headings), player);

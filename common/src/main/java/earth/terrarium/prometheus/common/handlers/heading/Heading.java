@@ -2,6 +2,7 @@ package earth.terrarium.prometheus.common.handlers.heading;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
@@ -34,7 +35,7 @@ public enum Heading {
     }
 
     public Component getTranslation(Object... args) {
-        return Component.translatable(translation, args);
+        return CommonUtils.serverTranslatable(translation, args);
     }
 
     public boolean hasIcon() {

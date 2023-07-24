@@ -6,7 +6,10 @@ import earth.terrarium.prometheus.client.screens.widgets.editor.TextEditor;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.network.messages.server.OpenCommandPacket;
 import earth.terrarium.prometheus.common.network.messages.server.SaveCommandPacket;
+import earth.terrarium.prometheus.mixin.client.FontManagerAccessor;
+import earth.terrarium.prometheus.mixin.client.MinecraftAccessor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ImageButton;
@@ -23,6 +26,7 @@ import java.util.Set;
 public class EditCommandScreen extends BaseCursorScreen {
 
     public static final ResourceLocation HEADING = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/heading.png");
+    private static final Font FONT = new Font(id -> ((FontManagerAccessor) ((MinecraftAccessor) Minecraft.getInstance()).getFontManager()).getFontSets().get(new ResourceLocation(Prometheus.MOD_ID, "monocraft")), false);
 
     private final List<String> commands = new ArrayList<>();
     private final List<String> lines = new ArrayList<>();
@@ -49,6 +53,7 @@ public class EditCommandScreen extends BaseCursorScreen {
             sidebar + 2, 15, this.width - sidebar + 2, this.height - 15,
             this.theme.cursor(),
             this.theme.lineNums(),
+            FONT,
             new CommandsHighlighter(this.theme)
         ));
         editor.setContent(String.join("\n", lines));

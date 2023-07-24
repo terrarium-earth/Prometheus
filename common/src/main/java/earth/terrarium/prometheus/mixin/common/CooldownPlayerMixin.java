@@ -5,12 +5,14 @@ import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.time.Duration;
 
 @Mixin(Player.class)
 public abstract class CooldownPlayerMixin implements CooldownHook {
 
+    @Unique
     private final Object2LongMap<String> prometheus$cooldowns = new Object2LongOpenHashMap<>();
 
     @Override
