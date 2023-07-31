@@ -3,6 +3,7 @@ package earth.terrarium.prometheus.common.handlers.tpa;
 import earth.terrarium.prometheus.api.roles.RoleApi;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.roles.TeleportOptions;
+import earth.terrarium.prometheus.common.utils.ModUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
@@ -61,8 +62,7 @@ public class TpaHandler {
             final ServerPlayer from = request.direction() == TpaRequest.Direction.FROM ? player : sender;
 
             from.sendSystemMessage(ConstantComponents.TELEPORTING, true);
-
-            from.teleportTo(to.serverLevel(), to.getX(), to.getY(), to.getZ(), to.getYRot(), to.getXRot());
+            ModUtils.teleport(from, to.serverLevel(), to.getX(), to.getY(), to.getZ(), to.getYRot(), to.getXRot());
         }
     }
 }

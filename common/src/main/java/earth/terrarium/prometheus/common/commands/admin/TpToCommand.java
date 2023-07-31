@@ -3,6 +3,7 @@ package earth.terrarium.prometheus.common.commands.admin;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import earth.terrarium.prometheus.common.utils.ModUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -49,7 +50,7 @@ public class TpToCommand {
         ResourceLocation location = ResourceLocationArgument.getId(context, "location");
         ServerLevel level = context.getSource().getServer().getLevel(ResourceKey.create(Registries.DIMENSION, location));
         if (level != null) {
-            player.teleportTo(level, pos.getX(), pos.getY(), pos.getZ(), player.getYRot(), player.getXRot());
+            ModUtils.teleport(player, level, pos.getX(), pos.getY(), pos.getZ(), player.getYRot(), player.getXRot());
         }
     }
 }

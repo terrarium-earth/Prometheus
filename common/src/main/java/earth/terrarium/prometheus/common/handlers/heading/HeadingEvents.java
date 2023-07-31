@@ -63,6 +63,7 @@ public class HeadingEvents {
 
     public static void sendAllHeadings(ServerPlayer player) {
         if (player.getServer() == null) return;
+        if (!NetworkHandler.CHANNEL.canSendPlayerPackets(player)) return;
         List<HeadingData> headings = new ArrayList<>();
         player.getServer().getPlayerList().getPlayers().forEach(p -> {
             if (p instanceof HeadingEntityHook hook) {

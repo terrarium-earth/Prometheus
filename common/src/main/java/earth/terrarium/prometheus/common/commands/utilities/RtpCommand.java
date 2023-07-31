@@ -6,6 +6,7 @@ import earth.terrarium.prometheus.api.roles.RoleApi;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.cooldowns.CooldownHandler;
 import earth.terrarium.prometheus.common.roles.TeleportOptions;
+import earth.terrarium.prometheus.common.utils.ModUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
@@ -67,7 +68,7 @@ public class RtpCommand {
             return tp(player, distance, tries + 1);
         }
 
-        player.teleportTo(pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5);
+        ModUtils.teleport(player, player.serverLevel(), pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, player.getYRot(), player.getXRot());
         player.sendSystemMessage(ConstantComponents.TELEPORTED);
         return true;
     }

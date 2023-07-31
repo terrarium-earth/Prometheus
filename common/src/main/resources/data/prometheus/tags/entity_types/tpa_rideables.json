@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:horse",
+    "minecraft:donkey",
+    "minecraft:mule",
+    "minecraft:skeleton_horse",
+    "minecraft:zombie_horse",
+    "minecraft:llama",
+    "minecraft:trader_llama",
+    "minecraft:camel"
+  ],
+  "__comment__": "This file is to determine what entities the player riding can be teleported with it."
+}

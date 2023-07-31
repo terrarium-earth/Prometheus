@@ -57,7 +57,7 @@ public class WarpHandler extends SaveHandler {
             return;
         }
 
-        player.teleportTo(level, pos.pos().getX(), pos.pos().getY(), pos.pos().getZ(), player.getYRot(), player.getXRot());
+        ModUtils.teleport(player, level, pos.pos().getX(), pos.pos().getY(), pos.pos().getZ(), player.getYRot(), player.getXRot());
     }
 
     public static Map<String, GlobalPos> getWarps(Player player) {
