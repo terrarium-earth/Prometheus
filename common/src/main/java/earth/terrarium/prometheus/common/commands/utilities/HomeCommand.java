@@ -5,8 +5,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
+import earth.terrarium.prometheus.api.locations.LocationsApi;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
-import earth.terrarium.prometheus.common.handlers.HomeHandler;
+import earth.terrarium.prometheus.common.handlers.locations.HomeHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -19,7 +20,7 @@ import net.minecraft.server.level.ServerPlayer;
 public class HomeCommand {
 
     private static final SuggestionProvider<CommandSourceStack> SUGGEST_HOMES = (context, builder) -> {
-        SharedSuggestionProvider.suggest(HomeHandler.getHomes(context.getSource().getPlayerOrException()).keySet(), builder);
+        SharedSuggestionProvider.suggest(LocationsApi.API.getHomes(context.getSource().getPlayerOrException()).keySet(), builder);
         return builder.buildFuture();
     };
 
@@ -31,8 +32,19 @@ public class HomeCommand {
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .suggests(SUGGEST_HOMES)
                 .executes(context -> {
-                    HomeHandler.teleport(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
-                    return 1;
+                    ServerPlayer player = context.getSource().getPlayerOrException();
+                    return LocationsApi.API.getHome(player, StringArgumentType.getString(context, "name"))
+                        .map(location -> {
+                            location.teleport(player);
+                            return 1;
+                        }, error -> {
+                            switch (error) {
+                                case DOES_NOT_EXIST_WITH_NAME -> context.getSource().sendFailure(ConstantComponents.HOME_DOES_NOT_EXIST);
+                                case NO_DIMENSION_FOR_LOCATION -> context.getSource().sendFailure(ConstantComponents.NO_DIMENSION);
+                                case NO_LOCATIONS -> context.getSource().sendFailure(ConstantComponents.NO_HOMES);
+                            }
+                            return 0;
+                        });
                 })
             ).executes(context -> {
                 ServerPlayer player = context.getSource().getPlayerOrException();
@@ -73,7 +85,7 @@ public class HomeCommand {
         return Commands.literal("list")
             .executes(context -> {
                 context.getSource().sendSuccess(() -> ConstantComponents.HOMES_COMMAND_TITLE, false);
-                HomeHandler.getHomes(context.getSource().getPlayerOrException())
+                LocationsApi.API.getHomes(context.getSource().getPlayerOrException())
                     .keySet()
                     .stream()
                     .map(HomeCommand::createListEntry)

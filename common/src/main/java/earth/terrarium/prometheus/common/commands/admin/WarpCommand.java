@@ -5,8 +5,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
+import earth.terrarium.prometheus.api.locations.LocationsApi;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
-import earth.terrarium.prometheus.common.handlers.WarpHandler;
+import earth.terrarium.prometheus.common.handlers.locations.WarpHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -14,11 +15,12 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerPlayer;
 
 public class WarpCommand {
 
     private static final SuggestionProvider<CommandSourceStack> SUGGESTION_PROVIDER = (context, builder) -> {
-        SharedSuggestionProvider.suggest(WarpHandler.getWarps(context.getSource().getPlayerOrException()).keySet(), builder);
+        SharedSuggestionProvider.suggest(LocationsApi.API.getWarps(context.getSource().getServer()).keySet(), builder);
         return builder.buildFuture();
     };
 
@@ -30,8 +32,19 @@ public class WarpCommand {
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .suggests(SUGGESTION_PROVIDER)
                 .executes(context -> {
-                    WarpHandler.teleport(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
-                    return 1;
+                    ServerPlayer player = context.getSource().getPlayerOrException();
+                    return LocationsApi.API.getWarp(player.getServer(), StringArgumentType.getString(context, "name"))
+                        .map(location -> {
+                            location.teleport(player);
+                            return 1;
+                        }, error -> {
+                            switch (error) {
+                                case DOES_NOT_EXIST_WITH_NAME -> context.getSource().sendFailure(ConstantComponents.WARP_DOES_NOT_EXIST);
+                                case NO_DIMENSION_FOR_LOCATION -> context.getSource().sendFailure(ConstantComponents.NO_DIMENSION);
+                                case NO_LOCATIONS -> context.getSource().sendFailure(ConstantComponents.NO_WARPS);
+                            }
+                            return 0;
+                        });
                 })
             )
         );
@@ -65,7 +78,7 @@ public class WarpCommand {
         return Commands.literal("list")
             .executes(context -> {
                 context.getSource().sendSuccess(() -> ConstantComponents.WARPS_COMMAND_TITLE, false);
-                WarpHandler.getWarps(context.getSource().getPlayerOrException())
+                LocationsApi.API.getWarps(context.getSource().getServer())
                     .keySet()
                     .stream()
                     .map(WarpCommand::createListEntry)

@@ -1,4 +1,4 @@
-package earth.terrarium.prometheus.common.handlers;
+package earth.terrarium.prometheus.common.handlers.locations;
 
 import com.teamresourceful.resourcefullib.common.utils.SaveHandler;
 import earth.terrarium.prometheus.api.roles.RoleApi;
@@ -51,7 +51,7 @@ public class HomeHandler extends SaveHandler {
         read(player.level()).setDirty();
     }
 
-    public static void teleport(ServerPlayer player, String name) {
+    private static void teleport(ServerPlayer player, String name) {
         Map<String, GlobalPos> homes = getHomes(player);
         if (homes.isEmpty()) {
             player.sendSystemMessage(ConstantComponents.NO_HOMES);

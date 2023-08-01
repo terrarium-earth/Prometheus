@@ -46,6 +46,7 @@ public class ConstantComponents {
     public static final Component WARPS_COMMAND_TITLE = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.locations.warp.command"));
     public static final Component WARP_ALREADY_EXISTS = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.warps.error.warp_already_exists"));
     public static final Component WARP_DOES_NOT_EXIST = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.warps.error.warp_does_not_exist"));
+    public static final Component NO_WARPS = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.warps.error.no_warps"));
 
     public static final Component MUTED = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.chat.error.muted"));
 

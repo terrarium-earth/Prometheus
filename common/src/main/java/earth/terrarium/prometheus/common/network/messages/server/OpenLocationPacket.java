@@ -4,9 +4,9 @@ import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import earth.terrarium.prometheus.Prometheus;
+import earth.terrarium.prometheus.api.locations.LocationsApi;
 import earth.terrarium.prometheus.api.roles.RoleApi;
-import earth.terrarium.prometheus.common.handlers.HomeHandler;
-import earth.terrarium.prometheus.common.handlers.WarpHandler;
+import earth.terrarium.prometheus.common.handlers.locations.WarpHandler;
 import earth.terrarium.prometheus.common.menus.content.location.Location;
 import earth.terrarium.prometheus.common.menus.content.location.LocationContent;
 import earth.terrarium.prometheus.common.menus.content.location.LocationType;
@@ -63,7 +63,7 @@ public record OpenLocationPacket(LocationType type) implements Packet<OpenLocati
     }
 
     public static void openWarps(ServerPlayer player) {
-        Map<String, GlobalPos> homes = WarpHandler.getWarps(player);
+        Map<String, GlobalPos> homes = LocationsApi.API.getWarps(player.server);
         List<Location> locations = homes.entrySet()
             .stream()
             .map(entry -> new Location(entry.getKey(), entry.getValue()))
@@ -78,7 +78,7 @@ public record OpenLocationPacket(LocationType type) implements Packet<OpenLocati
     }
 
     public static void openHomes(ServerPlayer player) {
-        Map<String, GlobalPos> homes = HomeHandler.getHomes(player);
+        Map<String, GlobalPos> homes = LocationsApi.API.getHomes(player);
         List<Location> locations = homes.entrySet()
             .stream()
             .map(entry -> new Location(entry.getKey(), entry.getValue()))

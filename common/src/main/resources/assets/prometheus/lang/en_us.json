@@ -47,6 +47,7 @@
     "prometheus.locations.warp.command": "Warps:",
     "prometheus.warps.error.warp_already_exists": "Warp already exists.",
     "prometheus.warps.error.warp_does_not_exist": "Warp does not exist.",
+    "prometheus.warps.error.no_warps": "There are no warps.",
     "prometheus.locations.warp.add": "Add a Warp",
     "prometheus.locations.warp.to": "Click to warp to %s",
     "prometheus.locations.add": "Add New Location:",

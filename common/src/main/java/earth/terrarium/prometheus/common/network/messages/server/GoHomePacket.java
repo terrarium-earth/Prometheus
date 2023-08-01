@@ -4,7 +4,8 @@ import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import earth.terrarium.prometheus.Prometheus;
-import earth.terrarium.prometheus.common.handlers.HomeHandler;
+import earth.terrarium.prometheus.api.locations.LocationsApi;
+import earth.terrarium.prometheus.common.handlers.locations.HomeHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,7 +40,7 @@ public record GoHomePacket() implements Packet<GoHomePacket> {
             return (player, level) -> {
                 if (player instanceof ServerPlayer serverPlayer) {
                     if (!HomeHandler.teleport(serverPlayer)) {
-                        var homes = HomeHandler.getHomes(player);
+                        var homes = LocationsApi.API.getHomes(serverPlayer);
                         if (homes.size() > 1) {
                             OpenLocationPacket.openHomes(serverPlayer);
                         }
