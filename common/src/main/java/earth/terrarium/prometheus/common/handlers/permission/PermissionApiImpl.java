@@ -44,4 +44,16 @@ public class PermissionApiImpl implements PermissionApi {
             .forEach(complete::add);
         return new ArrayList<>(complete);
     }
+
+    @Override
+    public List<String> getAutoComplete(Set<String> permissions) {
+        Set<String> complete = new LinkedHashSet<>();
+        AUTO_COMPLETE.stream()
+            .map(Supplier::get)
+            .flatMap(List::stream)
+            .filter(s -> !permissions.contains(s))
+            .map(s -> s.split("\\.")[0])
+            .forEach(complete::add);
+        return new ArrayList<>(complete);
+    }
 }

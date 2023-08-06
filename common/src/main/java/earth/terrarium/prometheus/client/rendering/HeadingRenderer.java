@@ -28,6 +28,16 @@ public class HeadingRenderer {
         }
     }
 
+    public static Component decorateHeading(UUID player, Component text) {
+        ClientPacketListener listener = Minecraft.getInstance().getConnection();
+        if (listener instanceof ClientListenerHook hook) {
+            Heading heading = hook.prometheus$getHeadings().getOrDefault(player, Heading.NONE);
+            if (!heading.canBroadcast()) return text;
+            return text.copy().withStyle(style -> style.withColor(heading.getColor()));
+        }
+        return text;
+    }
+
     public static void onRender(AbstractClientPlayer abstractClientPlayer, PoseStack stack, MultiBufferSource multiBufferSource, int i, double distance, RendererInterface renderer) {
         if (Minecraft.getInstance().getConnection() instanceof ClientListenerHook hook) {
             Component title = hook.prometheus$getHeadingTexts().get(abstractClientPlayer.getUUID());

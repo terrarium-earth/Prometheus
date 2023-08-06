@@ -22,7 +22,7 @@ public class InvseeCommand {
     private static final Component TITLE = Component.translatable("container.enderchest");
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        var enderChestCommand = dispatcher.register(Commands.literal("enderchest")
+        dispatcher.register(Commands.literal("enderchest")
             .requires(source -> source.hasPermission(2))
             .then(Commands.argument("player", EntityArgument.player())
                 .executes(context -> {
@@ -33,43 +33,44 @@ public class InvseeCommand {
                 InvseeCommand.openEnderChest(context.getSource().getEntity(), context.getSource().getEntity());
                 return 1;
             }));
-        dispatcher.register(Commands.literal("ec").redirect(enderChestCommand));
 
         dispatcher.register(Commands.literal("invsee")
             .requires(source -> source.hasPermission(2))
             .then(Commands.argument("player", EntityArgument.player())
                 .executes(context -> {
-                    if (!NetworkHandler.CHANNEL.canSendPlayerPackets(context.getSource().getPlayerOrException())) {
+                    ServerPlayer opener = context.getSource().getPlayerOrException();
+                    if (!NetworkHandler.CHANNEL.canSendPlayerPackets(opener)) {
                         context.getSource().sendFailure(Component.literal("You cant use invsee unless you have the client installed"));
                         return 0;
                     }
 
-
                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
 
-                    if (player.containerMenu != player.inventoryMenu) {
-                        player.closeContainer();
+                    if (opener.containerMenu != opener.inventoryMenu) {
+                        opener.closeContainer();
                     }
 
 
-                    ((ServerPlayerInvoker)player).invokeNextContainerCounter();
+                    ((ServerPlayerInvoker)opener).invokeNextContainerCounter();
+                    int counter = ((ServerPlayerAccessor)opener).getContainerCounter();
+
                     NetworkHandler.CHANNEL.sendToPlayer(
                         new OpenInvseeScreenPacket(
-                            ((ServerPlayerAccessor)player).getContainerCounter(),
+                            counter,
                             player.getInventory().getContainerSize(),
                             player.getUUID(),
                             Component.translatable("prometheus.invsee.inventory", player.getDisplayName())
                         ),
-                        player
+                        opener
                     );
-                    player.containerMenu = new InvseeMenu(
-                        ((ServerPlayerAccessor)player).getContainerCounter(),
-                        player.getInventory(),
+                    opener.containerMenu = new InvseeMenu(
+                        counter,
+                        opener.getInventory(),
                         player,
                         new WrappedPlayerContainer(player),
                         player.getUUID()
                     );
-                    ((ServerPlayerInvoker)player).invokeInitMenu(player.containerMenu);
+                    ((ServerPlayerInvoker)opener).invokeInitMenu(opener.containerMenu);
                     return 1;
                 })
             ));

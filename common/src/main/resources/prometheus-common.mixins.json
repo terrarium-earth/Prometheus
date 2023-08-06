@@ -6,7 +6,6 @@
   "mixins": [
     "common.ChatTypeMixin",
     "common.CommandNodeAccessor",
-    "common.CommandsMixin",
     "common.CooldownPlayerMixin",
     "common.HeadingPlayerMixin",
     "common.NickedPlayerMixin",

@@ -17,7 +17,7 @@ public class NicknameCommand {
                 NicknameHandler.remove(context.getSource().getPlayerOrException());
                 return 1;
             }))
-            .then(Commands.literal("set").then(Commands.argument("nickname", StringArgumentType.string())
+            .then(Commands.literal("set").then(Commands.argument("nickname", StringArgumentType.greedyString())
                 .executes(context -> {
                     NicknameHandler.set(context.getSource().getPlayerOrException(), Component.literal(StringArgumentType.getString(context, "nickname")));
                     return 1;

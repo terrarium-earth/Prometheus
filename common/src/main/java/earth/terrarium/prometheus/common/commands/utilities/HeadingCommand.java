@@ -25,13 +25,22 @@ public class HeadingCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("heading")
-            .then(Commands.argument("name", StringArgumentType.string()).suggests(SUGGEST_HEADINGS)
+            .then(Commands.argument("name", StringArgumentType.string())
+                .suggests(SUGGEST_HEADINGS)
                 .executes(context -> {
                     Heading heading = Heading.fromCommand(context);
                     if (heading != null) {
                         ServerPlayer player = context.getSource().getPlayerOrException();
+                        Heading currentHeading = HeadingHandler.get(player);
                         if (HeadingHandler.set(player, heading)) {
                             player.sendSystemMessage(CommonUtils.serverTranslatable("prometheus.heading.set", heading.getDisplayName()));
+                            if (heading.canBroadcast() && currentHeading != heading) {
+                                player.server.getPlayerList().broadcastSystemMessage(
+                                    CommonUtils.serverTranslatable("prometheus.heading.broadcast", player.getDisplayName(), heading.getDisplayName()).copy()
+                                        .withStyle(style -> style.withColor(heading.getColor()).withBold(true)),
+                                    false
+                                );
+                            }
                         } else {
                             player.sendSystemMessage(CommonUtils.serverTranslatable("prometheus.heading.invalid_permission", heading.getDisplayName()));
                         }

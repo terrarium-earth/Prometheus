@@ -1,8 +1,10 @@
 package earth.terrarium.prometheus.client.screens.location;
 
-import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen;
 import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
 import earth.terrarium.prometheus.Prometheus;
+import earth.terrarium.prometheus.client.screens.base.PriorityScreen;
+import earth.terrarium.prometheus.client.screens.widgets.ContextMenu;
+import earth.terrarium.prometheus.client.screens.widgets.ContextualMenuScreen;
 import earth.terrarium.prometheus.common.menus.content.location.Location;
 import earth.terrarium.prometheus.common.menus.content.location.LocationContent;
 import net.minecraft.client.Minecraft;
@@ -18,13 +20,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class LocationScreen extends BaseCursorScreen {
+public class LocationScreen extends PriorityScreen implements ContextualMenuScreen {
 
     private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/location.png");
     private static final int HEIGHT = 211;
     private static final int WIDTH = 176;
 
     private final LocationContent content;
+
+    private ContextMenu contextMenu;
 
     public LocationScreen(LocationContent content) {
         super(content.type().title());
@@ -49,9 +53,11 @@ public class LocationScreen extends BaseCursorScreen {
             addButton.active = false;
         }
 
-        LocationsList list = this.addRenderableWidget(new LocationsList(leftPos + 8, topPos + 43, 160, 160, 20, item -> {
+        LocationsList list = this.addRenderableWidget(new LocationsList(leftPos + 8, topPos + 43, 160, 160, 20,
+            this.content, item -> {
             if (item != null) {
                 ScreenUtils.sendCommand(this.content.type().tpPrefix() + " " + item.id());
+                onClose();
             }
         }));
         list.update(getEntries(content.locations(), ""));
@@ -60,6 +66,8 @@ public class LocationScreen extends BaseCursorScreen {
         searchBar.setMaxLength(32);
         searchBar.setBordered(false);
         searchBar.setResponder(text -> list.update(getEntries(content.locations(), text)));
+
+        this.contextMenu = addRenderableWidget(-1, new ContextMenu());
     }
 
     private static Stream<Location> getEntries(List<Location> locations, String filter) {
@@ -83,5 +91,10 @@ public class LocationScreen extends BaseCursorScreen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    @Override
+    public ContextMenu getContextMenu() {
+        return this.contextMenu;
     }
 }

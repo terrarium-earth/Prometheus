@@ -35,7 +35,7 @@ public class RtpCommand {
                     return 0;
                 }
                 TeleportOptions options = RoleApi.API.getNonNullOption(player, TeleportOptions.SERIALIZER);
-                if (tp(player, options.rtpDistance(), 0)) {
+                if (tp(player, options.rtpDistance())) {
                     CooldownHandler.setCooldown(player, "rtp", options.rtpCooldown());
                     return 1;
                 }
@@ -43,29 +43,11 @@ public class RtpCommand {
             }));
     }
 
-    public static boolean tp(ServerPlayer player, int distance, int tries) {
-        if (tries > MAX_TRIES) {
+    private static boolean tp(ServerPlayer player, int distance) {
+        BlockPos pos = tp(player.blockPosition(), player, distance, 0);
+        if (pos == null) {
             player.sendSystemMessage(ConstantComponents.FAILED_MAX_TRIES);
             return false;
-        }
-        Level level = player.level();
-
-        final int min = distance / 4;
-        final int max = distance - min;
-
-        int x = min + player.getRandom().nextInt(-max, max) + player.getBlockX();
-        int z = min + player.getRandom().nextInt(-max, max) + player.getBlockZ();
-
-        if (!level.getWorldBorder().isWithinBounds(x, z) || level.getBiome(new BlockPos(x, level.getSeaLevel(), z)).is(BiomeTags.IS_OCEAN)) {
-            return tp(player, distance, tries + 1);
-        }
-
-        level.getChunk(SectionPos.blockToSectionCoord(x), SectionPos.blockToSectionCoord(z));
-
-        BlockPos pos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
-
-        if (!isSafe(player, pos)) {
-            return tp(player, distance, tries + 1);
         }
 
         ModUtils.teleport(player, player.serverLevel(), pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, player.getYRot(), player.getXRot());
@@ -78,5 +60,29 @@ public class RtpCommand {
             player.level().getBlockState(pos.above()).isAir() &&
             player.level().getBlockState(pos.above(2)).isAir()
             && player.level().getBlockState(pos.below()).entityCanStandOn(player.level(), pos.below(), player);
+    }
+
+    public static BlockPos tp(BlockPos location, ServerPlayer player, int distance, int tries) {
+        if (tries > MAX_TRIES) return null;
+        Level level = player.level();
+
+        final int min = distance / 4;
+        final int max = distance - min;
+
+        int x = min + player.getRandom().nextInt(-max, max) + location.getX();
+        int z = min + player.getRandom().nextInt(-max, max) + location.getZ();
+
+        if (!level.getWorldBorder().isWithinBounds(x, z) || level.getBiome(new BlockPos(x, level.getSeaLevel(), z)).is(BiomeTags.IS_OCEAN)) {
+            return tp(location, player, distance, tries + 1);
+        }
+
+        level.getChunk(SectionPos.blockToSectionCoord(x), SectionPos.blockToSectionCoord(z));
+
+        BlockPos pos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
+
+        if (!isSafe(player, pos)) {
+            return tp(location, player, distance, tries + 1);
+        }
+        return pos;
     }
 }

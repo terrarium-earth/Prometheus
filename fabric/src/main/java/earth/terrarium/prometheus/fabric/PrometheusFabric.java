@@ -9,6 +9,7 @@ import earth.terrarium.prometheus.common.handlers.permission.PermissionEvents;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -25,5 +26,6 @@ public class PrometheusFabric implements ModInitializer {
                 NicknameEvents.onJoin(player);
             }
         });
+        ServerLifecycleEvents.SERVER_STARTED.register(Prometheus::onServerStarted);
     }
 }

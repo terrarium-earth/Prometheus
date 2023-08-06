@@ -58,7 +58,6 @@ public class HomeCommand {
 
     private static ArgumentBuilder<CommandSourceStack, ?> add() {
         return Commands.literal("add")
-            .requires(source -> source.hasPermission(2))
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .executes(context -> {
                     HomeHandler.add(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
@@ -70,7 +69,6 @@ public class HomeCommand {
 
     private static ArgumentBuilder<CommandSourceStack, ?> remove() {
         return Commands.literal("remove")
-            .requires(source -> source.hasPermission(2))
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .suggests(SUGGEST_HOMES)
                 .executes(context -> {

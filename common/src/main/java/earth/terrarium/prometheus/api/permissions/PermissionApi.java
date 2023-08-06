@@ -46,4 +46,14 @@ public interface PermissionApi {
      * @return the auto complete list
      */
     List<String> getAutoComplete(String text, Set<String> permissions);
+
+    /**
+     * Gets the list of possible auto complete options
+     *
+     * @param permissions the permissions already found and should not be added
+     * @return the auto complete list
+     */
+    default List<String> getAutoComplete(Set<String> permissions) {
+        return List.of();
+    }
 }

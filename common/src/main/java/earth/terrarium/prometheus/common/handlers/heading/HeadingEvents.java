@@ -44,7 +44,7 @@ public class HeadingEvents {
             if (heading != null && heading != hook.prometheus$getHeading()) {
                 hook.prometheus$setHeadingAndUpdate(heading);
                 player.sendSystemMessage(CommonUtils.serverTranslatable("prometheus.heading.join", heading.getDisplayName()));
-                sendToOnlinePlayers(player.getServer(), player, heading, null);
+                sendToOnlinePlayers(player.getServer(), player, heading, heading.getDisplayName());
             }
             sendAllHeadings(player);
         }

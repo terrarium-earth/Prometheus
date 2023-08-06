@@ -11,7 +11,9 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -19,8 +21,18 @@ public class PrometheusForgeClient {
 
     public static void init() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(PrometheusForgeClient::onClientSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(PrometheusForgeClient::onRegisterKeyBindings);
         MinecraftForge.EVENT_BUS.addListener(PrometheusForgeClient::onClientMessage);
         MinecraftForge.EVENT_BUS.addListener(PrometheusForgeClient::onRegisterClientCommands);
+        MinecraftForge.EVENT_BUS.addListener(PrometheusForgeClient::onClientTick);
+    }
+
+    private static void onClientTick(TickEvent.ClientTickEvent event) {
+        PrometheusClient.clientTick();
+    }
+
+    private static void onRegisterKeyBindings(RegisterKeyMappingsEvent event) {
+        PrometheusClient.KEYS.forEach(event::register);
     }
 
     private static void onClientSetup(FMLClientSetupEvent event) {

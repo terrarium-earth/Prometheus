@@ -21,17 +21,19 @@
     "prometheus.invsee.inventory": "%s's Inventory",
     "prometheus.invsee.your_inventory": "Your Inventory",
 
+    "prometheus.heading.broadcast": "%s is now %s",
+
     "prometheus.heading.streaming": "§5● Streaming ●",
     "prometheus.heading.recording": "§c● Recording ●",
     "prometheus.heading.afk": "§e⌚ AFK ⌚",
     "prometheus.heading.dnd": "§c✖ Do Not Disturb ✖",
     "prometheus.heading.music": "§9♬ %s §9♬",
 
-    "prometheus.heading.name.streaming": "§5Streaming",
-    "prometheus.heading.name.recording": "§cRecording",
-    "prometheus.heading.name.afk": "§eAFK",
-    "prometheus.heading.name.dnd": "§cDo Not Disturb",
-    "prometheus.heading.name.music": "§9Music",
+    "prometheus.heading.name.streaming": "Streaming",
+    "prometheus.heading.name.recording": "Recording",
+    "prometheus.heading.name.afk": "AFK",
+    "prometheus.heading.name.dnd": "Do Not Disturb",
+    "prometheus.heading.name.music": "Music",
     "prometheus.heading.name.none": "nothing.",
 
     "prometheus.heading.join": "Heading is set to %s from last login.",
@@ -95,6 +97,8 @@
     "prometheus.roles.error.cant_edit_role_in_list": "You can't edit a role in this list.",
     "prometheus.roles.error.not_allowed_to_edit_roles": "You do not have permission to modify roles.",
 
+    "prometheus.spawn.cant_find_location": "Can't find a safe location at spawn to teleport to.",
+
     "prometheus.muted": "You cannot not message while muted.",
 
     "dimension.minecraft.overworld": "Overworld",
@@ -130,5 +134,8 @@
     "prometheus.roles.member.error": "Only 1 player is allowed",
 
     "rei.sections.odyssey": "Project Odyssey",
-    "rei.prometheus.prometheus.tooltip": "Teleport Home"
+    "rei.prometheus.prometheus.tooltip": "Teleport Home",
+
+    "key.categories.odyssey": "Project Odyssey",
+    "key.prometheus.open_homes": "Open Homes"
 }

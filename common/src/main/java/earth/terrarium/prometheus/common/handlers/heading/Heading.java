@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Locale;
 
 public enum Heading {
-    NONE(-1, -1),
-    AFK(8, 8),
-    DND(0, 8),
-    MUSIC(-1, -1),
-    RECORDING(0, 0),
-    STREAMING(8, 0);
+    NONE(-1, -1, -1, false),
+    AFK(8, 8, 0xFFFF55, false),
+    DND(0, 8, 0xFF5555, false),
+    MUSIC(-1, -1, 0x5555FF, false),
+    RECORDING(0, 0, 0xFF5555, true),
+    STREAMING(8, 0, 0x9146FF, true);
 
     public static final List<Heading> VALUES = List.of(values());
 
@@ -26,12 +26,16 @@ public enum Heading {
     private final String name;
     private final int u;
     private final int v;
+    private final int color;
+    private final boolean broadcast;
 
-    Heading(int u, int v) {
+    Heading(int u, int v, int color, boolean broadcast) {
         this.translation = "prometheus.heading." + this.name().toLowerCase(Locale.ROOT);
         this.name = "prometheus.heading.name." + this.name().toLowerCase(Locale.ROOT);
         this.u = u;
         this.v = v;
+        this.color = color;
+        this.broadcast = broadcast;
     }
 
     public Component getTranslation(Object... args) {
@@ -50,8 +54,18 @@ public enum Heading {
         return this.v;
     }
 
+    public int getColor() {
+        return this.color;
+    }
+
     public Component getDisplayName() {
-        return Component.translatable(name);
+        return CommonUtils.serverTranslatable(name)
+            .copy()
+            .withStyle(style -> style.withColor(getColor()));
+    }
+
+    public boolean canBroadcast() {
+        return this.broadcast;
     }
 
     public String permission() {

@@ -1,6 +1,7 @@
 package earth.terrarium.prometheus.common.handlers.nickname;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
@@ -14,7 +15,11 @@ public record Nickname(String name, Component component) {
     }
 
     public static Nickname of(CompoundTag tag) {
-        return new Nickname(tag.getString("name"), Component.Serializer.fromJson(tag.getString("component")));
+        Component component = Component.Serializer.fromJson(tag.getString("component"));
+        if (component != null && component.getString().isBlank()) {
+            component = CommonComponents.SPACE;
+        }
+        return new Nickname(tag.getString("name"), component);
     }
 
     public CompoundTag toTag() {

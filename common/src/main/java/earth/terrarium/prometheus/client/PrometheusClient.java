@@ -1,5 +1,6 @@
 package earth.terrarium.prometheus.client;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.api.roles.client.OptionDisplayApi;
@@ -10,14 +11,28 @@ import earth.terrarium.prometheus.client.screens.roles.options.displays.Permissi
 import earth.terrarium.prometheus.client.screens.roles.options.displays.TeleportOptionsDisplay;
 import earth.terrarium.prometheus.client.utils.SystemNotificationUtils;
 import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
+import earth.terrarium.prometheus.common.menus.content.location.LocationType;
+import earth.terrarium.prometheus.common.network.NetworkHandler;
+import earth.terrarium.prometheus.common.network.messages.server.OpenLocationPacket;
 import earth.terrarium.prometheus.common.roles.CosmeticOptions;
 import earth.terrarium.prometheus.common.roles.HomeOptions;
 import earth.terrarium.prometheus.common.roles.TeleportOptions;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.List;
+
 public class PrometheusClient {
+
+    public static final KeyMapping OPEN_HOMES = new KeyMapping(
+        "key.prometheus.open_homes",
+        InputConstants.UNKNOWN.getValue(),
+        "key.categories.odyssey"
+    );
+
+    public static final List<KeyMapping> KEYS = List.of(OPEN_HOMES);
 
     public static void init() {
         OptionDisplayApi.API.register(new ResourceLocation(Prometheus.MOD_ID, "permissions"), PermissionDisplay::create);
@@ -96,5 +111,11 @@ public class PrometheusClient {
             new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_abyssii_pocket_dimension.png"));
         api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("theabyss:the_abyss")),
             new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_abyssii_the_abyss.png"));
+    }
+
+    public static void clientTick() {
+        if (OPEN_HOMES.consumeClick()) {
+            NetworkHandler.CHANNEL.sendToServer(new OpenLocationPacket(LocationType.HOME));
+        }
     }
 }

@@ -80,4 +80,5 @@ public class ConstantComponents {
     public static final Component FAILED_MAX_TRIES = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.rtp.failed_max_tries"));
     public static final Component MEMBER_ERROR = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.roles.member.error"));
     public static final Component CLICK_EDIT = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.commands.click_edit"));
+    public static final Component CANT_FIND_LOCATION = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.spawn.cant_find_location"));
 }

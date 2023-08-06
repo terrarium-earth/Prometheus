@@ -33,6 +33,11 @@ public class TpCommand {
             .executes(context -> {
                 ServerPlayer player = context.getSource().getPlayerOrException();
                 BlockPos pos = player.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, player.level().getSharedSpawnPos());
+                pos = RtpCommand.tp(pos, player, 10, 0);
+                if (pos == null) {
+                    player.sendSystemMessage(ConstantComponents.CANT_FIND_LOCATION);
+                    return 0;
+                }
                 player.teleportTo(player.server.overworld(), pos.getX(), pos.getY(), pos.getZ(), player.getYRot(), player.getXRot());
                 return 1;
             }));
