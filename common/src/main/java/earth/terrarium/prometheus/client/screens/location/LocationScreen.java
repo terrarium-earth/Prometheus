@@ -46,7 +46,7 @@ public class LocationScreen extends PriorityScreen implements ContextualMenuScre
         int topPos = (this.height - HEIGHT) / 2;
 
         ImageButton addButton = this.addRenderableWidget(new ImageButton(leftPos + 157, topPos + 22, 12, 12, 176, 0, 12, CONTAINER_BACKGROUND, (button) ->
-            Minecraft.getInstance().setScreen(new AddLocationScreen(this.content.type()))
+            Minecraft.getInstance().setScreen(new AddLocationScreen(this, this.content.type()))
         ));
         addButton.setTooltip(Tooltip.create(Component.translatable("prometheus.locations." + content.type().getId() + ".add")));
         if (content.locations().size() >= content.max() || !content.canModify()) {

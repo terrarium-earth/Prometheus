@@ -29,6 +29,7 @@ public class NetworkHandler {
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, OpenLocationPacket.ID, OpenLocationPacket.HANDLER, OpenLocationPacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, OpenMemberRolesPacket.ID, OpenMemberRolesPacket.HANDLER, OpenMemberRolesPacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, GoHomePacket.ID, GoHomePacket.HANDLER, GoHomePacket.class);
+        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, GoSpawnPacket.ID, GoSpawnPacket.HANDLER, GoSpawnPacket.class);
 
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, CommandPermissionsPacket.ID, CommandPermissionsPacket.HANDLER, CommandPermissionsPacket.class);
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, UpdateHeadingPacket.ID, UpdateHeadingPacket.HANDLER, UpdateHeadingPacket.class);

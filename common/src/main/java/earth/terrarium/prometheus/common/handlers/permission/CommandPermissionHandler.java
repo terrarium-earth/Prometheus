@@ -5,7 +5,7 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import com.teamresourceful.resourcefullib.common.utils.UnsafeUtils;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
-import earth.terrarium.prometheus.mixin.common.CommandNodeAccessor;
+import earth.terrarium.prometheus.mixin.common.accessors.CommandNodeAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;

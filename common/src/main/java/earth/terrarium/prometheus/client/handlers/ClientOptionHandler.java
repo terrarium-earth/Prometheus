@@ -17,6 +17,7 @@ import java.util.List;
 
 public class ClientOptionHandler {
 
+    public static OptionInstance<Boolean> showStuckButton;
     public static OptionInstance<Boolean> showNotifications;
     public static OptionInstance<NotificationHandler.PingSound> notificationSound;
 
@@ -59,15 +60,26 @@ public class ClientOptionHandler {
                 }
             }
         );
+        showStuckButton = OptionInstance.createBoolean(
+            "options.prometheusShowStuckButton",
+            OptionInstance.cachedConstantTooltip(ConstantComponents.STUCK_BUTTON_TOOLTIP),
+            false,
+            on -> {}
+        );
     }
 
     public static void onParse(Options.FieldAccess access) {
         access.process("prometheusShowNotifications", showNotifications);
         access.process("prometheusNotificationSound", notificationSound);
+        access.process("prometheusShowStuckButton", showStuckButton);
     }
 
     public static List<OptionInstance<?>> getChatOptions() {
         return List.of(showNotifications, notificationSound);
+    }
+
+    public static List<OptionInstance<?>> getAccessibilityOptions() {
+        return List.of(showStuckButton);
     }
 
 }

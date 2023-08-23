@@ -2,7 +2,7 @@ package earth.terrarium.prometheus.common.commands.utilities;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import earth.terrarium.prometheus.api.locations.LocationsApi;
@@ -26,9 +26,6 @@ public class HomeCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("home")
-            .then(add())
-            .then(remove())
-            .then(list())
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .suggests(SUGGEST_HOMES)
                 .executes(context -> {
@@ -54,10 +51,13 @@ public class HomeCommand {
                 return 1;
             })
         );
+        dispatcher.register(add());
+        dispatcher.register(remove());
+        dispatcher.register(list());
     }
 
-    private static ArgumentBuilder<CommandSourceStack, ?> add() {
-        return Commands.literal("add")
+    private static LiteralArgumentBuilder<CommandSourceStack> add() {
+        return Commands.literal("sethome")
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .executes(context -> {
                     HomeHandler.add(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
@@ -67,8 +67,8 @@ public class HomeCommand {
             );
     }
 
-    private static ArgumentBuilder<CommandSourceStack, ?> remove() {
-        return Commands.literal("remove")
+    private static LiteralArgumentBuilder<CommandSourceStack> remove() {
+        return Commands.literal("delhome")
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .suggests(SUGGEST_HOMES)
                 .executes(context -> {
@@ -79,8 +79,8 @@ public class HomeCommand {
             );
     }
 
-    private static ArgumentBuilder<CommandSourceStack, ?> list() {
-        return Commands.literal("list")
+    private static LiteralArgumentBuilder<CommandSourceStack> list() {
+        return Commands.literal("listhomes")
             .executes(context -> {
                 context.getSource().sendSuccess(() -> ConstantComponents.HOMES_COMMAND_TITLE, false);
                 LocationsApi.API.getHomes(context.getSource().getPlayerOrException())

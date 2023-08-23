@@ -127,6 +127,8 @@
     "options.prometheus.sound.tooltip": "Play a sound when you receive a message or are mentioned in chat.",
     "options.prometheusShowNotifications": "Show Desktop Notifications",
     "options.prometheus.notifications.tooltip": "Get desktop notifications when you receive a message or are mentioned in chat.",
+    "options.prometheusShowStuckButton": "Show Stuck Button",
+    "options.prometheus.stuck.tooltip": "Show a button on the join screen to teleport you to spawn.",
 
     "prometheus.roles.error.cant_give_role": "You do not have permission",
     "prometheus.run.no_permission": "You do not have permission to run this command.",
@@ -137,5 +139,11 @@
     "rei.prometheus.prometheus.tooltip": "Teleport Home",
 
     "key.categories.odyssey": "Project Odyssey",
-    "key.prometheus.open_homes": "Open Homes"
+    "key.prometheus.open_homes": "Open Homes",
+
+    "prometheus.offline.multiple_players": "You can't use for multiple players.",
+    "prometheus.offline.unknown_player": "Unknown player.",
+    "prometheus.offline.player_online": "Player is online, use /tp.",
+
+    "prometheus.stuck.panic": "If you're stuck crashing, click to be TP'd to spawn on join!"
 }

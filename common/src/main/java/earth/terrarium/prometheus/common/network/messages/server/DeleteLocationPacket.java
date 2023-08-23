@@ -49,8 +49,10 @@ public record DeleteLocationPacket(LocationType type, String name) implements Pa
                             OpenLocationPacket.openHomes(serverPlayer);
                         }
                         case WARP -> {
-                            WarpHandler.remove(serverPlayer, message.name);
-                            OpenLocationPacket.openWarps(serverPlayer);
+                            if (WarpHandler.canModifyWarps(serverPlayer)) {
+                                WarpHandler.remove(serverPlayer, message.name);
+                                OpenLocationPacket.openWarps(serverPlayer);
+                            }
                         }
                     }
                 }

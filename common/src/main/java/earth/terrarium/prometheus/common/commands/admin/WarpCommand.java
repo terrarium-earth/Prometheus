@@ -2,7 +2,7 @@ package earth.terrarium.prometheus.common.commands.admin;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import earth.terrarium.prometheus.api.locations.LocationsApi;
@@ -26,9 +26,6 @@ public class WarpCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("warp")
-            .then(add())
-            .then(remove())
-            .then(list())
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .suggests(SUGGESTION_PROVIDER)
                 .executes(context -> {
@@ -48,10 +45,13 @@ public class WarpCommand {
                 })
             )
         );
+        dispatcher.register(add());
+        dispatcher.register(remove());
+        dispatcher.register(list());
     }
 
-    private static ArgumentBuilder<CommandSourceStack, ?> add() {
-        return Commands.literal("add")
+    private static LiteralArgumentBuilder<CommandSourceStack> add() {
+        return Commands.literal("setwarp")
             .requires(source -> source.hasPermission(2))
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .executes(context -> {
@@ -62,8 +62,8 @@ public class WarpCommand {
             );
     }
 
-    private static ArgumentBuilder<CommandSourceStack, ?> remove() {
-        return Commands.literal("remove")
+    private static LiteralArgumentBuilder<CommandSourceStack> remove() {
+        return Commands.literal("delwarp")
             .requires(source -> source.hasPermission(2))
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .suggests(SUGGESTION_PROVIDER)
@@ -74,8 +74,8 @@ public class WarpCommand {
             );
     }
 
-    private static ArgumentBuilder<CommandSourceStack, ?> list() {
-        return Commands.literal("list")
+    private static LiteralArgumentBuilder<CommandSourceStack> list() {
+        return Commands.literal("listwarps")
             .executes(context -> {
                 context.getSource().sendSuccess(() -> ConstantComponents.WARPS_COMMAND_TITLE, false);
                 LocationsApi.API.getWarps(context.getSource().getServer())

@@ -1,4 +1,4 @@
-package earth.terrarium.prometheus.mixin.common;
+package earth.terrarium.prometheus.mixin.common.accessors;
 
 import com.mojang.brigadier.tree.CommandNode;
 import org.spongepowered.asm.mixin.Mixin;

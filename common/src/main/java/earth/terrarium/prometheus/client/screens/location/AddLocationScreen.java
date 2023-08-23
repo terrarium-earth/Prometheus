@@ -1,7 +1,6 @@
 package earth.terrarium.prometheus.client.screens.location;
 
 import com.mojang.blaze3d.platform.Window;
-import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.menus.content.location.LocationType;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
@@ -19,10 +18,12 @@ public class AddLocationScreen extends Screen {
 
     private static final Component TITLE = Component.translatable("prometheus.locations.add");
 
+    private final Screen parent;
     private final LocationType type;
 
-    protected AddLocationScreen(LocationType type) {
+    protected AddLocationScreen(Screen parent, LocationType type) {
         super(CommonComponents.EMPTY);
+        this.parent = parent;
         this.type = type;
     }
 
@@ -35,7 +36,7 @@ public class AddLocationScreen extends Screen {
             (int) ((width / 2f) - 120),
             (int) ((height / 2f) - 30), 240, 20, Component.empty()));
         addRenderableWidget(
-            Button.builder(CommonComponents.GUI_CANCEL, button -> ScreenUtils.sendCommand(type.editPrefix()))
+            Button.builder(CommonComponents.GUI_CANCEL, button -> Minecraft.getInstance().setScreen(parent))
                 .bounds((int) ((width / 2f) - 120), (int) ((height / 2f) + 10), 100, 20)
                 .build()
         );

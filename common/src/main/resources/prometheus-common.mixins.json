@@ -5,24 +5,29 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "common.ChatTypeMixin",
-    "common.CommandNodeAccessor",
+    "common.CommandsMixin",
     "common.CooldownPlayerMixin",
     "common.HeadingPlayerMixin",
     "common.NickedPlayerMixin",
     "common.PermissionPlayerMixin",
+    "common.PlayerDataStorageMixin",
     "common.RolePlayerMixin",
     "common.ServerGamePacketListenerImplMixin",
-    "common.ServerPlayerAccessor",
-    "common.ServerPlayerInvoker"
+    "common.accessors.CommandNodeAccessor",
+    "common.accessors.PlayerListAccessor",
+    "common.accessors.ServerPlayerAccessor",
+    "common.accessors.ServerPlayerInvoker"
   ],
   "client": [
     "client.ChatOptionsScreenMixin",
     "client.ClientPacketListenerMixin",
-    "client.FontManagerAccessor",
-    "client.MinecraftAccessor",
     "client.OptionsMixin",
     "client.PlayerRendererMixin",
-    "client.PlayerTabOverlayMixin"
+    "client.PlayerTabOverlayMixin",
+    "client.ScreenMixin",
+    "client.accessors.FontManagerAccessor",
+    "client.accessors.MinecraftAccessor",
+    "client.accessors.ProgressScreenAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

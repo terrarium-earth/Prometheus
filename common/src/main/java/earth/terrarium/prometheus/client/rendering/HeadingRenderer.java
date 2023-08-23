@@ -23,7 +23,7 @@ public class HeadingRenderer {
         if (listener instanceof ClientListenerHook hook) {
             Heading heading = hook.prometheus$getHeadings().getOrDefault(player, Heading.NONE);
             if (heading.hasIcon()) {
-                graphics.blit(TEXTURE, x + 1, y + 1, heading.getU(), heading.getV(), 8, 8, 256, 256);
+                graphics.blit(TEXTURE, x, y, heading.getU(), heading.getV(), 8, 8, 256, 256);
             }
         }
     }
@@ -41,6 +41,8 @@ public class HeadingRenderer {
     public static void onRender(AbstractClientPlayer abstractClientPlayer, PoseStack stack, MultiBufferSource multiBufferSource, int i, double distance, RendererInterface renderer) {
         if (Minecraft.getInstance().getConnection() instanceof ClientListenerHook hook) {
             Component title = hook.prometheus$getHeadingTexts().get(abstractClientPlayer.getUUID());
+            Heading heading = hook.prometheus$getHeadings().getOrDefault(abstractClientPlayer.getUUID(), Heading.NONE);
+            if (heading == Heading.NONE) return;
             if (title == null) return;
             if (distance <= 4096.0D) {
                 stack.pushPose();

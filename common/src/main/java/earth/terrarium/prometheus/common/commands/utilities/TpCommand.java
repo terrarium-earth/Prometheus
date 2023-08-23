@@ -25,7 +25,7 @@ public class TpCommand {
                             player.sendSystemMessage(ConstantComponents.NO_DIMENSION);
                             return;
                         }
-                        player.teleportTo(level, pos.pos().getX(), pos.pos().getY(), pos.pos().getZ(), player.getYRot(), player.getXRot());
+                        player.teleportTo(level, pos.pos().getX() + 0.5, pos.pos().getY() + 0.2, pos.pos().getZ() + 0.5, player.getYRot(), player.getXRot());
                     });
                 return 1;
             }));
@@ -33,12 +33,14 @@ public class TpCommand {
             .executes(context -> {
                 ServerPlayer player = context.getSource().getPlayerOrException();
                 BlockPos pos = player.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, player.level().getSharedSpawnPos());
-                pos = RtpCommand.tp(pos, player, 10, 0);
+                if (!RtpCommand.isSafe(player, pos)) {
+                    pos = RtpCommand.tp(pos, player, 10, 0);
+                }
                 if (pos == null) {
                     player.sendSystemMessage(ConstantComponents.CANT_FIND_LOCATION);
                     return 0;
                 }
-                player.teleportTo(player.server.overworld(), pos.getX(), pos.getY(), pos.getZ(), player.getYRot(), player.getXRot());
+                player.teleportTo(player.server.overworld(), pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, player.getYRot(), player.getXRot());
                 return 1;
             }));
     }

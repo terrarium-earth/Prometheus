@@ -1,13 +1,12 @@
-#### 1.0.2
-Moved command modifying to server started to fix incompat with spark commands.
-Add context menu to homes screen to allow for deletion.
-Make headings that are for content creators broadcast.
-Change the colors of headings to be more inline with branding colors such as Twitch with #9145FF
-Change heading icons to not be as intrusive with outlines instead of blocks.
-Change color in tab overlay to color of heading.
-Fix home add and remove commands requiring op.
-Fix invsee opening menu for player being invseed.
-Make it so nicknames now if blank resolve to a single space.
-Change nickname command to greedy.
-Add homes screen keybind (unbound by default)
-Change spawn command to find a safe location around spawn if direct spawn is not safe.
+#### 1.1.0
+
+- Added stuck button to join screen for servers to allow people to teleport to spawn, useful if you are encountering a client crash when loading in and you need to get out of the location before you crash again. (Enabled in accessibility options)
+- Added offlinetp command for admins to teleport players that are not online.
+- Fixed canceling adding a location not going back to the locations screen.
+- Fixed heading display in tab being offset by 1px.
+- Fixed heading display above player head showing nothing when set to none.
+- Seperated home and warp commands to deal with conflicts better.
+- Fixed Twilight Forest icon not being set due to dimension id being wrong.
+- Added Rats Ratlantis dimension icon
+- Rtp and Spawn command will now take player height into effect when checking safety.
+- Spawn and Back command will now teleport players to center of the block instead of the x.0 and z.0

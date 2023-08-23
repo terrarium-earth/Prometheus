@@ -15,6 +15,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 public class RtpCommand {
@@ -55,11 +56,15 @@ public class RtpCommand {
         return true;
     }
 
-    private static boolean isSafe(Player player, BlockPos pos) {
-        return player.level().getBlockState(pos).isAir() &&
-            player.level().getBlockState(pos.above()).isAir() &&
-            player.level().getBlockState(pos.above(2)).isAir()
-            && player.level().getBlockState(pos.below()).entityCanStandOn(player.level(), pos.below(), player);
+    public static boolean isSafe(Player player, BlockPos pos) {
+        int maxHeight = (int) Math.min(3, Math.ceil(player.getBbHeight()) + 1);
+        for (int i = 0; i < maxHeight; i++) {
+            BlockState state = player.level().getBlockState(pos.above(i));
+            if (!state.isAir()) {
+                return false;
+            }
+        }
+        return player.level().getBlockState(pos.below()).entityCanStandOn(player.level(), pos.below(), player);
     }
 
     public static BlockPos tp(BlockPos location, ServerPlayer player, int distance, int tries) {
@@ -78,7 +83,7 @@ public class RtpCommand {
 
         level.getChunk(SectionPos.blockToSectionCoord(x), SectionPos.blockToSectionCoord(z));
 
-        BlockPos pos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
+        BlockPos pos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z), z);
 
         if (!isSafe(player, pos)) {
             return tp(location, player, distance, tries + 1);

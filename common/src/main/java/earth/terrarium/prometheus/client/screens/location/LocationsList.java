@@ -86,7 +86,7 @@ public class LocationsList extends SelectionList<LocationsList.Entry> {
                 list.onSelection.accept(this);
                 return true;
             }
-            if (button == InputConstants.MOUSE_BUTTON_RIGHT) {
+            if (button == InputConstants.MOUSE_BUTTON_RIGHT && list.content.canModify()) {
                 ContextualMenuScreen.getMenu()
                     .ifPresent(menu -> menu.start(mouseX, mouseY)
                         .addOption(Component.literal("Delete"), () ->

@@ -1,4 +1,4 @@
-package earth.terrarium.prometheus.mixin.common;
+package earth.terrarium.prometheus.mixin.common.accessors;
 
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;

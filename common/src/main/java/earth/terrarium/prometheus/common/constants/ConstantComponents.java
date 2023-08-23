@@ -71,6 +71,7 @@ public class ConstantComponents {
 
     public static final Component NOTIFICATION_OPTION_TOOLTIP = DeferredComponent.of(() -> CommonUtils.serverTranslatable("options.prometheus.notifications.tooltip"));
     public static final Component SOUND_OPTION_TOOLTIP = DeferredComponent.of(() -> CommonUtils.serverTranslatable("options.prometheus.sound.tooltip"));
+    public static final Component STUCK_BUTTON_TOOLTIP = DeferredComponent.of(() -> CommonUtils.serverTranslatable("options.prometheus.stuck.tooltip"));
 
     public static final Component CANT_GIVE_ROLE = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.roles.error.cant_give_role"));
 
@@ -81,4 +82,10 @@ public class ConstantComponents {
     public static final Component MEMBER_ERROR = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.roles.member.error"));
     public static final Component CLICK_EDIT = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.commands.click_edit"));
     public static final Component CANT_FIND_LOCATION = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.spawn.cant_find_location"));
+
+    public static final Component MULTIPLE_PLAYERS = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.offline.multiple_players"));
+    public static final Component UNKNOWN_PLAYER = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.offline.unknown_player"));
+    public static final Component PLAYER_ONLINE = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.offline.player_online"));
+
+    public static final Component TP_PANIC = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.stuck.panic"));
 }

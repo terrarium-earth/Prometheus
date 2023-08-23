@@ -1,4 +1,4 @@
-package earth.terrarium.prometheus.mixin.client;
+package earth.terrarium.prometheus.mixin.client.accessors;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.font.FontManager;

@@ -16,9 +16,9 @@ public abstract class HeadingPlayerMixin extends LivingEntity implements Heading
 
     @Unique
     private Component prometheus$headingText = null;
+
     @Unique
     private Heading prometheus$heading = Heading.NONE;
-
 
     protected HeadingPlayerMixin(EntityType<? extends LivingEntity> entityType, Level level) {
         super(entityType, level);

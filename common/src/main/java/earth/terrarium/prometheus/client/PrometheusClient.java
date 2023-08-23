@@ -69,7 +69,7 @@ public class PrometheusClient {
             new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_vanilla_the_end.png"));
         api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("the_bumblezone:the_bumblezone")),
             new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_bumblezone_bumblezone.png"));
-        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("twilightforest:twilightforest")),
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("twilightforest:twilight_forest")),
             new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_twilightforest_twilight_forest.png"));
         api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("undergarden:undergarden")),
             new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_undergarden_the_undergarden.png"));
@@ -111,6 +111,8 @@ public class PrometheusClient {
             new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_abyssii_pocket_dimension.png"));
         api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("theabyss:the_abyss")),
             new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_abyssii_the_abyss.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("rats:ratlantis")),
+            new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_rats_ratlantis.png"));
     }
 
     public static void clientTick() {
