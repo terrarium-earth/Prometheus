@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +49,9 @@ public class CommandPermissionHandler {
     private static <T extends CommandSourceStack> void setRequirement(CommandNode<T> node, Predicate<T> requirement) {
         if (node instanceof CommandNodeAccessor accessor) {
             accessor.setRequirement(requirement);
-        } else if (UnsafeUtils.hasField(node, "requirement")) {
+        } else {
             //Unsafe way to set the requirement, this is because of forges modules and forge seemingly blocking mixins to CommandNode
-            UnsafeUtils.setField(node, "requirement", requirement);
+            setRequirementField(node, requirement);
         }
     }
 
@@ -85,11 +86,10 @@ public class CommandPermissionHandler {
     }
 
     private static TriState getPermission(ServerPlayer player, String permission) {
-        TriState state = PermissionApi.API.getPermission(player, permission);
-        if (state.isUndefined()) {
-            state = recursivePermissionCheck(player, permission.substring(0, permission.lastIndexOf('.')));
-        }
-        return state;
+        return TriState.map(
+            PermissionApi.API.getPermission(player, permission),
+            recursivePermissionCheck(player, permission)
+        );
     }
 
     private static TriState recursivePermissionCheck(ServerPlayer player, String permission) {
@@ -101,5 +101,23 @@ public class CommandPermissionHandler {
             return recursivePermissionCheck(player, permission.substring(0, permission.lastIndexOf('.')));
         }
         return state;
+    }
+
+    private static boolean triedToSetField = false;
+    private static Field requirementField = null;
+
+    private static void setRequirementField(Object instance, Object value) {
+        if (requirementField == null && !triedToSetField) {
+            triedToSetField = true;
+            try {
+                requirementField = CommandNode.class.getDeclaredField("requirement");
+                requirementField.setAccessible(true);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        }
+        if (requirementField != null) {
+            UnsafeUtils.setField(instance, requirementField, value);
+        }
     }
 }

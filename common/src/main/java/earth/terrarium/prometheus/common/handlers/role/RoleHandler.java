@@ -11,6 +11,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -53,8 +54,14 @@ public class RoleHandler extends SaveHandler {
                 return map;
             })
         );
-        if (player.getServer() != null && player.getServer().getPlayerList().getPlayer(target) instanceof PermissionHolder holder) {
-            holder.prometheus$updatePermissions();
+        ServerPlayer serverPlayer = player.getServer() == null ? null : player.getServer().getPlayerList().getPlayer(target);
+        if (serverPlayer != null) {
+            if (serverPlayer instanceof PermissionHolder holder) {
+                holder.prometheus$updatePermissions();
+            }
+            if (serverPlayer instanceof RoleEntityHook hook) {
+                hook.prometheus$updateHighestRole();
+            }
         }
     }
 
@@ -124,6 +131,9 @@ public class RoleHandler extends SaveHandler {
     private static void updatePlayers(@Nullable MinecraftServer server) {
         if (server == null) return;
         for (var listPlayer : server.getPlayerList().getPlayers()) {
+            if (listPlayer instanceof RoleEntityHook holder) {
+                holder.prometheus$updateHighestRole();
+            }
             if (listPlayer instanceof PermissionHolder holder) {
                 holder.prometheus$updatePermissions();
             }
