@@ -113,6 +113,8 @@ public class PrometheusClient {
             new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_abyssii_the_abyss.png"));
         api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("rats:ratlantis")),
             new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_rats_ratlantis.png"));
+        api.register(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("aether:the_aether")),
+            new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_aether_the_aether.png"));
     }
 
     public static void clientTick() {
