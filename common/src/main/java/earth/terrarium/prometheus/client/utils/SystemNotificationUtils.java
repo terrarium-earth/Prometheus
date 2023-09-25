@@ -19,7 +19,9 @@ public class SystemNotificationUtils {
     private static TrayIcon trayIcon;
 
     public static void init() {
+        // We cant trust the OS to be able to handle the tray icon on linux or mac
         if (Util.getPlatform() == Util.OS.OSX) return;
+        if (Util.getPlatform() == Util.OS.LINUX) return;
         System.setProperty("java.awt.headless", "false"); //Client should NEVER be headless
         if (SystemTray.isSupported()) {
             try (InputStream icon = SystemNotificationUtils.class.getClassLoader().getResourceAsStream("prometheus_icon.png")) {

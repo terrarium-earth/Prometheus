@@ -29,13 +29,15 @@ public class NotificationHandler {
         if (Minecraft.getInstance().player.getGameProfile().getId().equals(sender)) return;
         if (Minecraft.getInstance().getPlayerSocialManager().shouldHideMessageFrom(sender)) return;
         String name = Minecraft.getInstance().player.getGameProfile().getName();
-        String senderName = Optionull.mapOrDefault(Minecraft.getInstance().getConnection().getPlayerInfo(sender), info -> info.getProfile().getName(), "");
+        String senderName = Optionull.mapOrDefault(Minecraft.getInstance().getConnection().getPlayerInfo(sender), info -> info.getProfile().getName(), "")
+            .replace("[^A-Z-a-z0-9_]", "");
         Type type = getType(params, Minecraft.getInstance().getConnection().registryAccess());
         String text = message.getString().toLowerCase(Locale.ROOT);
 
         boolean shouldPing = text.contains("@" + name.toLowerCase(Locale.ROOT)) || type == Type.PRIVATE;
 
         if (!ClientOptionHandler.showNotifications.get() || !shouldPing) return;
+        if (senderName.isBlank()) return;
 
         if (Minecraft.getInstance().isWindowActive()) {
             switch (ClientOptionHandler.notificationSound.get()) {

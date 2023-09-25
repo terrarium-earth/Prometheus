@@ -3,6 +3,8 @@ package earth.terrarium.prometheus.common.handlers.role;
 import com.teamresourceful.resourcefullib.common.nbt.TagUtils;
 import com.teamresourceful.resourcefullib.common.utils.SaveHandler;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
+import earth.terrarium.prometheus.api.events.MemberRolesChangedEvent;
+import earth.terrarium.prometheus.api.events.ServerRolesUpdatedEvent;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.common.handlers.permission.PermissionHolder;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
@@ -63,6 +65,7 @@ public class RoleHandler extends SaveHandler {
                 hook.prometheus$updateHighestRole();
             }
         }
+        MemberRolesChangedEvent.fire(new MemberRolesChangedEvent(player.getServer(), target));
     }
 
     public static void setRole(Player player, UUID uuid, Role role) {
@@ -70,6 +73,7 @@ public class RoleHandler extends SaveHandler {
         if (uuid != null) {
             updatePlayers(player.getServer());
         }
+        ServerRolesUpdatedEvent.fire(new ServerRolesUpdatedEvent(player.getServer()));
     }
 
     public static RoleMap roles(Player player) {
@@ -81,6 +85,7 @@ public class RoleHandler extends SaveHandler {
         data.roles.reorder(newOrder);
         data.setDirty();
         updatePlayers(player.getServer());
+        ServerRolesUpdatedEvent.fire(new ServerRolesUpdatedEvent(player.getServer()));
     }
 
     public static Set<UUID> getEditableRoles(Player player) {
