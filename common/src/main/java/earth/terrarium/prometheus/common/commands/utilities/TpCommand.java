@@ -33,9 +33,6 @@ public class TpCommand {
             .executes(context -> {
                 ServerPlayer player = context.getSource().getPlayerOrException();
                 BlockPos pos = player.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, player.level().getSharedSpawnPos());
-                if (!RtpCommand.isSafe(player, pos)) {
-                    pos = RtpCommand.tp(pos, player, 10, 0);
-                }
                 if (pos == null) {
                     player.sendSystemMessage(ConstantComponents.CANT_FIND_LOCATION);
                     return 0;
