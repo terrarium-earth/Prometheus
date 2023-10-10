@@ -1,5 +1,1 @@
-- Fixed issue where a crash can occur on linux
-- Remove invalid characters from player names in notifications, this should prevent servers from sending invisible player names and causing notifications.
-- Added events for developers to use
-- Fix issue with command permissions
-- Added Aether dimension icon (bconlon1)
+- Fix issue where cooldown was passed as the RTP distance in roles screen.

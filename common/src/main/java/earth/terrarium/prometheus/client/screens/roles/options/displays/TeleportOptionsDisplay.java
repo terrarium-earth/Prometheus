@@ -32,7 +32,7 @@ public record TeleportOptionsDisplay(List<ListEntry> entries) implements OptionD
     public boolean save(Role role) {
         NumberBoxListEntry expire = (NumberBoxListEntry) entries.get(1);
         NumberBoxListEntry rtpCooldown = (NumberBoxListEntry) entries.get(2);
-        NumberBoxListEntry rtpDistance = (NumberBoxListEntry) entries.get(2);
+        NumberBoxListEntry rtpDistance = (NumberBoxListEntry) entries.get(3);
         if (expire.getIntValue().isPresent() && rtpCooldown.getIntValue().isPresent() && rtpDistance.getIntValue().isPresent()) {
             role.setData(new TeleportOptions(expire.getIntValue().getAsInt(), rtpCooldown.getIntValue().getAsInt(), rtpDistance.getIntValue().getAsInt()));
             return true;
