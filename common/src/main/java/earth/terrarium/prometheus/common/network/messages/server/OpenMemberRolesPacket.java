@@ -48,7 +48,7 @@ public record OpenMemberRolesPacket(UUID id) implements Packet<OpenMemberRolesPa
         public PacketContext handle(OpenMemberRolesPacket message) {
             return (player, level) -> {
                 if (player.hasPermissions(2)) {
-                    List<RoleEntry> roles = RoleHandler.roles(player).roles();
+                    List<RoleEntry> roles = RoleHandler.roles(player.level()).roles();
                     Set<UUID> editable = RoleHandler.getEditableRoles(player);
                     Set<UUID> selected = RoleHandler.getRolesForPlayer(player, message.id());
 

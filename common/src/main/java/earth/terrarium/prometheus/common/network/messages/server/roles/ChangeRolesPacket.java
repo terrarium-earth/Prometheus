@@ -46,7 +46,7 @@ public record ChangeRolesPacket(List<UUID> ids) implements Packet<ChangeRolesPac
             return (player, level) -> {
                 if (player instanceof ServerPlayer serverPlayer && RoleHandler.canModifyRoles(player)) {
                     Set<UUID> editableRoles = RoleHandler.getEditableRoles(player);
-                    Set<UUID> roles = RoleHandler.roles(player).ids();
+                    Set<UUID> roles = RoleHandler.roles(player.level()).ids();
                     //Check if message.ids contains any roles that the player cannot edit
                     if (!isValid(editableRoles, roles, message.ids)) {
                         player.sendSystemMessage(ConstantComponents.CANT_EDIT_ROLE_IN_LIST);

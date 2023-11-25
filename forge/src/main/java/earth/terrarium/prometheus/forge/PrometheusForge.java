@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -30,6 +31,7 @@ public class PrometheusForge {
         MinecraftForge.EVENT_BUS.addListener(PrometheusForge::onChatMessage);
         MinecraftForge.EVENT_BUS.addListener(PrometheusForge::onEntityJoin);
         MinecraftForge.EVENT_BUS.addListener(PrometheusForge::onServerStarted);
+        MinecraftForge.EVENT_BUS.addListener(PrometheusForge::onServerTick);
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
@@ -56,5 +58,9 @@ public class PrometheusForge {
 
     private static void onServerStarted(ServerStartedEvent event) {
         Prometheus.onServerStarted(event.getServer());
+    }
+
+    private static void onServerTick(TickEvent.ServerTickEvent event) {
+        Prometheus.onServerTick(event.getServer());
     }
 }

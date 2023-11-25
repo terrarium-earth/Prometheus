@@ -53,7 +53,7 @@ public record OpenRolePacket(UUID id) implements Packet<OpenRolePacket> {
                         player.sendSystemMessage(ConstantComponents.CANT_EDIT_ROLE);
                         return;
                     }
-                    List<RoleEntry> roles = RoleHandler.roles(player).roles().stream()
+                    List<RoleEntry> roles = RoleHandler.roles(player.level()).roles().stream()
                         .filter(entry -> editable.contains(entry.id()))
                         .toList();
                     NetworkHandler.CHANNEL.sendToPlayer(new OpenRoleScreenPacket(new RoleEditContent(roles, message.id())), player);

@@ -55,7 +55,7 @@ public record OpenRolesPacket() implements Packet<OpenRolesPacket> {
     public static void openScreen(ServerPlayer player) {
         if (!player.hasPermissions(2)) return;
         Set<UUID> editable = RoleHandler.getEditableRoles(player);
-        List<RoleEntry> roles = RoleHandler.roles(player).roles();
+        List<RoleEntry> roles = RoleHandler.roles(player.level()).roles();
         for (RoleEntry role : roles) {
             if (editable.contains(role.id())) {
                 NetworkHandler.CHANNEL.sendToPlayer(new OpenRolesScreenPacket(new RolesContent(roles, roles.indexOf(role))), player);

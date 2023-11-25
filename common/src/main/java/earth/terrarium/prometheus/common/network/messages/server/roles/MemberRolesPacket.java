@@ -60,7 +60,7 @@ public record MemberRolesPacket(UUID target, Object2BooleanMap<UUID> ids) implem
                         return;
                     }
                 }
-                RoleHandler.changeRoles(player, message.target, message.ids);
+                RoleHandler.changeRoles(player.level(), message.target, message.ids);
             };
         }
     }

@@ -42,8 +42,8 @@ public class RoleHandler extends SaveHandler {
         return permissions;
     }
 
-    public static void changeRoles(Player player, UUID target, Object2BooleanMap<UUID> roles) {
-        handle(player.level(), RoleHandler::read, data ->
+    public static void changeRoles(Level level, UUID target, Object2BooleanMap<UUID> roles) {
+        handle(level, RoleHandler::read, data ->
             data.players.compute(target, (key, value) -> {
                 final Set<UUID> map = value == null ? new HashSet<>() : new HashSet<>(value);
                 roles.forEach((id, has) -> {
@@ -56,7 +56,7 @@ public class RoleHandler extends SaveHandler {
                 return map;
             })
         );
-        ServerPlayer serverPlayer = player.getServer() == null ? null : player.getServer().getPlayerList().getPlayer(target);
+        ServerPlayer serverPlayer = level.getServer() == null ? null : level.getServer().getPlayerList().getPlayer(target);
         if (serverPlayer != null) {
             if (serverPlayer instanceof PermissionHolder holder) {
                 holder.prometheus$updatePermissions();
@@ -65,7 +65,7 @@ public class RoleHandler extends SaveHandler {
                 hook.prometheus$updateHighestRole();
             }
         }
-        MemberRolesChangedEvent.fire(new MemberRolesChangedEvent(player.getServer(), target));
+        MemberRolesChangedEvent.fire(new MemberRolesChangedEvent(level.getServer(), target));
     }
 
     public static void setRole(Player player, UUID uuid, Role role) {
@@ -76,8 +76,8 @@ public class RoleHandler extends SaveHandler {
         ServerRolesUpdatedEvent.fire(new ServerRolesUpdatedEvent(player.getServer()));
     }
 
-    public static RoleMap roles(Player player) {
-        return read(player.level()).roles;
+    public static RoleMap roles(Level level) {
+        return read(level).roles;
     }
 
     public static void reorder(Player player, List<UUID> newOrder) {

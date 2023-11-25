@@ -2,6 +2,7 @@ package earth.terrarium.prometheus;
 
 import earth.terrarium.prometheus.api.roles.options.RoleOptionsApi;
 import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
+import earth.terrarium.prometheus.common.handlers.promotions.PromotionsHandler;
 import earth.terrarium.prometheus.common.handlers.role.RoleOptionsApiImpl;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.roles.CosmeticOptions;
@@ -25,5 +26,9 @@ public class Prometheus {
 
     public static void onServerStarted(MinecraftServer server) {
         CommandPermissionHandler.registerPermissions(server.getCommands().getDispatcher());
+    }
+
+    public static void onServerTick(MinecraftServer server) {
+        PromotionsHandler.runChecks(server);
     }
 }

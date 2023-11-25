@@ -145,5 +145,14 @@
     "prometheus.offline.unknown_player": "Unknown player.",
     "prometheus.offline.player_online": "Player is online, use /tp.",
 
-    "prometheus.stuck.panic": "If you're stuck crashing, click to be TP'd to spawn on join!"
+    "prometheus.stuck.panic": "If you're stuck crashing, click to be TP'd to spawn on join!",
+
+    "prometheus.promotions.promoted": "You have been promoted to %s",
+    "prometheus.promotions.created": "Created promotion %s",
+    "prometheus.promotions.removed": "Removed promotion %s",
+    "prometheus.promotions.edited": "Edited promotion %s",
+    "prometheus.promotions.does_not_exist": "Promotion with id %s does not exist.",
+
+    "prometheus.roles.member.removed": "Removed member %s from role %s",
+    "prometheus.roles.member.added": "Added member %s to role %s"
 }

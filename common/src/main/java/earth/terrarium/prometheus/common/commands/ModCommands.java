@@ -6,6 +6,9 @@ import earth.terrarium.prometheus.common.commands.cheating.FeedCommand;
 import earth.terrarium.prometheus.common.commands.cheating.FlyCommand;
 import earth.terrarium.prometheus.common.commands.cheating.GodModeCommand;
 import earth.terrarium.prometheus.common.commands.cheating.HealCommand;
+import earth.terrarium.prometheus.common.commands.roles.MemberCommand;
+import earth.terrarium.prometheus.common.commands.roles.PromotionCommand;
+import earth.terrarium.prometheus.common.commands.roles.RolesCommand;
 import earth.terrarium.prometheus.common.commands.utilities.*;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -31,5 +34,8 @@ public class ModCommands {
         NicknameCommand.register(dispatcher);
         RunCommand.register(dispatcher);
         OfflineCommand.register(dispatcher);
+        PromotionCommand.register(dispatcher);
+        MemberCommand.register(dispatcher);
+        RolesCommand.register(dispatcher);
     }
 }
