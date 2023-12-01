@@ -3,7 +3,7 @@
   "id": "prometheus",
   "version": "${version}",
   "name": "Prometheus",
-  "description": "Modern Ranks/Utilities Mod!",
+  "description": "A utility mod adding useful commands and player permission handling.",
   "authors": [
     "ThatGravyBoat"
   ],
@@ -36,8 +36,8 @@
     "prometheus-common.mixins.json"
   ],
   "depends": {
-    "fabric": "*",
-    "minecraft": ">=1.20",
-    "resourcefullib": ">=2.1.1"
+    "fabric-api": "*",
+    "minecraft": ">=1.20.2",
+    "resourcefullib": ">=2.2.4"
   }
 }

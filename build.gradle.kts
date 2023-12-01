@@ -8,7 +8,7 @@ plugins {
     java
     id("maven-publish")
     id("com.teamresourceful.resourcefulgradle") version "0.0.+"
-    id("dev.architectury.loom") version "1.2-SNAPSHOT" apply false
+    id("dev.architectury.loom") version "1.4-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT" apply false
 }
 
@@ -31,10 +31,9 @@ subprojects {
     }
 
     repositories {
-        maven(url = "https://maven.architectury.dev/")
-        maven(url = "https://maven.minecraftforge.net/")
-        maven(url = "https://maven.msrandom.net/repository/root")
         maven(url = "https://maven.resourcefulbees.com/repository/maven-public/")
+        maven(url = "https://maven.neoforged.net/releases/")
+        maven(url = "https://maven.msrandom.net/repository/root")
         maven {
             url = URI("https://jitpack.io")
             content {
@@ -57,7 +56,7 @@ subprojects {
 
             officialMojangMappings()
 
-            parchment(create(group = "org.parchmentmc.data", name = "parchment-1.20.1", version = parchmentVersion))
+            parchment(create(group = "org.parchmentmc.data", name = "parchment-$minecraftVersion", version = parchmentVersion))
         })
 
         compileOnly(group = "com.teamresourceful", name = "yabn", version = "1.0.3")
