@@ -21,7 +21,7 @@ public class MuteHandler extends SaveHandler {
     private final Map<UUID, Instant> mutedPlayers = new HashMap<>();
 
     public static MuteHandler read(Level level) {
-        return read(level, CLIENT_SIDE, MuteHandler::new, "prometheus_muted_players");
+        return read(level, HandlerType.create(CLIENT_SIDE, MuteHandler::new), "prometheus_muted_players");
     }
 
     public static void mute(Level level, GameProfile profile, long length, TemporalUnit unit) {

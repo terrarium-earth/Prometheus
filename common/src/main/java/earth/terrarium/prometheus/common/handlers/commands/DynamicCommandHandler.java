@@ -20,7 +20,7 @@ public class DynamicCommandHandler extends SaveHandler {
     private final Map<String, List<String>> commands = new HashMap<>();
 
     public static DynamicCommandHandler read(Level level) {
-        return read(level, CLIENT_SIDE, DynamicCommandHandler::new, "prometheus_commands");
+        return read(level, HandlerType.create(CLIENT_SIDE, DynamicCommandHandler::new), "prometheus_commands");
     }
 
     public static void removeCommand(ServerLevel level, String name) {

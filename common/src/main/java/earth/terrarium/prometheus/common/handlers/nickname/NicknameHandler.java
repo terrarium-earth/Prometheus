@@ -19,7 +19,7 @@ public class NicknameHandler extends SaveHandler {
     private final Map<UUID, Nickname> names = new HashMap<>();
 
     public static NicknameHandler read(Level level) {
-        return read(level, CLIENT_SIDE, NicknameHandler::new, "prometheus_nicknames");
+        return read(level, HandlerType.create(CLIENT_SIDE, NicknameHandler::new), "prometheus_nicknames");
     }
 
     public static void set(ServerPlayer player, Component name) {

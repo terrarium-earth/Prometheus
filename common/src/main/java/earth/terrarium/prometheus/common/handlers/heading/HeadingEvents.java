@@ -19,21 +19,21 @@ import java.util.List;
 public class HeadingEvents {
 
     public static boolean onCustomPacketReceived(ServerboundCustomPayloadPacket serverboundCustomPayloadPacket, ServerPlayer player) {
-        if (serverboundCustomPayloadPacket.getIdentifier().toString().equals("music:song")) {
-            FriendlyByteBuf data = serverboundCustomPayloadPacket.getData();
-            byte[] bytes = data.readByteArray(32767);
-            String song = new String(bytes, StandardCharsets.UTF_8);
-            if (player instanceof HeadingEntityHook hook) {
-                final Heading heading = hook.prometheus$getHeading();
-                if (heading == Heading.MUSIC) {
-                    hook.prometheus$setHeadingText(heading.getTranslation(
-                        Component.literal((song.length() <= 20 ? song : song.substring(0, 20) + "..."))
-                            .withStyle(ChatFormatting.BLUE)
-                    ));
-                    sendToOnlinePlayers(player.getServer(), player, heading, hook.prometheus$getHeadingText());
-                }
-            }
-            return true;
+        if (serverboundCustomPayloadPacket.payload().id().toString().equals("music:song")) {
+//            FriendlyByteBuf data = serverboundCustomPayloadPacket.getData(); // TODO: not sure how to get the FriendlyByteBuf now
+//            byte[] bytes = data.readByteArray(32767);
+//            String song = new String(bytes, StandardCharsets.UTF_8);
+//            if (player instanceof HeadingEntityHook hook) {
+//                final Heading heading = hook.prometheus$getHeading();
+//                if (heading == Heading.MUSIC) {
+//                    hook.prometheus$setHeadingText(heading.getTranslation(
+//                        Component.literal((song.length() <= 20 ? song : song.substring(0, 20) + "..."))
+//                            .withStyle(ChatFormatting.BLUE)
+//                    ));
+//                    sendToOnlinePlayers(player.getServer(), player, heading, hook.prometheus$getHeadingText());
+//                }
+//            }
+//            return true;
         }
         return false;
     }

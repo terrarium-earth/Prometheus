@@ -22,8 +22,8 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class QuickEditList extends SelectionList<QuickEditList.Entry> {
-
-    private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/edit_role.png");
+    private static final ResourceLocation ENTRY = new ResourceLocation(Prometheus.MOD_ID, "edit_role/entry");
+    private static final ResourceLocation ENTRY_HIGHLIGHTED = new ResourceLocation(Prometheus.MOD_ID, "edit_role/entry_highlighted");
 
     private Entry selected;
 
@@ -56,8 +56,7 @@ public class QuickEditList extends SelectionList<QuickEditList.Entry> {
 
         @Override
         protected void render(@NotNull GuiGraphics graphics, @NotNull ScissorBoxStack scissor, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
-            graphics.blit(CONTAINER_BACKGROUND, left, top, 300, hovered ? 20 : 0, 42, 20, 512, 512);
-
+            graphics.blitSprite(hovered ? ENTRY_HIGHLIGHTED : ENTRY, left, top, 42, 20);
             graphics.drawCenteredString(Minecraft.getInstance().font, String.valueOf(display.icon()), left + 21, top + 5, 0xFFFFFF);
             if (hovered) {
                 CursorUtils.setCursor(true, CursorScreen.Cursor.POINTER);

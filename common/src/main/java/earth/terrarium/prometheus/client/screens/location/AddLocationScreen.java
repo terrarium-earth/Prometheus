@@ -12,7 +12,6 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
 
 public class AddLocationScreen extends Screen {
 
@@ -48,9 +47,8 @@ public class AddLocationScreen extends Screen {
     }
 
     @Override
-    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        super.renderBackground(graphics);
-        super.render(graphics, mouseX, mouseY, partialTicks);
+    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.renderBackground(graphics, mouseX, mouseY, partialTick);
         graphics.drawString(
             this.font,
             TITLE, (int) (width / 2f) - 120, (int) (height / 2f) - 45, 0xFFFFFF,

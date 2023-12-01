@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.player.RemotePlayer;
@@ -22,6 +23,11 @@ public class InvseeScreen extends AbstractContainerCursorScreen<InvseeMenu> impl
     private static final Component YOUR_INVENTORY = Component.translatable("prometheus.invsee.your_inventory");
     private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/invsee.png");
 
+    private static final WidgetSprites ENDERCHEST_BUTTON_SPRITES = new WidgetSprites(
+        new ResourceLocation(Prometheus.MOD_ID, "invsee/enderchest_button"),
+        new ResourceLocation(Prometheus.MOD_ID, "invsee/enderchest_button_highlighted")
+    );
+
     private Player renderedPlayer;
 
     public InvseeScreen(InvseeMenu menu, Inventory inventory, Component component) {
@@ -34,21 +40,25 @@ public class InvseeScreen extends AbstractContainerCursorScreen<InvseeMenu> impl
     @Override
     protected void init() {
         super.init();
-        this.addRenderableWidget(new ImageButton(this.leftPos + 125, this.topPos + 31, 20, 18, 178, 0, 19, CONTAINER_BACKGROUND, (button) -> {
+        this.addRenderableWidget(new ImageButton(this.leftPos + 125, this.topPos + 31, 20, 18, ENDERCHEST_BUTTON_SPRITES, (button) -> {
             if (this.minecraft != null && this.minecraft.gameMode != null) {
                 this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, 100);
             }
         })).setTooltip(Tooltip.create(Component.translatable("prometheus.invsee.enderchest")));
         try {
-            this.renderedPlayer = new RemotePlayer(this.minecraft.level, new GameProfile(this.menu.getPlayerUUID(), "Fake Inventory Player"));
+            this.renderedPlayer = new RemotePlayer(this.minecraft.level, new GameProfile(this.menu.getPlayerUUID(), "Fake Inventory Player")) {
+                @Override
+                public boolean isVehicle() {
+                    return true; // Prevent display name from rendering in the GUI
+                }
+            };
         } catch (Exception ignored) {}
     }
 
     @Override
-    public void render(@NotNull GuiGraphics graphics, int i, int j, float f) {
-        this.renderBackground(graphics);
-        super.render(graphics, i, j, f);
-        this.renderTooltip(graphics, i, j);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float f) {
+        super.render(graphics, mouseX, mouseY, f);
+        this.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
@@ -58,14 +68,13 @@ public class InvseeScreen extends AbstractContainerCursorScreen<InvseeMenu> impl
     }
 
     @Override
-    protected void renderBg(@NotNull GuiGraphics graphics, float f, int i, int j) {
-        int k = (this.width - this.imageWidth) / 2;
-        int l = (this.height - this.imageHeight) / 2;
-        graphics.blit(CONTAINER_BACKGROUND, k, l, 0, 0, this.imageWidth, this.imageHeight);
+    protected void renderBg(@NotNull GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+        graphics.blit(CONTAINER_BACKGROUND, leftPos, topPos, 0, 0, this.imageWidth, this.imageHeight);
         if (this.renderedPlayer != null) {
             InventoryScreen.renderEntityInInventoryFollowsMouse(graphics,
-                k + 87, l + 58,
-                20, (float) (k + 51) - i, (float) (l + 75 - 50) - j, this.renderedPlayer);
+                leftPos + 63, topPos + 4,
+                leftPos + 112, topPos + 74,
+                20, 0.0625f, mouseX, mouseY, renderedPlayer);
         }
     }
 

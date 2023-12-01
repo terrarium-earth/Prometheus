@@ -2,6 +2,7 @@ package earth.terrarium.prometheus.client.screens.roles.adding;
 
 import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen;
 import earth.terrarium.prometheus.Prometheus;
+import earth.terrarium.prometheus.client.screens.roles.RolesScreen;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.menus.content.MemberRolesContent;
 import net.minecraft.client.Minecraft;
@@ -11,7 +12,6 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 
 public class MemberRolesScreen extends BaseCursorScreen {
 
@@ -44,14 +44,14 @@ public class MemberRolesScreen extends BaseCursorScreen {
         this.list = this.addRenderableWidget(new MemberRolesList(leftPos + 8, topPos + 24, 144, 180, 20, item -> updateButtons()));
         this.list.update(this.content.roles());
 
-        this.saveButton = this.addRenderableWidget(new ImageButton(leftPos + 154, topPos + 5, 17, 17, 176, 36, 17, CONTAINER_BACKGROUND, button -> {
+        this.saveButton = this.addRenderableWidget(new ImageButton(leftPos + 154, topPos + 5, 17, 17, RolesScreen.SAVE_BUTTON_SPRITES, button -> {
             this.list.saveChanges(this.content.person());
             updateButtons();
         }));
         this.saveButton.setTooltip(Tooltip.create(ConstantComponents.SAVE));
         this.saveButton.active = false;
 
-        this.undoButton = this.addRenderableWidget(new ImageButton(leftPos + 154, topPos + 188, 17, 17, 193, 36, 17, CONTAINER_BACKGROUND, button -> {
+        this.undoButton = this.addRenderableWidget(new ImageButton(leftPos + 154, topPos + 188, 17, 17, RolesScreen.UNDO_BUTTON_SPRITES, button -> {
             this.list.undoChanges();
             updateButtons();
         }));
@@ -66,12 +66,11 @@ public class MemberRolesScreen extends BaseCursorScreen {
     }
 
     @Override
-    public void render(@NotNull GuiGraphics graphics, int i, int j, float f) {
+    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.renderBackground(graphics, mouseX, mouseY, partialTick);
         int leftPos = (this.width - WIDTH) / 2;
         int topPos = (this.height - HEIGHT) / 2;
-        this.renderBackground(graphics);
         graphics.blit(CONTAINER_BACKGROUND, leftPos, topPos, 0, 0, WIDTH, HEIGHT, 256, 256);
-        super.render(graphics, i, j, f);
         graphics.drawString(
             this.font,
             this.title, leftPos + 8, topPos + 6, 4210752,

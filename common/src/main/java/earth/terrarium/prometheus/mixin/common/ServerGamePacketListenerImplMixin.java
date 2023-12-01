@@ -15,11 +15,11 @@ public class ServerGamePacketListenerImplMixin {
 
     @Shadow
     public ServerPlayer player;
-
-    @Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
-    public void onCustomPacket(ServerboundCustomPayloadPacket serverboundCustomPayloadPacket, CallbackInfo ci) {
-        if (HeadingEvents.onCustomPacketReceived(serverboundCustomPayloadPacket, player)) {
-            ci.cancel();
-        }
-    }
+    // TODO: Not sure where this is meant to inject into now
+//    @Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
+//    public void onCustomPacket(ServerboundCustomPayloadPacket serverboundCustomPayloadPacket, CallbackInfo ci) {
+//        if (HeadingEvents.onCustomPacketReceived(serverboundCustomPayloadPacket, player)) {
+//            ci.cancel();
+//        }
+//    }
 }

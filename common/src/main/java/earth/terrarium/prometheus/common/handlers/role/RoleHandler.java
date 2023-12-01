@@ -29,7 +29,7 @@ public class RoleHandler extends SaveHandler {
     private final RoleMap roles = new RoleMap();
 
     public static RoleHandler read(Level level) {
-        return read(level, CLIENT_SIDE, RoleHandler::new, "prometheus_roles");
+        return read(level, HandlerType.create(CLIENT_SIDE, RoleHandler::new), "prometheus_roles");
     }
 
     public static Map<String, TriState> getPermissions(Player player) {

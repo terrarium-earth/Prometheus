@@ -17,7 +17,7 @@ public class HeadingHandler extends SaveHandler {
     private final Map<UUID, Heading> headings = new HashMap<>();
 
     public static HeadingHandler read(Level level) {
-        return read(level, CLIENT_SIDE, HeadingHandler::new, "prometheus_headings");
+        return read(level, HandlerType.create(CLIENT_SIDE, HeadingHandler::new), "prometheus_headings");
     }
 
     public static boolean set(Player player, Heading heading) {

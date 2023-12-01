@@ -12,10 +12,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -25,6 +25,12 @@ public class LocationScreen extends PriorityScreen implements ContextualMenuScre
     private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/location.png");
     private static final int HEIGHT = 211;
     private static final int WIDTH = 176;
+
+    private static final WidgetSprites PLUS_BUTTON_SPRITES = new WidgetSprites(
+        new ResourceLocation(Prometheus.MOD_ID, "location/plus_button"),
+        new ResourceLocation(Prometheus.MOD_ID, "location/plus_button_disabled"),
+        new ResourceLocation(Prometheus.MOD_ID, "location/plus_button_highlighted")
+    );
 
     private final LocationContent content;
 
@@ -45,7 +51,7 @@ public class LocationScreen extends PriorityScreen implements ContextualMenuScre
         int leftPos = (this.width - WIDTH) / 2;
         int topPos = (this.height - HEIGHT) / 2;
 
-        ImageButton addButton = this.addRenderableWidget(new ImageButton(leftPos + 157, topPos + 22, 12, 12, 176, 0, 12, CONTAINER_BACKGROUND, (button) ->
+        ImageButton addButton = this.addRenderableWidget(new ImageButton(leftPos + 157, topPos + 22, 12, 12, PLUS_BUTTON_SPRITES, (button) ->
             Minecraft.getInstance().setScreen(new AddLocationScreen(this, this.content.type()))
         ));
         addButton.setTooltip(Tooltip.create(Component.translatable("prometheus.locations." + content.type().getId() + ".add")));
@@ -75,12 +81,11 @@ public class LocationScreen extends PriorityScreen implements ContextualMenuScre
     }
 
     @Override
-    public void render(@NotNull GuiGraphics graphics, int i, int j, float f) {
+    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.renderBackground(graphics, mouseX, mouseY, partialTick);
         int leftPos = (this.width - WIDTH) / 2;
         int topPos = (this.height - HEIGHT) / 2;
-        this.renderBackground(graphics);
         graphics.blit(CONTAINER_BACKGROUND, leftPos, topPos, 0, 0, WIDTH, HEIGHT);
-        super.render(graphics, i, j, f);
         graphics.drawString(
             this.font,
             title, leftPos + 8, topPos + 6, 4210752,

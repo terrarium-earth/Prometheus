@@ -26,7 +26,8 @@ import java.util.stream.Stream;
 
 public class LocationsList extends SelectionList<LocationsList.Entry> {
 
-    private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/location.png");
+    private static final ResourceLocation ENTRY = new ResourceLocation(Prometheus.MOD_ID, "location/entry");
+    private static final ResourceLocation ENTRY_HIGHLIGHTED = new ResourceLocation(Prometheus.MOD_ID, "location/entry_highlighted");
     private static final ResourceLocation DEFAULT_ICON = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_unknown.png");
 
     private Entry selected;
@@ -64,7 +65,7 @@ public class LocationsList extends SelectionList<LocationsList.Entry> {
 
         @Override
         protected void render(@NotNull GuiGraphics graphics, @NotNull ScissorBoxStack scissor, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
-            graphics.blit(CONTAINER_BACKGROUND, left, top, 0, hovered ? 231 : 211, 160, 20);
+            graphics.blitSprite(hovered ? ENTRY_HIGHLIGHTED : ENTRY, left, top, 160, 20);
             graphics.blit(icon, left + 5, top + 2, 0, 0, 16, 16, 16, 16);
             graphics.drawString(
                 Minecraft.getInstance().font,

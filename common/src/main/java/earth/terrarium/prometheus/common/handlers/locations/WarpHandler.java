@@ -21,7 +21,7 @@ public class WarpHandler extends SaveHandler {
     private final Map<String, GlobalPos> warps = new HashMap<>();
 
     public static WarpHandler read(Level level) {
-        return read(level, CLIENT_SIDE, WarpHandler::new, "prometheus_warps");
+        return read(level, HandlerType.create(CLIENT_SIDE, WarpHandler::new), "prometheus_warps");
     }
 
     public static boolean add(ServerPlayer player, String name) {

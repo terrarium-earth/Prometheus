@@ -24,7 +24,7 @@ public class HomeHandler extends SaveHandler {
     private final Map<UUID, Map<String, GlobalPos>> homes = new HashMap<>();
 
     public static HomeHandler read(Level level) {
-        return read(level, CLIENT_SIDE, HomeHandler::new, "prometheus_homes");
+        return read(level, HandlerType.create(CLIENT_SIDE, HomeHandler::new), "prometheus_homes");
     }
 
     public static boolean add(ServerPlayer player, String name) {

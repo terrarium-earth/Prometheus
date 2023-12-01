@@ -22,7 +22,7 @@ public class PromotionsHandler extends SaveHandler {
     private final Map<UUID, Set<String>> playerPromotions = new HashMap<>();
 
     public static PromotionsHandler read(Level level) {
-        return read(level, CLIENT_SIDE, PromotionsHandler::new, "prometheus_promotions");
+        return read(level, HandlerType.create(CLIENT_SIDE, PromotionsHandler::new), "prometheus_promotions");
     }
 
     public static void removePromotion(Level level, String id) {
