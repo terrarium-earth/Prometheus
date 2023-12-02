@@ -1,21 +1,28 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import dev.architectury.plugin.ArchitectPluginExtension
 import groovy.json.StringEscapeUtils
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
 import net.fabricmc.loom.task.RemapJarTask
-import java.net.URI
 
 plugins {
     java
     id("maven-publish")
     id("com.teamresourceful.resourcefulgradle") version "0.0.+"
-    id("dev.architectury.loom") version "1.2-SNAPSHOT" apply false
-    id("architectury-plugin") version "3.4-SNAPSHOT" apply false
+    id("dev.architectury.loom") version "1.4-SNAPSHOT" apply false
+    id("architectury-plugin") version "3.4-SNAPSHOT"
+    id("com.github.johnrengelman.shadow") version "7.1.2" apply false
+}
+
+architectury {
+    val minecraftVersion: String by project
+    minecraft = minecraftVersion
 }
 
 subprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "dev.architectury.loom")
     apply(plugin = "architectury-plugin")
+    apply(plugin = "com.github.johnrengelman.shadow")
 
     val minecraftVersion: String by project
     val modLoader = project.name
@@ -36,7 +43,7 @@ subprojects {
         maven(url = "https://maven.msrandom.net/repository/root")
         maven(url = "https://maven.resourcefulbees.com/repository/maven-public/")
         maven {
-            url = URI("https://jitpack.io")
+            url = uri("https://jitpack.io")
             content {
                 includeGroup("com.github.LlamaLad7")
                 includeGroup("com.github.llamalad7.mixinextras")
@@ -57,7 +64,7 @@ subprojects {
 
             officialMojangMappings()
 
-            parchment(create(group = "org.parchmentmc.data", name = "parchment-1.20.1", version = parchmentVersion))
+            parchment(create(group = "org.parchmentmc.data", name = "parchment-$minecraftVersion", version = parchmentVersion))
         })
 
         compileOnly(group = "com.teamresourceful", name = "yabn", version = "1.0.3")
@@ -104,17 +111,23 @@ subprojects {
             platformSetupLoomIde()
         }
 
-        sourceSets.main {
-            val main = this
-
-            rootProject.projects.common.dependencyProject.sourceSets.main {
-                main.java.source(java)
-                main.resources.source(resources)
-            }
+        val shadowCommon by configurations.creating {
+            isCanBeConsumed = false
+            isCanBeResolved = true
         }
 
-        dependencies {
-            compileOnly(rootProject.projects.common)
+        tasks {
+            "shadowJar"(ShadowJar::class) {
+                archiveClassifier.set("dev-shadow")
+                configurations = listOf(shadowCommon)
+
+                exclude("architectury.common.json")
+            }
+
+            "remapJar"(RemapJarTask::class) {
+                dependsOn("shadowJar")
+                inputFile.set(named<ShadowJar>("shadowJar").flatMap { it.archiveFile })
+            }
         }
     }
 

@@ -6,3 +6,7 @@ architectury {
 loom {
     accessWidenerPath.set(file("src/main/resources/prometheus.accesswidener"))
 }
+
+dependencies {
+    modCompileOnly(group = "tech.thatgravyboat", name = "commonats", version = "1.0")
+}

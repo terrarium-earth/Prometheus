@@ -1,1 +1,2 @@
-- Fix issue where cooldown was passed as the RTP distance in roles screen.
+- Add promotions and basic role commands
+- Fix breaking in dev env
