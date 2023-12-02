@@ -10,11 +10,6 @@ val common: Configuration by configurations.creating {
 
 loom {
     accessWidenerPath.set(project(":common").loom.accessWidenerPath)
-
-    neoForge { // TODO: Not sure if this is still needed since it doesn't exist anymore
-//        convertAccessWideners.set(true)
-//        extraAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
-    }
 }
 
 dependencies {

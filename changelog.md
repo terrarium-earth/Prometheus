@@ -1,1 +1,2 @@
-- Fix issue where cooldown was passed as the RTP distance in roles screen.
+- 1.20.2
+- Fix nametag displaying in invsee screen when close to spawn
