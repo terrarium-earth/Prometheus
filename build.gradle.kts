@@ -118,6 +118,8 @@ subprojects {
             "shadowJar"(ShadowJar::class) {
                 archiveClassifier.set("dev-shadow")
                 configurations = listOf(shadowCommon)
+
+                exclude("architectury.common.json")
             }
 
             "remapJar"(RemapJarTask::class) {
