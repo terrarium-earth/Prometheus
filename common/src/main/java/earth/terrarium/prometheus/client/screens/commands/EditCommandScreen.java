@@ -26,7 +26,6 @@ import java.util.Set;
 
 public class EditCommandScreen extends BaseCursorScreen {
 
-    public static final ResourceLocation HEADING = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/heading.png");
     private static final Font FONT = new Font(id -> ((FontManagerAccessor) ((MinecraftAccessor) Minecraft.getInstance()).getFontManager()).getFontSets().get(new ResourceLocation(Prometheus.MOD_ID, "monocraft")), false);
 
     private static final WidgetSprites ADD_BUTTON_SPRITES = new WidgetSprites(
@@ -120,25 +119,14 @@ public class EditCommandScreen extends BaseCursorScreen {
         })).setTooltip(Tooltip.create(Component.literal("Close")));
     }
 
-    // TODO: Don't know what happened to blitRepeating
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-         graphics.fill(0, 0, width, height, 0xD0000000);
-//        graphics.blitRepeating(HEADING, 0, 0, this.width, 15, 0, 0, 128, 15);
+        graphics.fill(0, 0, width, height, 0xD0000000);
+        graphics.blitSprite(new ResourceLocation(Prometheus.MOD_ID, "commands/header"), 0, 0, this.width, 15);
         int sidebar = (int) (this.width * 0.25f) - 2;
-//        graphics.blitRepeating(HEADING, sidebar, 15, 2, this.height - 15, 243, 0, 2, 256);
-//        graphics.blitRepeating(HEADING,
-//            0, 15,
-//            sidebar, this.height - 15,
-//            0, 15,
-//            122, 241
-//        );
-//        graphics.blitRepeating(HEADING,
-//            sidebar + 2, 15,
-//            this.width - sidebar, this.height - 15,
-//            122, 15,
-//            121, 241
-//        );
+        graphics.blitSprite(new ResourceLocation(Prometheus.MOD_ID, "commands/divider"), sidebar, 0, 2, this.height);
+        graphics.blitSprite(new ResourceLocation(Prometheus.MOD_ID, "commands/light_background"), 0, 15, sidebar, this.height - 15);
+        graphics.blitSprite(new ResourceLocation(Prometheus.MOD_ID, "commands/dark_background"), sidebar + 2, 15, this.width - sidebar - 2, this.height - 15);
         int textX = (int) (this.width * 0.25f) + ((int) (this.width * 0.75f) / 2) - font.width("Command - " + command) / 2;
         graphics.drawString(
             font,
