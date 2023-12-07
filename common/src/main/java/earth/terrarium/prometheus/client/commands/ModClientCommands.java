@@ -8,7 +8,6 @@ import earth.terrarium.prometheus.common.menus.content.location.LocationType;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.network.messages.server.OpenCommandPacket;
 import earth.terrarium.prometheus.common.network.messages.server.OpenLocationPacket;
-import earth.terrarium.prometheus.common.network.messages.server.roles.OpenRolesPacket;
 import net.minecraft.network.chat.Component;
 
 public class ModClientCommands {
@@ -18,12 +17,6 @@ public class ModClientCommands {
             NetworkHandler.CHANNEL.sendToServer(new OpenCommandPacket(""));
             return 1;
         }));
-        dispatcher.register(builder.literal("roles")
-            .requires(source -> builder.hasPermission(source, 2))
-            .executes(context -> {
-                NetworkHandler.CHANNEL.sendToServer(new OpenRolesPacket());
-                return 1;
-            }));
         dispatcher.register(builder.literal("warps")
             .executes(context -> {
                 NetworkHandler.CHANNEL.sendToServer(new OpenLocationPacket(LocationType.WARP));

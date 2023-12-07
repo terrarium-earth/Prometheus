@@ -1,2 +1,1 @@
-- 1.20.2
-- Fix nametag displaying in invsee screen when close to spawn
+- Fix conflicts between server and client commands of same name
