@@ -1,2 +1,1 @@
-- Add promotions and basic role commands
-- Fix breaking in dev env
+- Fix conflicts between server and client commands of same name
