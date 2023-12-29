@@ -68,7 +68,7 @@ public class HomeHandler extends SaveHandler {
             return;
         }
 
-        ModUtils.teleport(player, level, pos.pos().getX(), pos.pos().getY(), pos.pos().getZ(), player.getYRot(), player.getXRot());
+        ModUtils.teleport(player, level, pos.pos().getX() + 0.5, pos.pos().getY(), pos.pos().getZ() + 0.5, player.getYRot(), player.getXRot());
     }
 
     public static boolean teleport(ServerPlayer player) {
