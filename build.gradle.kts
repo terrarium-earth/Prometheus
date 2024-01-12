@@ -38,7 +38,8 @@ subprojects {
     }
 
     repositories {
-        maven(url = "https://maven.resourcefulbees.com/repository/maven-public/")
+        mavenCentral()
+        maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
         maven(url = "https://maven.neoforged.net/releases/")
         maven {
             url = uri("https://jitpack.io")
@@ -62,25 +63,18 @@ subprojects {
 
             officialMojangMappings()
 
-            parchment(create(group = "org.parchmentmc.data", name = "parchment-$minecraftVersion", version = parchmentVersion))
+            parchment(create(group = "org.parchmentmc.data", name = "parchment-1.20.3", version = parchmentVersion))
         })
 
-        compileOnly(group = "com.teamresourceful", name = "yabn", version = "1.0.3")
         "modApi"(group = "com.teamresourceful.resourcefullib", name = "resourcefullib-$modLoader-$minecraftVersion", version = resourcefulLibVersion)
-
-        implementation("annotationProcessor"(group = "com.github.llamalad7.mixinextras", name = "mixinextras-common", version = mixinExtrasVersion))
         if (!isCommon) {
-            "annotationProcessor"(group = "com.github.llamalad7.mixinextras", name = "mixinextras-$modLoader", version = mixinExtrasVersion).apply {
-                implementation(this)
-                "include"(this)
-            }
-
-//            "modRuntimeOnly"("me.shedaniel:RoughlyEnoughItems-$modLoader:$reiVersion")
+            "modRuntimeOnly"("me.shedaniel:RoughlyEnoughItems-$modLoader:$reiVersion")
             "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api-$modLoader:$reiVersion")
             "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-default-plugin-$modLoader:$reiVersion")
         } else {
             "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api:$reiVersion")
             "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-default-plugin:$reiVersion")
+            implementation("annotationProcessor"(group = "io.github.llamalad7", name = "mixinextras-common", version = mixinExtrasVersion))
         }
     }
 

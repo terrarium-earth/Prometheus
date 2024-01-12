@@ -5,10 +5,11 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import earth.terrarium.prometheus.common.handlers.promotions.Promotion;
 import earth.terrarium.prometheus.common.handlers.promotions.PromotionsHandler;
-import net.minecraft.commands.CommandRuntimeException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ComponentArgument;
@@ -39,19 +40,19 @@ public class PromotionCommand {
             .then(
                 Commands.argument("id", StringArgumentType.word())
                     .then(Commands.argument("time", TimeArgument.time(20))
-                    .executes(context -> {
-                        String name = StringArgumentType.getString(context, "id");
-                        PromotionsHandler.addPromotion(
-                            context.getSource().getLevel(),
-                            name,
-                            Promotion.fromId(name, IntegerArgumentType.getInteger(context, "time"))
-                        );
-                        context.getSource().sendSuccess(
-                            () -> CommonUtils.serverTranslatable("prometheus.promotions.created", name),
-                            true
-                        );
-                        return 1;
-                    }))
+                        .executes(context -> {
+                            String name = StringArgumentType.getString(context, "id");
+                            PromotionsHandler.addPromotion(
+                                context.getSource().getLevel(),
+                                name,
+                                Promotion.fromId(name, IntegerArgumentType.getInteger(context, "time"))
+                            );
+                            context.getSource().sendSuccess(
+                                () -> CommonUtils.serverTranslatable("prometheus.promotions.created", name),
+                                true
+                            );
+                            return 1;
+                        }))
             );
     }
 
@@ -105,7 +106,7 @@ public class PromotionCommand {
                     Level level = context.getSource().getLevel();
                     String id = StringArgumentType.getString(context, "id");
                     Component name = ComponentArgument.getComponent(context, "name");
-                    Promotion promotion =  getPromotion(context);
+                    Promotion promotion = getPromotion(context);
                     Promotion newPromotion = new Promotion(name, promotion.time(), promotion.roles());
                     PromotionsHandler.addPromotion(level, id, newPromotion);
                     context.getSource().sendSuccess(
@@ -125,7 +126,7 @@ public class PromotionCommand {
                     Level level = context.getSource().getLevel();
                     String id = StringArgumentType.getString(context, "id");
                     UUID role = UuidArgument.getUuid(context, "role");
-                    Promotion promotion =  getPromotion(context);
+                    Promotion promotion = getPromotion(context);
                     List<UUID> roles = new ArrayList<>(promotion.roles());
                     if (add) {
                         roles.add(role);
@@ -150,7 +151,7 @@ public class PromotionCommand {
                     Level level = context.getSource().getLevel();
                     String id = StringArgumentType.getString(context, "id");
                     int time = IntegerArgumentType.getInteger(context, "time");
-                    Promotion promotion =  getPromotion(context);
+                    Promotion promotion = getPromotion(context);
                     Promotion newPromotion = new Promotion(promotion.name(), time, promotion.roles());
                     PromotionsHandler.addPromotion(level, id, newPromotion);
                     context.getSource().sendSuccess(
@@ -162,11 +163,11 @@ public class PromotionCommand {
             );
     }
 
-    private static Promotion getPromotion(CommandContext<CommandSourceStack> context) {
+    private static Promotion getPromotion(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         String name = StringArgumentType.getString(context, "id");
         Promotion promotion = PromotionsHandler.getPromotion(context.getSource().getLevel(), name);
         if (promotion == null) {
-            throw new CommandRuntimeException(CommonUtils.serverTranslatable("prometheus.promotions.does_not_exist", name));
+            throw new SimpleCommandExceptionType(CommonUtils.serverTranslatable("prometheus.promotions.does_not_exist", name)).create();
         }
         return promotion;
     }

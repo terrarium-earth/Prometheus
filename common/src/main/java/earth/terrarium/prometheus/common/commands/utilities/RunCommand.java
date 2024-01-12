@@ -3,6 +3,8 @@ package earth.terrarium.prometheus.common.commands.utilities;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
@@ -11,7 +13,6 @@ import earth.terrarium.prometheus.common.handlers.commands.DynamicCommand;
 import earth.terrarium.prometheus.common.handlers.commands.DynamicCommandException;
 import earth.terrarium.prometheus.common.handlers.commands.DynamicCommandHandler;
 import net.minecraft.Optionull;
-import net.minecraft.commands.CommandRuntimeException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -36,7 +37,7 @@ public class RunCommand {
                 .executes(context -> runArgLessCommand(dispatcher, context))));
     }
 
-    private static int runArgCommand(CommandDispatcher<CommandSourceStack> dispatcher, CommandContext<CommandSourceStack> context) {
+    private static int runArgCommand(CommandDispatcher<CommandSourceStack> dispatcher, CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         String id = StringArgumentType.getString(context, "id");
         if (checkPermissions(context.getSource(), id)) {
             context.getSource().sendFailure(ConstantComponents.NO_PERMISSION);
@@ -49,11 +50,11 @@ public class RunCommand {
         try {
             return DynamicCommand.execute(dispatcher, context.getSource(), username, args, output);
         } catch (DynamicCommandException e) {
-            throw new CommandRuntimeException(Component.literal(e.getMessage()));
+            throw new SimpleCommandExceptionType(Component.literal(e.getMessage())).create();
         }
     }
 
-    private static int runArgLessCommand(CommandDispatcher<CommandSourceStack> dispatcher, CommandContext<CommandSourceStack> context) {
+    private static int runArgLessCommand(CommandDispatcher<CommandSourceStack> dispatcher, CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         String id = StringArgumentType.getString(context, "id");
         if (checkPermissions(context.getSource(), id)) {
             context.getSource().sendFailure(ConstantComponents.NO_PERMISSION);
@@ -65,7 +66,7 @@ public class RunCommand {
         try {
             return DynamicCommand.execute(dispatcher, context.getSource(), username, new String[0], output);
         } catch (DynamicCommandException e) {
-            throw new CommandRuntimeException(Component.literal(e.getMessage()));
+            throw new SimpleCommandExceptionType(Component.literal(e.getMessage())).create();
         }
     }
 
