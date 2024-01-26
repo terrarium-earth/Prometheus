@@ -1,1 +1,1 @@
-- Fix conflicts between server and client commands of same name
+- Updated to 1.20.4
