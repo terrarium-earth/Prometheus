@@ -6,8 +6,8 @@ import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.menus.content.RolesContent;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.server.roles.AddRolePacket;
-import earth.terrarium.prometheus.common.network.messages.server.roles.OpenRolePacket;
+import earth.terrarium.prometheus.common.network.messages.server.roles.ServerboundAddRolePacket;
+import earth.terrarium.prometheus.common.network.messages.server.roles.ServerboundOpenRolePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -115,7 +115,7 @@ public class RolesScreen extends BaseCursorScreen {
         this.undoButton.active = false;
 
         this.addRenderableWidget(button(leftPos + 157, topPos + 27, 12, 12, PLUS_BUTTON_SPRITES, button ->
-                NetworkHandler.CHANNEL.sendToServer(new AddRolePacket())
+                NetworkHandler.CHANNEL.sendToServer(new ServerboundAddRolePacket())
             , ConstantComponents.ADD)).active = !this.content.hasError();
 
         this.deleteButton = this.addRenderableWidget(button(leftPos + 157, topPos + 43, 12, 12, MINUS_BUTTON_SPRITES, button -> {
@@ -149,7 +149,7 @@ public class RolesScreen extends BaseCursorScreen {
             if (this.saveButton.active) {
                 this.timeSinceLastSaveWarning = System.currentTimeMillis();
             } else if (Minecraft.getInstance().gameMode != null && this.selected != null) {
-                NetworkHandler.CHANNEL.sendToServer(new OpenRolePacket(this.selected.id()));
+                NetworkHandler.CHANNEL.sendToServer(new ServerboundOpenRolePacket(this.selected.id()));
             }
         }, ConstantComponents.EDIT));
         this.editButton.active = false;

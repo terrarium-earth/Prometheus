@@ -2,7 +2,7 @@ package earth.terrarium.prometheus.common.handlers.heading;
 
 import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.client.UpdateHeadingPacket;
+import earth.terrarium.prometheus.common.network.messages.client.ClientboundUpdateHeadingPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
@@ -50,22 +50,22 @@ public class HeadingEvents {
         if (server == null) return;
         List<Player> players = new ArrayList<>();
         for (ServerPlayer serverPlayer : server.getPlayerList().getPlayers()) {
-            if (NetworkHandler.CHANNEL.canSendPlayerPackets(serverPlayer)) {
+            if (NetworkHandler.CHANNEL.canSendToPlayer(serverPlayer, ClientboundUpdateHeadingPacket.TYPE)) {
                 players.add(serverPlayer);
             }
         }
-        NetworkHandler.CHANNEL.sendToPlayers(new UpdateHeadingPacket(List.of(new HeadingData(player.getUUID(), heading, text))), players);
+        NetworkHandler.CHANNEL.sendToPlayers(new ClientboundUpdateHeadingPacket(List.of(new HeadingData(player.getUUID(), heading, text))), players);
     }
 
     public static void sendAllHeadings(ServerPlayer player) {
         if (player.getServer() == null) return;
-        if (!NetworkHandler.CHANNEL.canSendPlayerPackets(player)) return;
+        if (!NetworkHandler.CHANNEL.canSendToPlayer(player, ClientboundUpdateHeadingPacket.TYPE)) return;
         List<HeadingData> headings = new ArrayList<>();
         player.getServer().getPlayerList().getPlayers().forEach(p -> {
             if (p instanceof HeadingEntityHook hook) {
                 headings.add(new HeadingData(p.getUUID(), hook.prometheus$getHeading(), hook.prometheus$getHeadingText()));
             }
         });
-        NetworkHandler.CHANNEL.sendToPlayer(new UpdateHeadingPacket(headings), player);
+        NetworkHandler.CHANNEL.sendToPlayer(new ClientboundUpdateHeadingPacket(headings), player);
     }
 }

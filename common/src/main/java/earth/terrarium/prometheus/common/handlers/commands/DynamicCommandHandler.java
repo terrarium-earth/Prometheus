@@ -8,10 +8,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DynamicCommandHandler extends SaveHandler {
 
@@ -31,7 +28,7 @@ public class DynamicCommandHandler extends SaveHandler {
         handle(level, DynamicCommandHandler::read, handler -> handler.commands.put(name, command));
     }
 
-    public static Collection<String> getCommands(ServerLevel level) {
+    public static Set<String> getCommands(ServerLevel level) {
         return read(level).commands.keySet();
     }
 

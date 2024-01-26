@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.Window;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.menus.content.location.LocationType;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.server.AddLocationPacket;
+import earth.terrarium.prometheus.common.network.messages.server.ServerboundAddLocationPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -40,7 +40,7 @@ public class AddLocationScreen extends Screen {
                 .build()
         );
         addRenderableWidget(
-            Button.builder(ConstantComponents.SAVE, button -> NetworkHandler.CHANNEL.sendToServer(new AddLocationPacket(type, text.getValue())))
+            Button.builder(ConstantComponents.SAVE, button -> NetworkHandler.CHANNEL.sendToServer(new ServerboundAddLocationPacket(type, text.getValue())))
                 .bounds((int) ((width / 2f) + 20), (int) ((height / 2f) + 10), 100, 20)
                 .build()
         );

@@ -13,7 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ServerboundCustomPayloadPacket.class)
 public class ServerboundCustomPayloadPacketMixin {
 
-    @Inject(method = "readPayload", at = @At("HEAD"), cancellable = true)
+    @Inject(
+        method = "readPayload(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/network/FriendlyByteBuf;)Lnet/minecraft/network/protocol/common/custom/CustomPacketPayload;",
+        at = @At("HEAD"),
+        cancellable = true)
     private static void prometheus$readPayload(ResourceLocation id, FriendlyByteBuf buffer, CallbackInfoReturnable<CustomPacketPayload> cir) {
         if (id.equals(MusicSongPacketPayload.ID)) {
             cir.setReturnValue(new MusicSongPacketPayload(buffer));

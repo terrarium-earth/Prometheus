@@ -4,8 +4,8 @@ import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.client.screens.widgets.editor.TextEditor;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.server.OpenCommandPacket;
-import earth.terrarium.prometheus.common.network.messages.server.SaveCommandPacket;
+import earth.terrarium.prometheus.common.network.messages.server.ServerboundOpenCommandPacket;
+import earth.terrarium.prometheus.common.network.messages.server.ServerboundSaveCommandPacket;
 import earth.terrarium.prometheus.mixin.client.accessors.FontManagerAccessor;
 import earth.terrarium.prometheus.mixin.client.accessors.MinecraftAccessor;
 import net.minecraft.client.Minecraft;
@@ -79,7 +79,7 @@ public class EditCommandScreen extends BaseCursorScreen {
         editor.setContent(String.join("\n", lines));
         CommandsList list = addRenderableWidget(new CommandsList(0, 15, sidebar, this.height - 15, command -> {
             if (command != null && !command.equals(this.command)) {
-                NetworkHandler.CHANNEL.sendToServer(new OpenCommandPacket(command));
+                NetworkHandler.CHANNEL.sendToServer(new ServerboundOpenCommandPacket(command));
             }
         }));
         list.update(this.command, commands);
@@ -95,20 +95,20 @@ public class EditCommandScreen extends BaseCursorScreen {
             Set<String> commands = this.commands.stream().map(String::toLowerCase).collect(java.util.stream.Collectors.toSet());
             boolean invalid = commands.contains(this.addBox.getValue().toLowerCase()) || this.addBox.getValue().isEmpty();
             if (!invalid) {
-                NetworkHandler.CHANNEL.sendToServer(new OpenCommandPacket(this.addBox.getValue().toLowerCase()));
+                NetworkHandler.CHANNEL.sendToServer(new ServerboundOpenCommandPacket(this.addBox.getValue().toLowerCase()));
             }
         })).setTooltip(Tooltip.create(Component.literal("Add")));
 
         addRenderableWidget(new ImageButton(this.width - 38, 1, 11, 11, UNDO_BUTTON_SPRITES, (button) -> {
             editor.setContent(String.join("\n", lines));
             if (list.getSelected().isDeleted()) {
-                NetworkHandler.CHANNEL.sendToServer(new SaveCommandPacket(command, editor.lines()));
+                NetworkHandler.CHANNEL.sendToServer(new ServerboundSaveCommandPacket(command, editor.lines()));
                 list.getSelected().setDeleted(false);
             }
         })).setTooltip(Tooltip.create(Component.literal("Undo")));
 
         addRenderableWidget(new ImageButton(this.width - 25, 1, 11, 11, SAVE_BUTTON_SPRITES, (button) -> {
-            NetworkHandler.CHANNEL.sendToServer(new SaveCommandPacket(command, editor.lines()));
+            NetworkHandler.CHANNEL.sendToServer(new ServerboundSaveCommandPacket(command, editor.lines()));
             list.add(command);
         })).setTooltip(Tooltip.create(Component.literal("Save")));
 

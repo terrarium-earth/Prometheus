@@ -8,7 +8,7 @@ plugins {
     java
     id("maven-publish")
     id("com.teamresourceful.resourcefulgradle") version "0.0.+"
-    id("dev.architectury.loom") version "1.4-SNAPSHOT" apply false
+    id("dev.architectury.loom") version "1.5-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
 }
@@ -68,7 +68,7 @@ subprojects {
 
         "modApi"(group = "com.teamresourceful.resourcefullib", name = "resourcefullib-$modLoader-$minecraftVersion", version = resourcefulLibVersion)
         if (!isCommon) {
-            "modRuntimeOnly"("me.shedaniel:RoughlyEnoughItems-$modLoader:$reiVersion")
+//            "modRuntimeOnly"("me.shedaniel:RoughlyEnoughItems-$modLoader:$reiVersion")
             "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api-$modLoader:$reiVersion")
             "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-default-plugin-$modLoader:$reiVersion")
         } else {

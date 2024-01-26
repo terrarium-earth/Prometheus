@@ -1,8 +1,8 @@
 package earth.terrarium.prometheus.common.network.messages.server;
 
-import com.teamresourceful.resourcefullib.common.networking.base.Packet;
-import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
-import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
+import com.teamresourceful.resourcefullib.common.network.Packet;
+import com.teamresourceful.resourcefullib.common.network.base.PacketType;
+import com.teamresourceful.resourcefullib.common.network.base.ServerboundPacketType;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.common.commands.utilities.RtpCommand;
@@ -10,36 +10,43 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.levelgen.Heightmap;
 
-public record GoSpawnPacket() implements Packet<GoSpawnPacket> {
+import java.util.function.Consumer;
 
-    public static final ResourceLocation ID = new ResourceLocation(Prometheus.MOD_ID, "go_spawn");
-    public static final PacketHandler<GoSpawnPacket> HANDLER = new Handler();
+public record ServerboundGoSpawnPacket() implements Packet<ServerboundGoSpawnPacket> {
 
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
+    public static final ServerboundPacketType<ServerboundGoSpawnPacket> TYPE = new Type();
 
     @Override
-    public PacketHandler<GoSpawnPacket> getHandler() {
-        return HANDLER;
+    public PacketType<ServerboundGoSpawnPacket> type() {
+        return TYPE;
     }
 
-    private static class Handler implements PacketHandler<GoSpawnPacket> {
+    private static class Type implements ServerboundPacketType<ServerboundGoSpawnPacket> {
 
         @Override
-        public void encode(GoSpawnPacket message, FriendlyByteBuf buffer) {}
-
-        @Override
-        public GoSpawnPacket decode(FriendlyByteBuf buffer) {
-            return new GoSpawnPacket();
+        public Class<ServerboundGoSpawnPacket> type() {
+            return ServerboundGoSpawnPacket.class;
         }
 
         @Override
-        public PacketContext handle(GoSpawnPacket message) {
-            return (player, level) -> {
+        public ResourceLocation id() {
+            return new ResourceLocation(Prometheus.MOD_ID, "go_spawn");
+        }
+
+        @Override
+        public void encode(ServerboundGoSpawnPacket message, FriendlyByteBuf buffer) {}
+
+        @Override
+        public ServerboundGoSpawnPacket decode(FriendlyByteBuf buffer) {
+            return new ServerboundGoSpawnPacket();
+        }
+
+        @Override
+        public Consumer<Player> handle(ServerboundGoSpawnPacket message) {
+            return player -> {
                 if (player instanceof ServerPlayer serverPlayer && !PermissionApi.API.getPermission(player, "commands.spawn").isFalse()) {
                     final BlockPos originalPos = player.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, player.level().getSharedSpawnPos());
                     BlockPos pos = RtpCommand.tp(originalPos, serverPlayer, 10, 0);

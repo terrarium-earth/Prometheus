@@ -6,9 +6,9 @@ import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
 import earth.terrarium.prometheus.common.menus.content.RoleEditContent;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.server.roles.OpenRolePacket;
-import earth.terrarium.prometheus.common.network.messages.server.roles.OpenRolesPacket;
-import earth.terrarium.prometheus.common.network.messages.server.roles.SaveRolePacket;
+import earth.terrarium.prometheus.common.network.messages.server.roles.ServerboundOpenRolePacket;
+import earth.terrarium.prometheus.common.network.messages.server.roles.ServerboundOpenRolesPacket;
+import earth.terrarium.prometheus.common.network.messages.server.roles.ServerboundSaveRolePacket;
 import earth.terrarium.prometheus.common.roles.CosmeticOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -72,7 +72,7 @@ public class RoleEditScreen extends BaseCursorScreen {
 
         this.list = addRenderableWidget(new QuickEditList(leftPos + 8, topPos + 29, 42, 180, 20, item -> {
             if (item != null && !item.id().equals(this.content.selectedId())) {
-                NetworkHandler.CHANNEL.sendToServer(new OpenRolePacket(item.id()));
+                NetworkHandler.CHANNEL.sendToServer(new ServerboundOpenRolePacket(item.id()));
             }
         }));
         this.list.update(this.content.roles());
@@ -92,7 +92,7 @@ public class RoleEditScreen extends BaseCursorScreen {
 
         addRenderableWidget(new ImageButton(leftPos + 7, topPos + 7, 17, 17, BACK_BUTTON_SPRITES, button -> {
             if (Minecraft.getInstance().gameMode != null) {
-                NetworkHandler.CHANNEL.sendToServer(new OpenRolesPacket());
+                NetworkHandler.CHANNEL.sendToServer(new ServerboundOpenRolesPacket());
             }
         })).setTooltip(Tooltip.create(ConstantComponents.BACK));
 
@@ -102,7 +102,7 @@ public class RoleEditScreen extends BaseCursorScreen {
             if (index != -1) {
                 this.content.roles().set(index, new RoleEntry(this.content.selectedId(), this.content.selected()));
             }
-            NetworkHandler.CHANNEL.sendToServer(new SaveRolePacket(this.content.selectedId(), this.content.selected()));
+            NetworkHandler.CHANNEL.sendToServer(new ServerboundSaveRolePacket(this.content.selectedId(), this.content.selected()));
             this.list.update(this.content.roles());
         })).setTooltip(Tooltip.create(ConstantComponents.SAVE));
     }

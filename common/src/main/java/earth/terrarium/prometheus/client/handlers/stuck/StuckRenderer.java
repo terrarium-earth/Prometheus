@@ -3,7 +3,7 @@ package earth.terrarium.prometheus.client.handlers.stuck;
 import earth.terrarium.prometheus.client.handlers.ClientOptionHandler;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.server.GoSpawnPacket;
+import earth.terrarium.prometheus.common.network.messages.server.ServerboundGoSpawnPacket;
 import earth.terrarium.prometheus.mixin.client.accessors.ProgressScreenAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -28,7 +28,7 @@ public class StuckRenderer {
             PlainTextButton button = new PlainTextButton(
                 (screen.width - width) / 2, 4, width, 12,
                 ConstantComponents.TP_PANIC,
-                (b) -> NetworkHandler.CHANNEL.sendToServer(new GoSpawnPacket()), Minecraft.getInstance().font
+                (b) -> NetworkHandler.CHANNEL.sendToServer(new ServerboundGoSpawnPacket()), Minecraft.getInstance().font
             );
             return List.of(button);
         }

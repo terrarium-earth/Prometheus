@@ -6,7 +6,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.server.OpenMemberRolesPacket;
+import earth.terrarium.prometheus.common.network.messages.client.screens.ClientboundOpenMemberRolesScreenPacket;
+import earth.terrarium.prometheus.common.network.messages.server.ServerboundOpenMemberRolesPacket;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMaps;
 import net.minecraft.Optionull;
 import net.minecraft.commands.CommandSourceStack;
@@ -29,12 +30,12 @@ public class MemberCommand {
                 .then(remove())
                 .executes(context -> {
                     var source = context.getSource();
-                    if (source.isPlayer() && NetworkHandler.CHANNEL.canSendPlayerPackets(source.getPlayer())) {
+                    if (source.isPlayer() && NetworkHandler.CHANNEL.canSendToPlayer(source.getPlayer(), ClientboundOpenMemberRolesScreenPacket.TYPE)) {
                         GameProfile profile = Optionull.first(GameProfileArgument.getGameProfiles(context, "player"));
                         Objects.requireNonNull(profile, "Player cannot be null");
-                        OpenMemberRolesPacket packet = new OpenMemberRolesPacket(profile.getId());
+                        ServerboundOpenMemberRolesPacket packet = new ServerboundOpenMemberRolesPacket(profile.getId());
                         ServerPlayer player = source.getPlayerOrException();
-                        packet.getHandler().handle(packet).apply(player, player.level());
+                        ServerboundOpenMemberRolesPacket.TYPE.handle(packet).accept(player);
                     } else {
                         context.getSource().sendSystemMessage(Component.literal("You cannot use this command without the mod on your client."));
                     }

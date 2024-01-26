@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import com.teamresourceful.resourcefullib.client.utils.CursorUtils;
 import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.server.DeleteCommandPacket;
+import earth.terrarium.prometheus.common.network.messages.server.ServerboundDeleteCommandPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -88,7 +88,7 @@ public class CommandsList extends SelectionList<CommandsList.CommandEntry> {
         public boolean mouseClicked(double d, double e, int i) {
             if (i == 0 && d >= lastWidth - 18 && d <= lastWidth - 5) {
                 this.deleted = true;
-                NetworkHandler.CHANNEL.sendToServer(new DeleteCommandPacket(command));
+                NetworkHandler.CHANNEL.sendToServer(new ServerboundDeleteCommandPacket(command));
                 return true;
             }
             return false;

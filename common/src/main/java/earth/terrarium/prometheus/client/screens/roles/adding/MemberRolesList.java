@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefullib.client.utils.CursorUtils;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.menus.content.MemberRolesContent;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.server.roles.MemberRolesPacket;
+import earth.terrarium.prometheus.common.network.messages.server.roles.ServerboundMemberRolesPacket;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minecraft.client.Minecraft;
@@ -58,7 +58,7 @@ public class MemberRolesList extends SelectionList<MemberRolesList.Entry> {
             changes.put(child.id, child.selected);
             child.original = child.selected;
         }
-        NetworkHandler.CHANNEL.sendToServer(new MemberRolesPacket(target, changes));
+        NetworkHandler.CHANNEL.sendToServer(new ServerboundMemberRolesPacket(target, changes));
 
     }
 

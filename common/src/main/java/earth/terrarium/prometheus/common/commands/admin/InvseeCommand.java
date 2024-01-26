@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import earth.terrarium.prometheus.common.menus.InvseeMenu;
 import earth.terrarium.prometheus.common.menus.WrappedPlayerContainer;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.client.screens.OpenInvseeScreenPacket;
+import earth.terrarium.prometheus.common.network.messages.client.screens.ClientboundOpenInvseeScreenPacket;
 import earth.terrarium.prometheus.mixin.common.accessors.ServerPlayerAccessor;
 import earth.terrarium.prometheus.mixin.common.accessors.ServerPlayerInvoker;
 import net.minecraft.commands.CommandSourceStack;
@@ -39,7 +39,7 @@ public class InvseeCommand {
             .then(Commands.argument("player", EntityArgument.player())
                 .executes(context -> {
                     ServerPlayer opener = context.getSource().getPlayerOrException();
-                    if (!NetworkHandler.CHANNEL.canSendPlayerPackets(opener)) {
+                    if (!NetworkHandler.CHANNEL.canSendToPlayer(opener, ClientboundOpenInvseeScreenPacket.TYPE)) {
                         context.getSource().sendFailure(Component.literal("You cant use invsee unless you have the client installed"));
                         return 0;
                     }
@@ -55,7 +55,7 @@ public class InvseeCommand {
                     int counter = ((ServerPlayerAccessor)opener).getContainerCounter();
 
                     NetworkHandler.CHANNEL.sendToPlayer(
-                        new OpenInvseeScreenPacket(
+                        new ClientboundOpenInvseeScreenPacket(
                             counter,
                             player.getInventory().getContainerSize(),
                             player.getUUID(),

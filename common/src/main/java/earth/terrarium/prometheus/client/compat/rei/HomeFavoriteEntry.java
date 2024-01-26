@@ -4,7 +4,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Lifecycle;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.server.GoHomePacket;
+import earth.terrarium.prometheus.common.network.messages.server.ServerboundGoHomePacket;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.favorites.FavoriteEntry;
 import me.shedaniel.rei.api.client.favorites.FavoriteEntryType;
@@ -52,7 +52,7 @@ public class HomeFavoriteEntry extends FavoriteEntry {
     public boolean doAction(int button) {
         if (button == 0) {
             Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-            NetworkHandler.CHANNEL.sendToServer(new GoHomePacket());
+            NetworkHandler.CHANNEL.sendToServer(new ServerboundGoHomePacket());
             return true;
         }
         return false;

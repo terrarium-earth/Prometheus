@@ -6,7 +6,7 @@ import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import earth.terrarium.prometheus.common.menus.content.RolesContent;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.client.screens.OpenRolesScreenPacket;
+import earth.terrarium.prometheus.common.network.messages.client.screens.ClientboundOpenRolesScreenPacket;
 import earth.terrarium.prometheus.common.roles.CosmeticOptions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -32,7 +32,7 @@ public class RolesCommand {
             .requires(source -> source.hasPermission(2))
             .then(Commands.literal("open").executes(context -> {
                 var player = context.getSource().getPlayerOrException();
-                if (!NetworkHandler.CHANNEL.canSendPlayerPackets(player)) {
+                if (!NetworkHandler.CHANNEL.canSendToPlayer(player, ClientboundOpenRolesScreenPacket.TYPE)) {
                     context.getSource().sendSystemMessage(Component.literal("You cannot use this command without the mod on your client."));
                     return 1;
                 }
@@ -40,7 +40,7 @@ public class RolesCommand {
                 List<RoleEntry> roles = RoleHandler.roles(player.level()).roles();
                 for (RoleEntry role : roles) {
                     if (editable.contains(role.id())) {
-                        NetworkHandler.CHANNEL.sendToPlayer(new OpenRolesScreenPacket(new RolesContent(roles, roles.indexOf(role))), player);
+                        NetworkHandler.CHANNEL.sendToPlayer(new ClientboundOpenRolesScreenPacket(new RolesContent(roles, roles.indexOf(role))), player);
                         return 1;
                     }
                 }

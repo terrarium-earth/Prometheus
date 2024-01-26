@@ -3,7 +3,7 @@ package earth.terrarium.prometheus.common.menus.content;
 import earth.terrarium.prometheus.common.handlers.role.Role;
 import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.server.roles.ChangeRolesPacket;
+import earth.terrarium.prometheus.common.network.messages.server.roles.ServerboundChangeRolesPacket;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class RolesContent {
         List<UUID> ids = new ArrayList<>();
         uneditable.forEach(pair -> ids.add(pair.id()));
         roles.forEach(pair -> ids.add(pair.id()));
-        NetworkHandler.CHANNEL.sendToServer(new ChangeRolesPacket(ids));
+        NetworkHandler.CHANNEL.sendToServer(new ServerboundChangeRolesPacket(ids));
     }
 
     public boolean areRolesDifferent() {

@@ -1,10 +1,10 @@
 package earth.terrarium.prometheus.common.network.messages.server.roles;
 
 import com.mojang.logging.LogUtils;
+import com.teamresourceful.resourcefullib.common.network.Packet;
+import com.teamresourceful.resourcefullib.common.network.base.PacketType;
+import com.teamresourceful.resourcefullib.common.network.base.ServerboundPacketType;
 import com.teamresourceful.resourcefullib.common.networking.PacketHelper;
-import com.teamresourceful.resourcefullib.common.networking.base.Packet;
-import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
-import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.role.Role;
@@ -12,47 +12,53 @@ import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import org.slf4j.Logger;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
-public record SaveRolePacket(UUID id, Role role) implements Packet<SaveRolePacket> {
+public record ServerboundSaveRolePacket(UUID id, Role role) implements Packet<ServerboundSaveRolePacket> {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final PacketHandler<SaveRolePacket> HANDLER = new Handler();
-    public static final ResourceLocation ID = new ResourceLocation(Prometheus.MOD_ID, "save_role");
+    public static final ServerboundPacketType<ServerboundSaveRolePacket> TYPE = new Type();
 
     @Override
-    public ResourceLocation getID() {
-        return ID;
+    public PacketType<ServerboundSaveRolePacket> type() {
+        return TYPE;
     }
 
-    @Override
-    public PacketHandler<SaveRolePacket> getHandler() {
-        return HANDLER;
-    }
-
-    private static class Handler implements PacketHandler<SaveRolePacket> {
+    private static class Type implements ServerboundPacketType<ServerboundSaveRolePacket> {
 
         @Override
-        public void encode(SaveRolePacket message, FriendlyByteBuf buffer) {
-            PacketHelper.writeWithYabn(buffer, Role.CODEC, message.role(), true);
-            buffer.writeUUID(message.id());
+        public Class<ServerboundSaveRolePacket> type() {
+            return ServerboundSaveRolePacket.class;
         }
 
         @Override
-        public SaveRolePacket decode(FriendlyByteBuf buffer) {
-            Role role = PacketHelper.readWithYabn(buffer, Role.CODEC, true).get()
+        public ResourceLocation id() {
+            return new ResourceLocation(Prometheus.MOD_ID, "save_role");
+        }
+
+        @Override
+        public void encode(ServerboundSaveRolePacket message, FriendlyByteBuf buf) {
+            PacketHelper.writeWithYabn(buf, Role.CODEC, message.role(), true);
+            buf.writeUUID(message.id());
+        }
+
+        @Override
+        public ServerboundSaveRolePacket decode(FriendlyByteBuf buf) {
+            Role role = PacketHelper.readWithYabn(buf, Role.CODEC, true).get()
                 .ifRight(error -> LOGGER.error("Error reading role: {}", error))
                 .left()
                 .orElse(null);
-            return new SaveRolePacket(buffer.readUUID(), role);
+            return new ServerboundSaveRolePacket(buf.readUUID(), role);
         }
 
         @Override
-        public PacketContext handle(SaveRolePacket message) {
-            return (player, level) -> {
+        public Consumer<Player> handle(ServerboundSaveRolePacket message) {
+            return player -> {
                 if (player instanceof ServerPlayer serverPlayer && RoleHandler.canModifyRoles(player)) {
                     if (RoleHandler.getEditableRoles(player).contains(message.id())) {
                         RoleHandler.setRole(serverPlayer, message.id(), message.role());

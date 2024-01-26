@@ -13,7 +13,7 @@ import earth.terrarium.prometheus.client.screens.widgets.ContextualMenuScreen;
 import earth.terrarium.prometheus.common.menus.content.location.Location;
 import earth.terrarium.prometheus.common.menus.content.location.LocationContent;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.server.DeleteLocationPacket;
+import earth.terrarium.prometheus.common.network.messages.server.ServerboundDeleteLocationPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -91,7 +91,7 @@ public class LocationsList extends SelectionList<LocationsList.Entry> {
                 ContextualMenuScreen.getMenu()
                     .ifPresent(menu -> menu.start(mouseX, mouseY)
                         .addOption(Component.literal("Delete"), () ->
-                            NetworkHandler.CHANNEL.sendToServer(new DeleteLocationPacket(list.content.type(), location.name()))
+                            NetworkHandler.CHANNEL.sendToServer(new ServerboundDeleteLocationPacket(list.content.type(), location.name()))
                         )
                         .open());
                 return true;

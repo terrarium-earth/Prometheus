@@ -13,7 +13,7 @@ import earth.terrarium.prometheus.client.utils.SystemNotificationUtils;
 import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
 import earth.terrarium.prometheus.common.menus.content.location.LocationType;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
-import earth.terrarium.prometheus.common.network.messages.server.OpenLocationPacket;
+import earth.terrarium.prometheus.common.network.messages.server.ServerboundOpenLocationPacket;
 import earth.terrarium.prometheus.common.roles.CosmeticOptions;
 import earth.terrarium.prometheus.common.roles.HomeOptions;
 import earth.terrarium.prometheus.common.roles.TeleportOptions;
@@ -119,7 +119,7 @@ public class PrometheusClient {
 
     public static void clientTick() {
         if (OPEN_HOMES.consumeClick()) {
-            NetworkHandler.CHANNEL.sendToServer(new OpenLocationPacket(LocationType.HOME));
+            NetworkHandler.CHANNEL.sendToServer(new ServerboundOpenLocationPacket(LocationType.HOME));
         }
     }
 }

@@ -1,43 +1,42 @@
 package earth.terrarium.prometheus.common.network;
 
-import com.teamresourceful.resourcefullib.common.networking.NetworkChannel;
+import com.teamresourceful.resourcefullib.common.network.Network;
 import earth.terrarium.prometheus.Prometheus;
-import earth.terrarium.prometheus.common.network.messages.client.CommandPermissionsPacket;
-import earth.terrarium.prometheus.common.network.messages.client.UpdateHeadingPacket;
+import earth.terrarium.prometheus.common.network.messages.client.ClientboundCommandPermissionsPacket;
+import earth.terrarium.prometheus.common.network.messages.client.ClientboundUpdateHeadingPacket;
 import earth.terrarium.prometheus.common.network.messages.client.screens.*;
 import earth.terrarium.prometheus.common.network.messages.server.*;
 import earth.terrarium.prometheus.common.network.messages.server.roles.*;
-import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.resources.ResourceLocation;
 
 public class NetworkHandler {
 
-    public static final NetworkChannel CHANNEL = new NetworkChannel(Prometheus.MOD_ID, 1, "main", true);
+    public static final Network CHANNEL = new Network(new ResourceLocation(Prometheus.MOD_ID, "main"), 1, true);
 
     public static void init() {
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, AddLocationPacket.ID, AddLocationPacket.HANDLER, AddLocationPacket.class);
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, DeleteLocationPacket.ID, DeleteLocationPacket.HANDLER, DeleteLocationPacket.class);
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, AddRolePacket.ID, AddRolePacket.HANDLER, AddRolePacket.class);
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, ChangeRolesPacket.ID, ChangeRolesPacket.HANDLER, ChangeRolesPacket.class);
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, SaveRolePacket.ID, SaveRolePacket.HANDLER, SaveRolePacket.class);
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, MemberRolesPacket.ID, MemberRolesPacket.HANDLER, MemberRolesPacket.class);
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, SaveCommandPacket.ID, SaveCommandPacket.HANDLER, SaveCommandPacket.class);
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, OpenCommandPacket.ID, OpenCommandPacket.HANDLER, OpenCommandPacket.class);
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, DeleteCommandPacket.ID, DeleteCommandPacket.HANDLER, DeleteCommandPacket.class);
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, OpenRolePacket.ID, OpenRolePacket.HANDLER, OpenRolePacket.class);
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, OpenRolesPacket.ID, OpenRolesPacket.HANDLER, OpenRolesPacket.class);
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, OpenRolePacket.ID, OpenRolePacket.HANDLER, OpenRolePacket.class);
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, OpenLocationPacket.ID, OpenLocationPacket.HANDLER, OpenLocationPacket.class);
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, OpenMemberRolesPacket.ID, OpenMemberRolesPacket.HANDLER, OpenMemberRolesPacket.class);
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, GoHomePacket.ID, GoHomePacket.HANDLER, GoHomePacket.class);
-        CHANNEL.registerPacket(PacketFlow.SERVERBOUND, GoSpawnPacket.ID, GoSpawnPacket.HANDLER, GoSpawnPacket.class);
+        CHANNEL.register(ServerboundAddLocationPacket.TYPE);
+        CHANNEL.register(ServerboundDeleteLocationPacket.TYPE);
+        CHANNEL.register(ServerboundAddRolePacket.TYPE);
+        CHANNEL.register(ServerboundChangeRolesPacket.TYPE);
+        CHANNEL.register(ServerboundSaveRolePacket.TYPE);
+        CHANNEL.register(ServerboundMemberRolesPacket.TYPE);
+        CHANNEL.register(ServerboundSaveCommandPacket.TYPE);
+        CHANNEL.register(ServerboundOpenCommandPacket.TYPE);
+        CHANNEL.register(ServerboundDeleteCommandPacket.TYPE);
+        CHANNEL.register(ServerboundOpenRolePacket.TYPE);
+        CHANNEL.register(ServerboundOpenRolesPacket.TYPE);
+        CHANNEL.register(ServerboundOpenLocationPacket.TYPE);
+        CHANNEL.register(ServerboundOpenMemberRolesPacket.TYPE);
+        CHANNEL.register(ServerboundGoHomePacket.TYPE);
+        CHANNEL.register(ServerboundGoSpawnPacket.TYPE);
 
-        CHANNEL.registerPacket(PacketFlow.CLIENTBOUND, CommandPermissionsPacket.ID, CommandPermissionsPacket.HANDLER, CommandPermissionsPacket.class);
-        CHANNEL.registerPacket(PacketFlow.CLIENTBOUND, UpdateHeadingPacket.ID, UpdateHeadingPacket.HANDLER, UpdateHeadingPacket.class);
-        CHANNEL.registerPacket(PacketFlow.CLIENTBOUND, OpenCommandScreenPacket.ID, OpenCommandScreenPacket.HANDLER, OpenCommandScreenPacket.class);
-        CHANNEL.registerPacket(PacketFlow.CLIENTBOUND, OpenRolesScreenPacket.ID, OpenRolesScreenPacket.HANDLER, OpenRolesScreenPacket.class);
-        CHANNEL.registerPacket(PacketFlow.CLIENTBOUND, OpenRoleScreenPacket.ID, OpenRoleScreenPacket.HANDLER, OpenRoleScreenPacket.class);
-        CHANNEL.registerPacket(PacketFlow.CLIENTBOUND, OpenLocationScreenPacket.ID, OpenLocationScreenPacket.HANDLER, OpenLocationScreenPacket.class);
-        CHANNEL.registerPacket(PacketFlow.CLIENTBOUND, OpenMemberRolesScreenPacket.ID, OpenMemberRolesScreenPacket.HANDLER, OpenMemberRolesScreenPacket.class);
-        CHANNEL.registerPacket(PacketFlow.CLIENTBOUND, OpenInvseeScreenPacket.ID, OpenInvseeScreenPacket.HANDLER, OpenInvseeScreenPacket.class);
+        CHANNEL.register(ClientboundCommandPermissionsPacket.TYPE);
+        CHANNEL.register(ClientboundUpdateHeadingPacket.TYPE);
+        CHANNEL.register(ClientboundOpenCommandScreenPacket.TYPE);
+        CHANNEL.register(ClientboundOpenRolesScreenPacket.TYPE);
+        CHANNEL.register(ClientboundOpenRoleScreenPacket.TYPE);
+        CHANNEL.register(ClientboundOpenLocationScreenPacket.TYPE);
+        CHANNEL.register(ClientboundOpenMemberRolesScreenPacket.TYPE);
+        CHANNEL.register(ClientboundOpenInvseeScreenPacket.TYPE);
     }
 }
