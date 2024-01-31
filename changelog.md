@@ -1,1 +1,1 @@
-- Fix conflicts between server and client commands of same name
+- Added default permission API.

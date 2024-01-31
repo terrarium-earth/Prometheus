@@ -1,5 +1,7 @@
 package earth.terrarium.prometheus;
 
+import com.teamresourceful.resourcefullib.common.utils.TriState;
+import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.api.roles.options.RoleOptionsApi;
 import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
 import earth.terrarium.prometheus.common.handlers.promotions.PromotionsHandler;
@@ -18,6 +20,8 @@ public class Prometheus {
         RoleOptionsApi.API.register(CosmeticOptions.SERIALIZER);
         RoleOptionsApi.API.register(HomeOptions.SERIALIZER);
         RoleOptionsApi.API.register(TeleportOptions.SERIALIZER);
+        PermissionApi.API.addDefaultPermission("headings.afk", TriState.TRUE);
+        PermissionApi.API.addDefaultPermission("headings.dnd", TriState.TRUE);
     }
 
     public static void postInit() {
