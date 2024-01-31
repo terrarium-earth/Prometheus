@@ -7,9 +7,9 @@ import earth.terrarium.prometheus.common.handlers.heading.HeadingEvents;
 import earth.terrarium.prometheus.common.handlers.nickname.NicknameEvents;
 import earth.terrarium.prometheus.common.handlers.permission.PermissionEvents;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -21,12 +21,12 @@ import net.neoforged.neoforge.event.server.ServerStartedEvent;
 @Mod(Prometheus.MOD_ID)
 public class PrometheusNeoForge {
 
-    public PrometheusNeoForge() {
+    public PrometheusNeoForge(IEventBus bus) {
         Prometheus.init();
         if (FMLEnvironment.dist.isClient()) {
-            PrometheusNeoForgeClient.init();
+            PrometheusNeoForgeClient.init(bus);
         }
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(PrometheusNeoForge::onCommonSetup);
+        bus.addListener(PrometheusNeoForge::onCommonSetup);
         NeoForge.EVENT_BUS.addListener(PrometheusNeoForge::registerCommands);
         NeoForge.EVENT_BUS.addListener(PrometheusNeoForge::onChatMessage);
         NeoForge.EVENT_BUS.addListener(PrometheusNeoForge::onEntityJoin);

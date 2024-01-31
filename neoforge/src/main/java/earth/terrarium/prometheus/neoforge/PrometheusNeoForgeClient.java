@@ -9,8 +9,8 @@ import earth.terrarium.prometheus.client.handlers.NotificationHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.client.event.ClientChatReceivedEvent;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
@@ -19,9 +19,9 @@ import net.neoforged.neoforge.event.TickEvent;
 
 public class PrometheusNeoForgeClient {
 
-    public static void init() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(PrometheusNeoForgeClient::onClientSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(PrometheusNeoForgeClient::onRegisterKeyBindings);
+    public static void init(IEventBus bus) {
+        bus.addListener(PrometheusNeoForgeClient::onClientSetup);
+        bus.addListener(PrometheusNeoForgeClient::onRegisterKeyBindings);
         NeoForge.EVENT_BUS.addListener(PrometheusNeoForgeClient::onClientMessage);
         NeoForge.EVENT_BUS.addListener(PrometheusNeoForgeClient::onRegisterClientCommands);
         NeoForge.EVENT_BUS.addListener(PrometheusNeoForgeClient::onClientTick);
