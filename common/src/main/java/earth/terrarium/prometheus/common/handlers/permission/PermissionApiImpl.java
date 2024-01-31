@@ -4,15 +4,13 @@ import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import net.minecraft.world.entity.player.Player;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class PermissionApiImpl implements PermissionApi {
 
     private static final List<Supplier<List<String>>> AUTO_COMPLETE = new ArrayList<>();
+    private static final Map<String, TriState> DEFAULT_PERMISSIONS = new HashMap<>();
 
     @Override
     public TriState getPermission(Player player, String permission) {
@@ -55,5 +53,15 @@ public class PermissionApiImpl implements PermissionApi {
             .map(s -> s.split("\\.")[0])
             .forEach(complete::add);
         return new ArrayList<>(complete);
+    }
+
+    @Override
+    public void addDefaultPermission(String permission, TriState state) {
+        DEFAULT_PERMISSIONS.put(permission, state);
+    }
+
+    @Override
+    public Map<String, TriState> getDefaultPermissions() {
+        return DEFAULT_PERMISSIONS;
     }
 }

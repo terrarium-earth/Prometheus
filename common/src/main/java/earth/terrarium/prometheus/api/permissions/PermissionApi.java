@@ -5,6 +5,7 @@ import earth.terrarium.prometheus.api.ApiHelper;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -56,4 +57,19 @@ public interface PermissionApi {
     default List<String> getAutoComplete(Set<String> permissions) {
         return List.of();
     }
+
+    /**
+     * Adds a default permission to the map
+     *
+     * @param permission the permission to add
+     * @param state the default state of the permission
+     */
+    void addDefaultPermission(String permission, TriState state);
+
+    /**
+     * Gets all default permissions
+     *
+     * @return the default permissions
+     */
+    Map<String, TriState> getDefaultPermissions();
 }
