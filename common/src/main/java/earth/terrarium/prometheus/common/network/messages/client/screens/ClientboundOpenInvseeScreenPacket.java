@@ -9,11 +9,8 @@ import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.defaults.CodecPacketType;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.client.screens.InvseeScreen;
-import earth.terrarium.prometheus.common.menus.InvseeMenu;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.SimpleContainer;
 
 import java.util.UUID;
 
@@ -46,13 +43,7 @@ public record ClientboundOpenInvseeScreenPacket(
 
         @Override
         public Runnable handle(ClientboundOpenInvseeScreenPacket message) {
-            return () -> {
-                var currentPlayer = Minecraft.getInstance().player;
-                if (currentPlayer == null) return;
-                SimpleContainer container = new SimpleContainer(message.size());
-                InvseeMenu menu = new InvseeMenu(message.containerId(), currentPlayer.getInventory(), currentPlayer, container, message.player());
-                InvseeScreen.open(menu, message.title());
-            };
+            return () -> InvseeScreen.open(message.containerId, message.size, message.player, message.title);
         }
     }
 }

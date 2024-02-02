@@ -1,1 +1,1 @@
-- Added default permission API.
+- Fixed server crash

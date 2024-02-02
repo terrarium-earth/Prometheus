@@ -11,12 +11,16 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.player.RemotePlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 public class InvseeScreen extends AbstractContainerCursorScreen<InvseeMenu> implements MenuAccess<InvseeMenu> {
 
@@ -78,10 +82,13 @@ public class InvseeScreen extends AbstractContainerCursorScreen<InvseeMenu> impl
         }
     }
 
-    public static void open(InvseeMenu menu, Component title) {
-        if (Minecraft.getInstance().player != null) {
-            Minecraft.getInstance().player.containerMenu = menu;
-            Minecraft.getInstance().setScreen(new InvseeScreen(menu, Minecraft.getInstance().player.getInventory(), title));
+    public static void open(int containerId, int size, UUID uuid, Component title) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            SimpleContainer container = new SimpleContainer(size);
+            InvseeMenu menu = new InvseeMenu(containerId, player.getInventory(), player, container, uuid);
+            player.containerMenu = menu;
+            Minecraft.getInstance().setScreen(new InvseeScreen(menu, player.getInventory(), title));
         }
     }
 }
