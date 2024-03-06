@@ -8,17 +8,13 @@ import net.minecraft.network.chat.Component;
 public class ConstantComponents {
 
     public static final Component UNSAVED_CHANGES = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.ui.unsaved_changes").copy().withStyle(ChatFormatting.RED));
-    public static final Component ERROR_IN_LOGS = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.error.logs"));
     public static final Component REMOVE = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.ui.remove"));
     public static final Component SAVE = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.ui.save"));
     public static final Component BACK = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.ui.back"));
     public static final Component EDIT = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.ui.edit"));
     public static final Component MOVE_DOWN = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.ui.move_down"));
     public static final Component MOVE_UP = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.ui.move_up"));
-    public static final Component UNDO = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.ui.undo"));
     public static final Component ADD = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.ui.add"));
-    public static final Component NEXT = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.ui.next"));
-    public static final Component PREV = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.ui.prev"));
 
     public static final Component CANT_TP_TO_SELF = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.tpa.error.self_request"));
     public static final Component EXPIRED = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.tpa.error.expired_request"));
@@ -54,14 +50,11 @@ public class ConstantComponents {
     public static final Component PERMISSIONS_TITLE = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.options.permissions.title"));
     public static final Component PERMISSIONS_ADD = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.options.permissions.add"));
 
-    public static final Component COSMETIC_TITLE = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.options.cosmetic.title"));
     public static final Component COSMETIC_ROLE_NAME = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.options.cosmetic.role_name"));
     public static final Component COSMETIC_ROLE_ICON = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.options.cosmetic.role_icon"));
 
-    public static final Component HOMES_TITLE = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.options.homes.title"));
     public static final Component HOMES_MAX = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.options.homes.max"));
 
-    public static final Component TELEPORT_TITLE = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.options.teleport.title"));
     public static final Component REQUEST_TIMEOUT = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.options.teleport.request_timeout"));
     public static final Component REQUEST_TIMEOUT_TOOLTIP = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.options.teleport.request_timeout.tooltip"));
     public static final Component RTP_COOLDOWN = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.options.teleport.rtp_cooldown"));
@@ -79,12 +72,9 @@ public class ConstantComponents {
     public static final Component TELEPORTED = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.rtp.success"));
     public static final Component FAILED_WITH_CEILING = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.rtp.failed_with_ceiling"));
     public static final Component FAILED_MAX_TRIES = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.rtp.failed_max_tries"));
-    public static final Component MEMBER_ERROR = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.roles.member.error"));
-    public static final Component CLICK_EDIT = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.commands.click_edit"));
     public static final Component CANT_FIND_LOCATION = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.spawn.cant_find_location"));
 
     public static final Component MULTIPLE_PLAYERS = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.offline.multiple_players"));
-    public static final Component UNKNOWN_PLAYER = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.offline.unknown_player"));
     public static final Component PLAYER_ONLINE = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.offline.player_online"));
 
     public static final Component TP_PANIC = DeferredComponent.of(() -> CommonUtils.serverTranslatable("prometheus.stuck.panic"));

@@ -26,4 +26,6 @@ dependencies {
     shadowCommon(project(path = ":common", configuration = "transformProductionFabric")) {
         isTransitive = false
     }
+
+    modCompileOnly("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")
 }

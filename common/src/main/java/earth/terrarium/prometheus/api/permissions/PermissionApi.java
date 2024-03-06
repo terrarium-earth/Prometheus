@@ -2,11 +2,13 @@ package earth.terrarium.prometheus.api.permissions;
 
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.prometheus.api.ApiHelper;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public interface PermissionApi {
@@ -21,6 +23,16 @@ public interface PermissionApi {
      * @return the result of the check
      */
     TriState getPermission(Player player, String permission);
+
+    /**
+     * Checks if a player has a permission
+     *
+     * @param server     the server to check
+     * @param id         the player to check
+     * @param permission the permission to check
+     * @return the result of the check
+     */
+    TriState getOfflinePermission(MinecraftServer server, UUID id, String permission);
 
     /**
      * Adds a permission to the auto complete list
@@ -55,6 +67,13 @@ public interface PermissionApi {
      * @return the auto complete list
      */
     default List<String> getAutoComplete(Set<String> permissions) {
+        return List.of();
+    }
+
+    /**
+     * Get all auto complete options
+     */
+    default List<String> getAutoComplete() {
         return List.of();
     }
 

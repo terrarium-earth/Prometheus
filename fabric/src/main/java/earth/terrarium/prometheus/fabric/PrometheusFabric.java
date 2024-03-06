@@ -5,6 +5,7 @@ import earth.terrarium.prometheus.common.commands.ModCommands;
 import earth.terrarium.prometheus.common.handlers.MuteHandler;
 import earth.terrarium.prometheus.common.handlers.heading.HeadingEvents;
 import earth.terrarium.prometheus.common.handlers.nickname.NicknameEvents;
+import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
 import earth.terrarium.prometheus.common.handlers.permission.PermissionEvents;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -12,6 +13,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.level.ServerPlayer;
 
 public class PrometheusFabric implements ModInitializer {
@@ -25,9 +27,14 @@ public class PrometheusFabric implements ModInitializer {
             if (entity instanceof ServerPlayer player) {
                 HeadingEvents.onJoin(player);
                 NicknameEvents.onJoin(player);
+                CommandPermissionHandler.onJoin(player);
             }
         });
         ServerLifecycleEvents.SERVER_STARTED.register(Prometheus::onServerStarted);
         ServerTickEvents.END_SERVER_TICK.register(Prometheus::onServerTick);
+
+        if (FabricLoader.getInstance().isModLoaded("fabric-permissions-api-v0")) {
+            PrometheusFabricPermissionHandler.init();
+        }
     }
 }

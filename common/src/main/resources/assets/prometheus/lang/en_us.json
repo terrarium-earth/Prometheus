@@ -72,8 +72,10 @@
     "prometheus.ui.add": "Add",
     "prometheus.ui.next": "Next",
     "prometheus.ui.prev": "Previous",
+    "prometheus.ui.open": "Open",
 
     "prometheus.roles.edit": "Edit Role — %s",
+    "prometheus.member.edit": "Edit Member — %s",
     "prometheus.roles.title": "Prometheus Roles",
 
     "option.prometheus.permissions": "Permissions",

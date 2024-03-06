@@ -5,6 +5,8 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import com.teamresourceful.resourcefullib.common.utils.UnsafeUtils;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
+import earth.terrarium.prometheus.common.network.NetworkHandler;
+import earth.terrarium.prometheus.common.network.messages.client.ClientboundCommandPermissionsPacket;
 import earth.terrarium.prometheus.mixin.common.accessors.CommandNodeAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.commands.CommandSourceStack;
@@ -21,6 +23,10 @@ public class CommandPermissionHandler {
 
     public static final List<String> COMMAND_PERMS = new ArrayList<>();
 
+    public static void onJoin(ServerPlayer player) {
+        NetworkHandler.CHANNEL.sendToPlayer(new ClientboundCommandPermissionsPacket(COMMAND_PERMS), player);
+    }
+
     public static void registerPermissions(CommandDispatcher<CommandSourceStack> dispatcher) {
         Map<CommandNode<CommandSourceStack>, String> cache = new Object2ObjectOpenHashMap<>();
         modifyCommandNode(dispatcher, dispatcher.getRoot(), "commands", cache);
@@ -34,10 +40,11 @@ public class CommandPermissionHandler {
                 String childPermission = prefix + "." + child.getName();
                 cache.put(child, childPermission);
                 CommandNode<CommandSourceStack> redirect = child.getRedirect();
+                Predicate<CommandSourceStack> original = child.getRequirement();
                 if (redirect != null && redirect != dispatcher.getRoot()) {
-                    setRequirement(child, new RedirectedPermissionPredicate(() -> cache.get(redirect), new PermissionPredicate(childPermission, child.getRequirement())));
+                    setRequirement(child, new RedirectedPermissionPredicate(() -> cache.get(redirect), new PermissionPredicate(childPermission, original)));
                 } else {
-                    setRequirement(child, new PermissionPredicate(childPermission, child.getRequirement()));
+                    setRequirement(child, new PermissionPredicate(childPermission, original));
                 }
 
                 modifyCommandNode(dispatcher, child, childPermission, cache);
@@ -55,8 +62,9 @@ public class CommandPermissionHandler {
         }
     }
 
-    private record PermissionPredicate(String permission,
-                                       Predicate<CommandSourceStack> original) implements Predicate<CommandSourceStack> {
+    private record PermissionPredicate(
+        String permission, Predicate<CommandSourceStack> original
+    ) implements Predicate<CommandSourceStack> {
 
         @Override
         public boolean test(CommandSourceStack stack) {
@@ -68,8 +76,9 @@ public class CommandPermissionHandler {
         }
     }
 
-    private record RedirectedPermissionPredicate(Supplier<String> deferredPermission,
-                                                 PermissionPredicate predicate) implements Predicate<CommandSourceStack> {
+    private record RedirectedPermissionPredicate(
+        Supplier<String> deferredPermission, PermissionPredicate predicate
+    ) implements Predicate<CommandSourceStack> {
 
         @Override
         public boolean test(CommandSourceStack stack) {

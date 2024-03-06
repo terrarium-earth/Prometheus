@@ -3,20 +3,12 @@ package earth.terrarium.prometheus.client;
 import com.mojang.blaze3d.platform.InputConstants;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
-import earth.terrarium.prometheus.api.roles.client.OptionDisplayApi;
 import earth.terrarium.prometheus.client.screens.location.LocationDisplayApiImpl;
-import earth.terrarium.prometheus.client.screens.roles.options.displays.CosmeticOptionsDisplay;
-import earth.terrarium.prometheus.client.screens.roles.options.displays.HomeOptionsDisplay;
-import earth.terrarium.prometheus.client.screens.roles.options.displays.PermissionDisplay;
-import earth.terrarium.prometheus.client.screens.roles.options.displays.TeleportOptionsDisplay;
 import earth.terrarium.prometheus.client.utils.SystemNotificationUtils;
 import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
 import earth.terrarium.prometheus.common.menus.content.location.LocationType;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.network.messages.server.ServerboundOpenLocationPacket;
-import earth.terrarium.prometheus.common.roles.CosmeticOptions;
-import earth.terrarium.prometheus.common.roles.HomeOptions;
-import earth.terrarium.prometheus.common.roles.TeleportOptions;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -35,11 +27,6 @@ public class PrometheusClient {
     public static final List<KeyMapping> KEYS = List.of(OPEN_HOMES);
 
     public static void init() {
-        OptionDisplayApi.API.register(new ResourceLocation(Prometheus.MOD_ID, "permissions"), PermissionDisplay::create);
-        OptionDisplayApi.API.register(CosmeticOptions.SERIALIZER.id(), CosmeticOptionsDisplay::create);
-        OptionDisplayApi.API.register(HomeOptions.SERIALIZER.id(), HomeOptionsDisplay::create);
-        OptionDisplayApi.API.register(TeleportOptions.SERIALIZER.id(), TeleportOptionsDisplay::create);
-
         addAutoCompletes();
         addIcons();
 

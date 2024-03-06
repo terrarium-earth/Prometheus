@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefullib.common.network.Packet;
 import com.teamresourceful.resourcefullib.common.network.base.ClientboundPacketType;
 import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import earth.terrarium.prometheus.Prometheus;
-import earth.terrarium.prometheus.client.screens.roles.adding.MemberRolesScreen;
+import earth.terrarium.prometheus.client.ui.roles.adding.MemberEditingScreen;
 import earth.terrarium.prometheus.common.menus.content.MemberRolesContent;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -43,7 +43,7 @@ public record ClientboundOpenMemberRolesScreenPacket(
 
         @Override
         public Runnable handle(ClientboundOpenMemberRolesScreenPacket message) {
-            return () -> MemberRolesScreen.open(message.content());
+            return () -> MemberEditingScreen.open(message.content());
         }
     }
 }

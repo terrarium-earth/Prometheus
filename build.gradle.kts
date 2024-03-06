@@ -8,7 +8,7 @@ plugins {
     java
     id("maven-publish")
     id("com.teamresourceful.resourcefulgradle") version "0.0.+"
-    id("dev.architectury.loom") version "1.4-SNAPSHOT" apply false
+    id("dev.architectury.loom") version "1.5-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
 }
@@ -48,6 +48,8 @@ subprojects {
                 includeGroup("com.github.llamalad7.mixinextras")
             }
         }
+        maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
+        mavenLocal()
     }
 
     dependencies {
@@ -67,10 +69,15 @@ subprojects {
         })
 
         "modApi"(group = "com.teamresourceful.resourcefullib", name = "resourcefullib-$modLoader-$minecraftVersion", version = resourcefulLibVersion)
+        val olympus = "modImplementation"(group = "earth.terrarium.olympus", name = "olympus-$modLoader-1.20.4", version = "latest.release") {
+            isTransitive = false
+        }
+
         if (!isCommon) {
 //            "modRuntimeOnly"("me.shedaniel:RoughlyEnoughItems-$modLoader:$reiVersion")
             "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api-$modLoader:$reiVersion")
             "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-default-plugin-$modLoader:$reiVersion")
+            "include"(olympus)
         } else {
             "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-api:$reiVersion")
             "modCompileOnly"("me.shedaniel:RoughlyEnoughItems-default-plugin:$reiVersion")

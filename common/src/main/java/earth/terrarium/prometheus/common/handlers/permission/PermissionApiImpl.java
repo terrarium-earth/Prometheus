@@ -2,6 +2,8 @@ package earth.terrarium.prometheus.common.handlers.permission;
 
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
+import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.*;
@@ -21,6 +23,12 @@ public class PermissionApiImpl implements PermissionApi {
             return holder.prometheus$hasPermission(permission);
         }
         return TriState.UNDEFINED;
+    }
+
+    @Override
+    public TriState getOfflinePermission(MinecraftServer server, UUID id, String permission) {
+        var permissions = RoleHandler.getOfflinePermissions(server.overworld(), id);
+        return permissions.getOrDefault(permission, TriState.UNDEFINED);
     }
 
     @Override
@@ -51,6 +59,16 @@ public class PermissionApiImpl implements PermissionApi {
             .flatMap(List::stream)
             .filter(s -> !permissions.contains(s))
             .map(s -> s.split("\\.")[0])
+            .forEach(complete::add);
+        return new ArrayList<>(complete);
+    }
+
+    @Override
+    public List<String> getAutoComplete() {
+        Set<String> complete = new LinkedHashSet<>();
+        AUTO_COMPLETE.stream()
+            .map(Supplier::get)
+            .flatMap(List::stream)
             .forEach(complete::add);
         return new ArrayList<>(complete);
     }

@@ -32,14 +32,18 @@ public class RoleHandler extends SaveHandler {
         return read(level, HandlerType.create(CLIENT_SIDE, RoleHandler::new), "prometheus_roles");
     }
 
-    public static Map<String, TriState> getPermissions(Player player) {
-        RoleHandler data = read(player.level());
-        List<RoleEntry> roles = data.roles.roles(data.players.getOrDefault(player.getUUID(), Set.of()));
+    public static Map<String, TriState> getOfflinePermissions(Level level, UUID uuid) {
+        RoleHandler data = read(level);
+        List<RoleEntry> roles = data.roles.roles(data.players.getOrDefault(uuid, Set.of()));
         Map<String, TriState> permissions = new HashMap<>();
         for (RoleEntry entry : roles) {
             entry.role().permissions().forEach((key, value) -> permissions.compute(key, (k, v) -> TriState.map(v, value)));
         }
         return permissions;
+    }
+
+    public static Map<String, TriState> getPermissions(Player player) {
+        return getOfflinePermissions(player.level(), player.getUUID());
     }
 
     public static void changeRoles(Level level, UUID target, Object2BooleanMap<UUID> roles) {

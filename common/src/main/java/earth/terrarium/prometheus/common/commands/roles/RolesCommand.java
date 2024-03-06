@@ -30,25 +30,26 @@ public class RolesCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("roles")
             .requires(source -> source.hasPermission(2))
-            .then(Commands.literal("open").executes(context -> {
-                var player = context.getSource().getPlayerOrException();
-                if (!NetworkHandler.CHANNEL.canSendToPlayer(player, ClientboundOpenRolesScreenPacket.TYPE)) {
-                    context.getSource().sendSystemMessage(Component.literal("You cannot use this command without the mod on your client."));
-                    return 1;
-                }
-                Set<UUID> editable = RoleHandler.getEditableRoles(player);
-                List<RoleEntry> roles = RoleHandler.roles(player.level()).roles();
-                for (RoleEntry role : roles) {
-                    if (editable.contains(role.id())) {
-                        NetworkHandler.CHANNEL.sendToPlayer(new ClientboundOpenRolesScreenPacket(new RolesContent(roles, roles.indexOf(role))), player);
-                        return 1;
-                    }
-                }
-                return 1;
-            }))
             .executes(context -> {
                 var source = context.getSource();
-                source.sendSystemMessage(Component.literal("Roles:"));
+                if (source.isPlayer()) {
+                    var player = context.getSource().getPlayerOrException();
+                    if (!NetworkHandler.CHANNEL.canSendToPlayer(player, ClientboundOpenRolesScreenPacket.TYPE)) {
+                        source.sendSystemMessage(Component.literal("You cannot open the roles screen at this time. Here are the roles:"));
+                    } else {
+                        Set<UUID> editable = RoleHandler.getEditableRoles(player);
+                        List<RoleEntry> roles = RoleHandler.roles(player.level()).roles();
+                        for (RoleEntry role : roles) {
+                            if (editable.contains(role.id())) {
+                                NetworkHandler.CHANNEL.sendToPlayer(new ClientboundOpenRolesScreenPacket(new RolesContent(roles, roles.indexOf(role))), player);
+                                return 1;
+                            }
+                        }
+                        return 1;
+                    }
+                } else {
+                    source.sendSystemMessage(Component.literal("Roles:"));
+                }
                 for (RoleEntry role : RoleHandler.roles(source.getLevel())) {
                     source.sendSystemMessage(
                         Component.literal(role.id().toString() +

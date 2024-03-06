@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefullib.common.network.Packet;
 import com.teamresourceful.resourcefullib.common.network.base.ClientboundPacketType;
 import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import earth.terrarium.prometheus.Prometheus;
-import earth.terrarium.prometheus.client.screens.roles.RolesScreen;
+import earth.terrarium.prometheus.client.ui.roles.main.RolesScreen;
 import earth.terrarium.prometheus.common.menus.content.RolesContent;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
