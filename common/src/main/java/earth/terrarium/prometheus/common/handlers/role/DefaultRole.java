@@ -24,6 +24,6 @@ public class DefaultRole {
     });
 
     public static Role create() {
-        return new Role(PermissionApi.API.getDefaultPermissions(), OPTIONS);
+        return new Role(new HashMap<>(PermissionApi.API.getDefaultPermissions()), OPTIONS);
     }
 }

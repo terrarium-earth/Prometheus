@@ -21,9 +21,9 @@ public class OfflineCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("offlinetp")
+            .requires(context -> context.hasPermission(2))
             .then(Commands.argument("player", GameProfileArgument.gameProfile())
                 .then(Commands.argument("pos", BlockPosArgument.blockPos())
-                    .requires(context -> context.hasPermission(2))
                     .executes(context -> {
                         Collection<GameProfile> profiles = GameProfileArgument.getGameProfiles(context, "player");
                         if (profiles.size() != 1) {

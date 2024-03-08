@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.InputConstants;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.client.screens.location.LocationDisplayApiImpl;
-import earth.terrarium.prometheus.client.utils.SystemNotificationUtils;
 import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
 import earth.terrarium.prometheus.common.menus.content.location.LocationType;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
@@ -29,8 +28,6 @@ public class PrometheusClient {
     public static void init() {
         addAutoCompletes();
         addIcons();
-
-        SystemNotificationUtils.init();
     }
 
     private static void addAutoCompletes() {

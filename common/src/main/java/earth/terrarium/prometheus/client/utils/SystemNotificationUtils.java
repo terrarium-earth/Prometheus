@@ -16,12 +16,16 @@ public class SystemNotificationUtils {
         SystemNotificationUtils::sendKdeNotifcation
     );
 
+    private static boolean loaded = false;
     private static TrayIcon trayIcon;
 
     public static void init() {
         // We cant trust the OS to be able to handle the tray icon on linux or mac
         if (Util.getPlatform() == Util.OS.OSX) return;
         if (Util.getPlatform() == Util.OS.LINUX) return;
+        if (SystemNotificationUtils.loaded) return;
+        SystemNotificationUtils.loaded = true;
+        String headless = System.getProperty("java.awt.headless");
         System.setProperty("java.awt.headless", "false"); //Client should NEVER be headless
         if (SystemTray.isSupported()) {
             try (InputStream icon = SystemNotificationUtils.class.getClassLoader().getResourceAsStream("prometheus_icon.png")) {
@@ -31,14 +35,14 @@ public class SystemNotificationUtils {
                 byte[] bytes = IOUtils.toByteArray(icon);
                 SystemTray tray = SystemTray.getSystemTray();
                 Image image = Toolkit.getDefaultToolkit().createImage(bytes);
-                SystemNotificationUtils.trayIcon = new TrayIcon(image, "Prometheus");
+                SystemNotificationUtils.trayIcon = new TrayIcon(image, "Prometheus Minecraft Mod");
                 SystemNotificationUtils.trayIcon.setImageAutoSize(true);
                 tray.add(SystemNotificationUtils.trayIcon);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        System.setProperty("java.awt.headless", "true");
+        System.setProperty("java.awt.headless", headless);
     }
 
     public static void sendNotification(String notification, String title) {
@@ -49,32 +53,33 @@ public class SystemNotificationUtils {
         }
     }
 
-    private static boolean sendTrayNotification(String notification, String title) {
-        if (SystemNotificationUtils.trayIcon == null) return false;
-        SystemNotificationUtils.trayIcon.displayMessage(title, notification, TrayIcon.MessageType.NONE);
-        return true;
+    private static void sendTrayNotification(String notification, String title) {
+        try {
+            init();
+            if (SystemNotificationUtils.trayIcon == null) return;
+            SystemNotificationUtils.trayIcon.displayMessage(title, notification, TrayIcon.MessageType.NONE);
+        }catch (Exception ignored) {
+            SystemNotificationUtils.loaded = false;
+            SystemNotificationUtils.trayIcon = null;
+        }
     }
 
     private static void sendMacNotification(String notification, String title) {
         if (Util.getPlatform() != Util.OS.OSX) return;
-        if (!sendTrayNotification(notification, title)) {
-            try {
-                Runtime.getRuntime().exec(new String[]{
-                    "osascript",
-                    "-e",
-                    "display notification \"" + notification + "\" with title \"" + title + "\""
-                });
-            } catch (Exception ignored) {
-            }
+        try {
+            Runtime.getRuntime().exec(new String[]{
+                "osascript",
+                "-e",
+                "display notification \"" + notification + "\" with title \"" + title + "\""
+            });
+        } catch (Exception ignored) {
         }
     }
 
     private static void sendLinuxNotification(String notification, String title) {
         if (Util.getPlatform() != Util.OS.LINUX) return;
-        if (!sendTrayNotification(notification, title)) {
-            for (var run : LINUX_RUNS) {
-                if (run.apply(notification, title)) return;
-            }
+        for (var run : LINUX_RUNS) {
+            if (run.apply(notification, title)) return;
         }
     }
 
