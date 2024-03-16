@@ -10,7 +10,7 @@ public class PrometheusReiClientPlugin implements REIClientPlugin {
     @Override
     public void registerFavorites(FavoriteEntryType.Registry registry) {
         registry.register(HomeFavoriteEntry.ID, HomeFavoriteEntry.Type.INSTANCE);
-        registry.getOrCrateSection(Component.translatable("rei.sections.odyssey"))
+        registry.getOrCrateSection(Component.translatable("rei.sections.project_odyssey"))
             .add(new HomeFavoriteEntry());
     }
 }

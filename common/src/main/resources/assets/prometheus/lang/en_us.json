@@ -137,10 +137,10 @@
     "prometheus.rtp.failed_max_tries": "Failed after max tries.",
     "prometheus.roles.member.error": "Only 1 player is allowed",
 
-    "rei.sections.odyssey": "Project Odyssey",
+    "rei.sections.project_odyssey": "Project Odyssey",
     "rei.prometheus.prometheus.tooltip": "Teleport Home",
 
-    "key.categories.odyssey": "Project Odyssey",
+    "key.categories.project_odyssey": "Project Odyssey",
     "key.prometheus.open_homes": "Open Homes",
 
     "prometheus.offline.multiple_players": "You can't use for multiple players.",

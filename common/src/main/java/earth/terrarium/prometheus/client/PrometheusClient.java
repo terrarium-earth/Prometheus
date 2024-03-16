@@ -20,7 +20,7 @@ public class PrometheusClient {
     public static final KeyMapping OPEN_HOMES = new KeyMapping(
         "key.prometheus.open_homes",
         InputConstants.UNKNOWN.getValue(),
-        "key.categories.odyssey"
+        "key.categories.project_odyssey"
     );
 
     public static final List<KeyMapping> KEYS = List.of(OPEN_HOMES);
