@@ -74,13 +74,10 @@ public class RtpCommand {
         final int min = distance / 4;
         final int max = distance - min;
 
-        boolean flipX = player.getRandom().nextDouble() < 0.5;
-        int randRangeX = min + player.getRandom().nextInt(max);
-        int x = location.getX() + (randRangeX * (flipX ? -1 : 1));
-
-        boolean flipZ = player.getRandom().nextDouble() < 0.5;
-        int randRangeZ = min + player.getRandom().nextInt(max);
-        int z = location.getZ() + (randRangeZ * (flipZ ? -1 : 1));
+        var theta = player.getRandom().nextDouble() * 2 * Math.PI;
+        int r = min + player.getRandom().nextInt(max);
+        int x = Math.round(r * (float) Math.cos(theta));
+        int z = Math.round(r * (float) Math.sin(theta));
 
         if (!level.getWorldBorder().isWithinBounds(x, z) || level.getBiome(new BlockPos(x, level.getSeaLevel(), z)).is(BiomeTags.IS_OCEAN)) {
             return tp(location, player, distance, tries + 1);
