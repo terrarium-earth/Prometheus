@@ -18,7 +18,7 @@ import java.util.function.BiFunction;
 public class PageApiImpl implements PageApi {
 
     private final Map<ResourceLocation, BiFunction<RoleEditContent, Runnable, Page>> factories = Util.make(new LinkedHashMap<>(), map -> {
-        map.put(new ResourceLocation(Prometheus.MOD_ID, "permissions"), PermissionPage::new);
+        map.put(Prometheus.id("permissions"), PermissionPage::new);
         map.put(CosmeticOptions.SERIALIZER.id(), CosmeticsPage::new);
         map.put(HomeOptions.SERIALIZER.id(), HomesPage::new);
         map.put(TeleportOptions.SERIALIZER.id(), TeleportOptionsPage::new);

@@ -10,7 +10,7 @@ import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.handlers.locations.HomeHandler;
 import earth.terrarium.prometheus.common.handlers.locations.WarpHandler;
 import earth.terrarium.prometheus.common.menus.content.location.LocationType;
-import net.minecraft.resources.ResourceLocation;
+import earth.terrarium.prometheus.common.network.messages.client.screens.ClientboundOpenLocationScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
@@ -30,8 +30,7 @@ public record ServerboundDeleteLocationPacket(LocationType locationType,
 
         public Type() {
             super(
-                ServerboundDeleteLocationPacket.class,
-                new ResourceLocation(Prometheus.MOD_ID, "delete_location"),
+                Prometheus.id("delete_location"),
                 ObjectByteCodec.create(
                     ByteCodec.ofEnum(LocationType.class).fieldOf(ServerboundDeleteLocationPacket::locationType),
                     ByteCodec.STRING.fieldOf(ServerboundDeleteLocationPacket::name),
@@ -47,12 +46,12 @@ public record ServerboundDeleteLocationPacket(LocationType locationType,
                     switch (message.locationType) {
                         case HOME -> {
                             HomeHandler.remove(serverPlayer, message.name);
-                            ServerboundOpenLocationPacket.openHomes(serverPlayer);
+                            ClientboundOpenLocationScreenPacket.openHomes(serverPlayer);
                         }
                         case WARP -> {
                             if (WarpHandler.canModifyWarps(serverPlayer)) {
                                 WarpHandler.remove(serverPlayer, message.name);
-                                ServerboundOpenLocationPacket.openWarps(serverPlayer);
+                                ClientboundOpenLocationScreenPacket.openWarps(serverPlayer);
                             }
                         }
                     }

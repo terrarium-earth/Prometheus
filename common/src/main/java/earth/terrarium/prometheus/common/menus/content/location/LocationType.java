@@ -1,5 +1,6 @@
 package earth.terrarium.prometheus.common.menus.content.location;
 
+import com.teamresourceful.bytecodecs.base.ByteCodec;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import net.minecraft.network.chat.Component;
 
@@ -8,6 +9,8 @@ import java.util.Locale;
 public enum LocationType {
     HOME("homes", "home", ConstantComponents.HOMES_UI_TITLE),
     WARP("warps", "warp", ConstantComponents.WARPS_UI_TITLE);
+
+    public static final ByteCodec<LocationType> BYTE_CODEC = ByteCodec.ofEnum(LocationType.class);
 
     private final String editPrefix;
     private final String tpPrefix;

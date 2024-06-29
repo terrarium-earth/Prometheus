@@ -11,14 +11,6 @@ public interface LocationDisplayApi {
     LocationDisplayApi API = ApiHelper.load(LocationDisplayApi.class);
 
     /**
-     * Register a location icon for a dimension.
-     *
-     * @param dimension The dimension to register the icon for.
-     * @param icon      The icon to register, must be 16x16 pixels.
-     */
-    void register(ResourceKey<Level> dimension, ResourceLocation icon);
-
-    /**
      * Get the icon for a dimension.
      *
      * @param dimension The dimension to get the icon for.

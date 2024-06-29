@@ -2,6 +2,7 @@ package earth.terrarium.prometheus.common.handlers.role;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.teamresourceful.bytecodecs.base.ByteCodec;
 import earth.terrarium.prometheus.api.roles.options.RoleOption;
 import earth.terrarium.prometheus.api.roles.options.RoleOptionSerializer;
 import earth.terrarium.prometheus.api.roles.options.RoleOptionsApi;
@@ -18,7 +19,13 @@ import java.util.function.Function;
 
 public final class RoleOptionsApiImpl implements RoleOptionsApi {
 
-    private static final RoleOptionSerializer<DummyOption> DUMMY_SERIALIZER = RoleOptionSerializer.of(new ResourceLocation("noop"), 0, Codec.unit(DummyOption::new), new DummyOption());
+    private static final RoleOptionSerializer<DummyOption> DUMMY_SERIALIZER = RoleOptionSerializer.of(
+            ResourceLocation.withDefaultNamespace("noop"),
+            0,
+            Codec.unit(DummyOption::new),
+            ByteCodec.unit(DummyOption::new),
+            new DummyOption()
+    );
 
     private final Map<ResourceLocation, RoleOptionSerializer<?>> serializers = new HashMap<>();
     private final Object2IntMap<ResourceLocation> types = new Object2IntArrayMap<>();
@@ -62,9 +69,16 @@ public final class RoleOptionsApiImpl implements RoleOptionsApi {
     }
 
     @SuppressWarnings("unchecked")
-    public static Function<ResourceLocation, Codec<RoleOption<?>>> codec() {
+    public static Function<ResourceLocation, Codec<? extends RoleOption<?>>> codec() {
         return type -> (Codec<RoleOption<?>>) decode(type)
             .map(RoleOptionSerializer::codec)
+            .result().orElse(null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Function<ResourceLocation, ByteCodec<RoleOption<?>>> byteCodec() {
+        return type -> (ByteCodec<RoleOption<?>>) decode(type)
+            .map(RoleOptionSerializer::byteCodec)
             .result().orElse(null);
     }
 

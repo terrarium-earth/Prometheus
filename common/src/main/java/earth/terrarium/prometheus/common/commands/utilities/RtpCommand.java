@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import earth.terrarium.prometheus.api.roles.RoleApi;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
-import earth.terrarium.prometheus.common.handlers.cooldowns.CooldownHandler;
+import earth.terrarium.prometheus.common.handlers.CooldownHandler;
 import earth.terrarium.prometheus.common.roles.TeleportOptions;
 import earth.terrarium.prometheus.common.utils.ModUtils;
 import net.minecraft.commands.CommandSourceStack;

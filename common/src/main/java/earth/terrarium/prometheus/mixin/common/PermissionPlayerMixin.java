@@ -1,7 +1,7 @@
 package earth.terrarium.prometheus.mixin.common;
 
 import com.teamresourceful.resourcefullib.common.utils.TriState;
-import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
+import earth.terrarium.prometheus.common.handlers.permission.CommandPermissions;
 import earth.terrarium.prometheus.common.handlers.permission.PermissionHolder;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
@@ -29,10 +29,10 @@ public abstract class PermissionPlayerMixin extends LivingEntity implements Perm
     @Override
     public void prometheus$updatePermissions() {
         prometheus$permissions = RoleHandler.getPermissions((Player) ((Object) this));
-        //noinspection ConstantValue
-        if (getServer() != null && ((Object) this) instanceof ServerPlayer serverPlayer && NetworkHandler.CHANNEL.canSendToPlayer(serverPlayer, ClientboundCommandPermissionsPacket.TYPE)) {
+        if (getServer() != null && ((Object) this) instanceof ServerPlayer serverPlayer) {
             getServer().getCommands().sendCommands(serverPlayer);
-            NetworkHandler.CHANNEL.sendToPlayer(new ClientboundCommandPermissionsPacket(CommandPermissionHandler.COMMAND_PERMS), serverPlayer);
+            if (!NetworkHandler.CHANNEL.canSendToPlayer(serverPlayer, ClientboundCommandPermissionsPacket.TYPE)) return;
+            CommandPermissions.sendCommandPermissions(serverPlayer);
         }
     }
 

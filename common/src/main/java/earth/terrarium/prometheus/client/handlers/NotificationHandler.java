@@ -9,7 +9,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.OptionEnum;
@@ -43,15 +42,15 @@ public class NotificationHandler {
             switch (ClientOptionHandler.notificationSound.get()) {
                 case PING1 ->
                     Minecraft.getInstance().getSoundManager().play(
-                        SimpleSoundInstance.forUI(SoundEvent.createFixedRangeEvent(new ResourceLocation(Prometheus.MOD_ID, "ping_1"), 1.0F), 1.0F)
+                        SimpleSoundInstance.forUI(SoundEvent.createFixedRangeEvent(Prometheus.id("ping_1"), 1.0F), 1.0F)
                     );
                 case PING2 ->
                     Minecraft.getInstance().getSoundManager().play(
-                        SimpleSoundInstance.forUI(SoundEvent.createFixedRangeEvent(new ResourceLocation(Prometheus.MOD_ID, "ping_2"), 1.0F), 1.0F)
+                        SimpleSoundInstance.forUI(SoundEvent.createFixedRangeEvent(Prometheus.id("ping_2"), 1.0F), 1.0F)
                     );
                 case PING3 ->
                     Minecraft.getInstance().getSoundManager().play(
-                        SimpleSoundInstance.forUI(SoundEvent.createFixedRangeEvent(new ResourceLocation(Prometheus.MOD_ID, "ping_3"), 1.0F), 1.0F)
+                        SimpleSoundInstance.forUI(SoundEvent.createFixedRangeEvent(Prometheus.id("ping_3"), 1.0F), 1.0F)
                     );
             }
             return;
@@ -75,7 +74,7 @@ public class NotificationHandler {
     }
 
     private static Type getType(ChatType.Bound type, RegistryAccess access) {
-        var chatType = access.registry(Registries.CHAT_TYPE).map(reg -> reg.getKey(type.chatType())).orElse(null);
+        var chatType = access.registry(Registries.CHAT_TYPE).map(reg -> reg.getKey(type.chatType().value())).orElse(null);
         if (chatType != null) {
             if (chatType.equals(ChatType.MSG_COMMAND_INCOMING.location())) return Type.PRIVATE;
             if (chatType.equals(ChatType.TEAM_MSG_COMMAND_INCOMING.location())) return Type.TEAM;

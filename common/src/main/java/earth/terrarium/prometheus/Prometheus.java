@@ -3,13 +3,14 @@ package earth.terrarium.prometheus;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.api.roles.options.RoleOptionsApi;
-import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
+import earth.terrarium.prometheus.common.handlers.permission.CommandPermissions;
 import earth.terrarium.prometheus.common.handlers.promotions.PromotionsHandler;
 import earth.terrarium.prometheus.common.handlers.role.RoleOptionsApiImpl;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.roles.CosmeticOptions;
 import earth.terrarium.prometheus.common.roles.HomeOptions;
 import earth.terrarium.prometheus.common.roles.TeleportOptions;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 
 public class Prometheus {
@@ -29,10 +30,14 @@ public class Prometheus {
     }
 
     public static void onServerStarted(MinecraftServer server) {
-        CommandPermissionHandler.registerPermissions(server.getCommands().getDispatcher());
+        CommandPermissions.registerPermissions(server.getCommands().getDispatcher());
     }
 
     public static void onServerTick(MinecraftServer server) {
         PromotionsHandler.runChecks(server);
+    }
+
+    public static ResourceLocation id(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 }

@@ -5,21 +5,22 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "common.ChatTypeMixin",
-    "common.CommandsMixin",
-    "common.CooldownPlayerMixin",
+    "common.commands.CommandNodeMixin",
+    "common.commands.CommandsMixin",
     "common.HeadingPlayerMixin",
     "common.NickedPlayerMixin",
     "common.PermissionPlayerMixin",
     "common.PlayerDataStorageMixin",
     "common.RolePlayerMixin",
-    "common.ServerboundCustomPayloadPacketMixin",
-    "common.ServerCommonPacketListenerImplMixin",
     "common.accessors.CommandNodeAccessor",
     "common.accessors.PlayerListAccessor",
     "common.accessors.ServerPlayerAccessor",
-    "common.accessors.ServerPlayerInvoker"
+    "common.accessors.ServerPlayerInvoker",
+    "common.music.CustomPacketPayloadMixin",
+    "common.music.ServerCommonPacketListenerImplMixin"
   ],
   "client": [
+    "client.AccessibilityOptionsScreenMixin",
     "client.ChatOptionsScreenMixin",
     "client.ClientPacketListenerMixin",
     "client.OptionsMixin",

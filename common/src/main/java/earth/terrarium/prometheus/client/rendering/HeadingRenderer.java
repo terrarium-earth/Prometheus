@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class HeadingRenderer {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/heading_icons.png");
+    private static final ResourceLocation TEXTURE = Prometheus.id("textures/gui/heading_icons.png");
 
     public static void onRenderIcon(UUID player, GuiGraphics graphics, int x, int y) {
         ClientPacketListener listener = Minecraft.getInstance().getConnection();
@@ -38,7 +38,7 @@ public class HeadingRenderer {
         return text;
     }
 
-    public static void onRender(AbstractClientPlayer abstractClientPlayer, PoseStack stack, MultiBufferSource multiBufferSource, int i, double distance, RendererInterface renderer) {
+    public static void onRender(AbstractClientPlayer abstractClientPlayer, PoseStack stack, MultiBufferSource multiBufferSource, int i, float partialTicks, double distance, RendererInterface renderer) {
         if (Minecraft.getInstance().getConnection() instanceof ClientListenerHook hook) {
             Component title = hook.prometheus$getHeadingTexts().get(abstractClientPlayer.getUUID());
             Heading heading = hook.prometheus$getHeadings().getOrDefault(abstractClientPlayer.getUUID(), Heading.NONE);
@@ -47,7 +47,7 @@ public class HeadingRenderer {
             if (distance <= 4096.0D) {
                 stack.pushPose();
                 stack.translate(0.0D, (9.0F * 1.15F * 0.025F) * 1.5F, 0.0D);
-                renderer.render(abstractClientPlayer, title, stack, multiBufferSource, i);
+                renderer.render(abstractClientPlayer, title, stack, multiBufferSource, i, partialTicks);
                 stack.popPose();
             }
         }
@@ -55,6 +55,6 @@ public class HeadingRenderer {
 
     @FunctionalInterface
     public interface RendererInterface {
-        void render(AbstractClientPlayer player, Component component, PoseStack stack, MultiBufferSource source, int i);
+        void render(AbstractClientPlayer player, Component component, PoseStack stack, MultiBufferSource source, int i, float partialTicks);
     }
 }

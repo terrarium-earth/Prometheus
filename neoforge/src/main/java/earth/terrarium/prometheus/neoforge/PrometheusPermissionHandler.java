@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class PrometheusPermissionHandler implements IPermissionHandler {
 
-    public static final ResourceLocation ID = new ResourceLocation(Prometheus.MOD_ID, "permissions");
+    public static final ResourceLocation ID = Prometheus.id("permissions");
 
     private final IPermissionHandler parent;
     private final Set<PermissionNode<?>> nodes;

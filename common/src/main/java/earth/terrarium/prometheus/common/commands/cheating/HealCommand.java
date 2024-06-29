@@ -35,7 +35,7 @@ public class HealCommand {
             livingEntity.setAirSupply(livingEntity.getMaxAirSupply());
             final var effects = List.copyOf(livingEntity.getActiveEffects());
             for (MobEffectInstance effect : effects) {
-                if (effect.getEffect().getCategory() == MobEffectCategory.HARMFUL) {
+                if (effect.getEffect().value().getCategory() == MobEffectCategory.HARMFUL) {
                     livingEntity.removeEffect(effect.getEffect());
                 }
             }

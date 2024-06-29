@@ -12,14 +12,20 @@ import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public record ServerboundMemberRolesPacket(UUID target,
-                                           Object2BooleanMap<UUID> ids) implements Packet<ServerboundMemberRolesPacket> {
+public record ServerboundMemberRolesPacket(
+    UUID target, Object2BooleanMap<UUID> ids
+) implements Packet<ServerboundMemberRolesPacket> {
+
+    private static final ByteCodec<Object2BooleanMap<UUID>> MAP_CODEC = new MapCodec<>(ByteCodec.UUID, ByteCodec.BOOLEAN).map(map -> {
+        Object2BooleanMap<UUID> ids = new Object2BooleanOpenHashMap<>(map.size());
+        ids.putAll(map);
+        return ids;
+    }, map -> map);
 
     public static final ServerboundPacketType<ServerboundMemberRolesPacket> TYPE = new Type();
 
@@ -32,16 +38,10 @@ public record ServerboundMemberRolesPacket(UUID target,
 
         public Type() {
             super(
-                ServerboundMemberRolesPacket.class,
-                new ResourceLocation(Prometheus.MOD_ID, "member_roles"),
+                Prometheus.id("member_roles"),
                 ObjectByteCodec.create(
                     ByteCodec.UUID.fieldOf(ServerboundMemberRolesPacket::target),
-                    new MapCodec<>(ByteCodec.UUID, ByteCodec.BOOLEAN).map(map -> {
-                            Object2BooleanMap<UUID> ids = new Object2BooleanOpenHashMap<>(map.size());
-                            ids.putAll(map);
-                            return ids;
-                        }, map -> map
-                    ).fieldOf(ServerboundMemberRolesPacket::ids),
+                    MAP_CODEC.fieldOf(ServerboundMemberRolesPacket::ids),
                     ServerboundMemberRolesPacket::new
                 )
             );

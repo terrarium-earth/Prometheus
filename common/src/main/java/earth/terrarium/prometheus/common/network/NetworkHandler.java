@@ -7,11 +7,10 @@ import earth.terrarium.prometheus.common.network.messages.client.ClientboundUpda
 import earth.terrarium.prometheus.common.network.messages.client.screens.*;
 import earth.terrarium.prometheus.common.network.messages.server.*;
 import earth.terrarium.prometheus.common.network.messages.server.roles.*;
-import net.minecraft.resources.ResourceLocation;
 
 public class NetworkHandler {
 
-    public static final Network CHANNEL = new Network(new ResourceLocation(Prometheus.MOD_ID, "main"), 1, true);
+    public static final Network CHANNEL = new Network(Prometheus.id("main"), 1, true);
 
     public static void init() {
         CHANNEL.register(ServerboundAddLocationPacket.TYPE);
@@ -20,9 +19,6 @@ public class NetworkHandler {
         CHANNEL.register(ServerboundChangeRolesPacket.TYPE);
         CHANNEL.register(ServerboundSaveRolePacket.TYPE);
         CHANNEL.register(ServerboundMemberRolesPacket.TYPE);
-        CHANNEL.register(ServerboundSaveCommandPacket.TYPE);
-        CHANNEL.register(ServerboundOpenCommandPacket.TYPE);
-        CHANNEL.register(ServerboundDeleteCommandPacket.TYPE);
         CHANNEL.register(ServerboundOpenRolePacket.TYPE);
         CHANNEL.register(ServerboundOpenRolesPacket.TYPE);
         CHANNEL.register(ServerboundOpenLocationPacket.TYPE);
@@ -32,7 +28,6 @@ public class NetworkHandler {
 
         CHANNEL.register(ClientboundCommandPermissionsPacket.TYPE);
         CHANNEL.register(ClientboundUpdateHeadingPacket.TYPE);
-        CHANNEL.register(ClientboundOpenCommandScreenPacket.TYPE);
         CHANNEL.register(ClientboundOpenRolesScreenPacket.TYPE);
         CHANNEL.register(ClientboundOpenRoleScreenPacket.TYPE);
         CHANNEL.register(ClientboundOpenLocationScreenPacket.TYPE);

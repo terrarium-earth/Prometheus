@@ -34,7 +34,7 @@ public class TpCommand {
                 ServerPlayer player = context.getSource().getPlayerOrException();
                 BlockPos pos = player.level().getSharedSpawnPos();
                 if (!RtpCommand.isSafe(player, pos)) {
-                    pos = player.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos);
+                    pos = player.server.overworld().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos);
                     if (!RtpCommand.isSafe(player, pos)) {
                         pos = RtpCommand.tp(pos, player, 10, 0);
                     }

@@ -9,19 +9,14 @@ import java.nio.charset.StandardCharsets;
 
 public record MusicSongPacketPayload(String song) implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation("music:song");
+    public static final ResourceLocation ID = ResourceLocation.parse("music:song");
 
     public MusicSongPacketPayload(FriendlyByteBuf buffer) {
         this(new String(buffer.readByteArray(32767), StandardCharsets.UTF_8));
     }
 
     @Override
-    public void write(FriendlyByteBuf buffer) {
-        buffer.writeByteArray(song.getBytes(StandardCharsets.UTF_8));
-    }
-
-    @Override
-    public @NotNull ResourceLocation id() {
-        return ID;
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return new Type<>(ID);
     }
 }

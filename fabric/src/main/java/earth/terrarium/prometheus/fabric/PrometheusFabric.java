@@ -5,7 +5,7 @@ import earth.terrarium.prometheus.common.commands.ModCommands;
 import earth.terrarium.prometheus.common.handlers.MuteHandler;
 import earth.terrarium.prometheus.common.handlers.heading.HeadingEvents;
 import earth.terrarium.prometheus.common.handlers.nickname.NicknameEvents;
-import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
+import earth.terrarium.prometheus.common.handlers.permission.CommandPermissions;
 import earth.terrarium.prometheus.common.handlers.permission.PermissionEvents;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -27,7 +27,7 @@ public class PrometheusFabric implements ModInitializer {
             if (entity instanceof ServerPlayer player) {
                 HeadingEvents.onJoin(player);
                 NicknameEvents.onJoin(player);
-                CommandPermissionHandler.onJoin(player);
+                CommandPermissions.sendCommandPermissions(player);
             }
         });
         ServerLifecycleEvents.SERVER_STARTED.register(Prometheus::onServerStarted);

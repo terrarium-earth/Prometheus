@@ -21,11 +21,11 @@ public abstract class PlayerRendererMixin extends EntityRenderer<AbstractClientP
     }
 
     @Inject(
-        method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+        method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IF)V",
         at = @At("TAIL")
     )
-    public void onRenderNameTag(AbstractClientPlayer abstractClientPlayer, Component component, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
-        double d = this.entityRenderDispatcher.distanceToSqr(abstractClientPlayer);
-        HeadingRenderer.onRender(abstractClientPlayer, poseStack, multiBufferSource, i, d, super::renderNameTag);
+    public void onRenderNameTag(AbstractClientPlayer player, Component name, PoseStack stack, MultiBufferSource source, int packedLight, float partialTick, CallbackInfo ci) {
+        double d = this.entityRenderDispatcher.distanceToSqr(player);
+        HeadingRenderer.onRender(player, stack, source, packedLight, partialTick, d, super::renderNameTag);
     }
 }

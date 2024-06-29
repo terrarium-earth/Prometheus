@@ -26,9 +26,9 @@ import java.util.stream.Stream;
 
 public class LocationsList extends SelectionList<LocationsList.Entry> {
 
-    private static final ResourceLocation ENTRY = new ResourceLocation(Prometheus.MOD_ID, "location/entry");
-    private static final ResourceLocation ENTRY_HIGHLIGHTED = new ResourceLocation(Prometheus.MOD_ID, "location/entry_highlighted");
-    private static final ResourceLocation DEFAULT_ICON = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/locations/icon_unknown.png");
+    private static final ResourceLocation ENTRY = Prometheus.id("location/entry");
+    private static final ResourceLocation ENTRY_HIGHLIGHTED = Prometheus.id("location/entry_highlighted");
+    private static final ResourceLocation DEFAULT_ICON = Prometheus.id("textures/gui/locations/icon_unknown.png");
 
     private Entry selected;
     private final Consumer<@Nullable Entry> onSelection;

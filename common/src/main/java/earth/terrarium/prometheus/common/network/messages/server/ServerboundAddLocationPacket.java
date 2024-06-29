@@ -10,14 +10,15 @@ import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.handlers.locations.HomeHandler;
 import earth.terrarium.prometheus.common.handlers.locations.WarpHandler;
 import earth.terrarium.prometheus.common.menus.content.location.LocationType;
-import net.minecraft.resources.ResourceLocation;
+import earth.terrarium.prometheus.common.network.messages.client.screens.ClientboundOpenLocationScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.function.Consumer;
 
-public record ServerboundAddLocationPacket(LocationType locationType,
-                                           String name) implements Packet<ServerboundAddLocationPacket> {
+public record ServerboundAddLocationPacket(
+    LocationType locationType, String name
+) implements Packet<ServerboundAddLocationPacket> {
 
     public static final ServerboundPacketType<ServerboundAddLocationPacket> TYPE = new Type();
 
@@ -30,8 +31,7 @@ public record ServerboundAddLocationPacket(LocationType locationType,
 
         public Type() {
             super(
-                ServerboundAddLocationPacket.class,
-                new ResourceLocation(Prometheus.MOD_ID, "add_location"),
+                Prometheus.id("add_location"),
                 ObjectByteCodec.create(
                     ByteCodec.ofEnum(LocationType.class).fieldOf(ServerboundAddLocationPacket::locationType),
                     ByteCodec.STRING.fieldOf(ServerboundAddLocationPacket::name),
@@ -47,12 +47,12 @@ public record ServerboundAddLocationPacket(LocationType locationType,
                     switch (message.locationType) {
                         case HOME -> {
                             if (HomeHandler.add(serverPlayer, message.name)) {
-                                ServerboundOpenLocationPacket.openHomes(serverPlayer);
+                                ClientboundOpenLocationScreenPacket.openHomes(serverPlayer);
                             }
                         }
                         case WARP -> {
                             if (WarpHandler.add(serverPlayer, message.name)) {
-                                ServerboundOpenLocationPacket.openWarps(serverPlayer);
+                                ClientboundOpenLocationScreenPacket.openWarps(serverPlayer);
                             }
                         }
                     }

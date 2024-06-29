@@ -1,93 +1,79 @@
 package earth.terrarium.prometheus.common.handlers.promotions;
 
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
-import com.teamresourceful.resourcefullib.common.utils.SaveHandler;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
+import com.teamresourceful.resourcefullib.common.utils.files.CodecSavedData;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class PromotionsHandler extends SaveHandler {
+public record PromotionsHandler(
+    Map<String, Promotion> promotions,
+    Map<UUID, Set<String>> playerPromotions
+) {
 
-    private static final PromotionsHandler CLIENT_SIDE = new PromotionsHandler();
+    private static final Codec<PromotionsHandler> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Codec.unboundedMap(Codec.STRING, Promotion.CODEC).fieldOf("promotions").forGetter(PromotionsHandler::promotions),
+        Codec.unboundedMap(UUIDUtil.STRING_CODEC, CodecExtras.set(Codec.STRING)).fieldOf("playerPromotions").forGetter(PromotionsHandler::playerPromotions)
+    ).apply(instance, (p, pp) -> new PromotionsHandler(new HashMap<>(p), new HashMap<>(pp))));
 
-    private final Map<String, Promotion> promotions = new HashMap<>();
-    private final Map<UUID, Set<String>> playerPromotions = new HashMap<>();
+    private static final CodecSavedData.Factory<PromotionsHandler> DATA = CodecSavedData
+        .create(CODEC, "prometheus_promotions")
+        .defaultValue(PromotionsHandler::new)
+        .global()
+        .clean();
 
-    public static PromotionsHandler read(Level level) {
-        return read(level, HandlerType.create(CLIENT_SIDE, PromotionsHandler::new), "prometheus_promotions");
+    private PromotionsHandler() {
+        this(new HashMap<>(), new HashMap<>());
     }
 
-    public static void removePromotion(Level level, String id) {
-        PromotionsHandler handler = read(level);
-        handler.promotions.remove(id);
-        handler.playerPromotions.values().forEach(set -> set.remove(id));
-        handler.setDirty();
+    public static void removePromotion(ServerLevel level, String id) {
+        var data = DATA.create(level);
+        var promotions = data.get();
+        promotions.promotions.remove(id);
+        promotions.playerPromotions.values().forEach(set -> set.remove(id));
+        data.setDirty();
     }
 
-    public static Promotion getPromotion(Level level, String id) {
-        return read(level).promotions.get(id);
+    public static Promotion getPromotion(ServerLevel level, String id) {
+        return DATA.create(level).get().promotions.get(id);
     }
 
-    public static List<Pair<String, Promotion>> getPromotions(PromotionsHandler handler) {
+    public static List<Pair<String, Promotion>> getPromotions(ServerLevel level) {
+        var handler = DATA.create(level).get();
         return handler.promotions.entrySet().stream()
             .map(entry -> Pair.of(entry.getKey(), entry.getValue()))
             .toList();
     }
 
-    public static void addPromotion(Level level, String id, Promotion promotion) {
-        PromotionsHandler handler = read(level);
-        handler.promotions.put(id, promotion);
-        handler.setDirty();
+    public static void addPromotion(ServerLevel level, String id, Promotion promotion) {
+        var data = DATA.create(level);
+        data.get().promotions.put(id, promotion);
+        data.setDirty();
     }
 
     public static void runChecks(MinecraftServer server) {
-        PromotionsHandler handler = read(server.overworld());
-        server.getPlayerList().getPlayers().forEach(player -> runCheck(handler, player));
-    }
-
-    private static void runCheck(PromotionsHandler handler, ServerPlayer player) {
-        int time = player.getStats().getValue(Stats.CUSTOM.get(Stats.PLAY_TIME));
-        handler.promotions.forEach((id, promotion) -> {
-            if (time >= promotion.time()) {
-                if (!handler.playerPromotions.containsKey(player.getUUID())) {
-                    handler.playerPromotions.computeIfAbsent(player.getUUID(), uuid -> new HashSet<>()).add(id);
-                    promotion.run(player);
-                    player.sendSystemMessage(CommonUtils.serverTranslatable("prometheus.promotions.promoted", promotion.name()));
-                    handler.setDirty();
+        var data = DATA.create(server.overworld());
+        PromotionsHandler handler = data.get();
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            int time = player.getStats().getValue(Stats.CUSTOM.get(Stats.PLAY_TIME));
+            handler.promotions.forEach((id, promotion) -> {
+                if (time >= promotion.time()) {
+                    if (!handler.playerPromotions.containsKey(player.getUUID())) {
+                        handler.playerPromotions.computeIfAbsent(player.getUUID(), uuid -> new HashSet<>()).add(id);
+                        promotion.run(player);
+                        player.sendSystemMessage(CommonUtils.serverTranslatable("prometheus.promotions.promoted", promotion.name()));
+                        data.setDirty();
+                    }
                 }
-            }
-        });
-    }
-
-    @Override
-    public void saveData(@NotNull CompoundTag tag) {
-        promotions.forEach((key, value) -> tag.put(key, value.toTag()));
-        playerPromotions.forEach((key, value) -> {
-            ListTag list = new ListTag();
-            value.forEach(id -> list.add(StringTag.valueOf(id)));
-            tag.put(key.toString(), list);
-        });
-    }
-
-    @Override
-    public void loadData(CompoundTag tag) {
-        CompoundTag promotions = tag.getCompound("promotions");
-        CompoundTag playerPromotions = tag.getCompound("playerPromotions");
-        promotions.getAllKeys()
-            .forEach(key -> this.promotions.put(key, Promotion.fromTag(tag.getCompound(key))));
-        playerPromotions.getAllKeys()
-            .forEach(key -> {
-                Set<String> set = new HashSet<>();
-                playerPromotions.getList(key, 8).forEach(value -> set.add(value.getAsString()));
-                this.playerPromotions.put(UUID.fromString(key), set);
             });
+        }
     }
 }

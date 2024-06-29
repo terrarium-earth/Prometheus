@@ -2,6 +2,8 @@ package earth.terrarium.prometheus.common.commands.cheating;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
+import dev.architectury.injectables.annotations.ExpectPlatform;
 import earth.terrarium.prometheus.common.utils.ModUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -16,13 +18,11 @@ public class FlyCommand {
             .requires(source -> source.hasPermission(2))
             .then(Commands.argument("players", EntityArgument.players())
                 .executes(context -> {
-                    EntityArgument.getPlayers(context, "players").forEach(FlyCommand::fly);
+                    EntityArgument.getPlayers(context, "players").forEach(FlyCommand::setCanFly);
                     return 1;
                 })
             ).executes(context -> {
-                if (context.getSource().getEntity() instanceof Player player) {
-                    fly(player);
-                }
+                setCanFly(context.getSource().getEntity());
                 return 1;
             })
         );
@@ -35,12 +35,9 @@ public class FlyCommand {
     }
 
 
-    private static void fly(Entity entity) {
-        if (entity instanceof Player player) {
-            player.getAbilities().flying = !player.getAbilities().flying;
-            player.getAbilities().mayfly = !player.getAbilities().mayfly;
-            player.onUpdateAbilities();
-        }
+    @ExpectPlatform
+    private static void setCanFly(Entity entity) {
+        throw new NotImplementedException();
     }
 
     private static void setFlySpeed(Entity entity, float speed) {

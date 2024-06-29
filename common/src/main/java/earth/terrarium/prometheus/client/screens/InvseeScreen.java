@@ -25,11 +25,11 @@ import java.util.UUID;
 public class InvseeScreen extends AbstractContainerCursorScreen<InvseeMenu> implements MenuAccess<InvseeMenu> {
 
     private static final Component YOUR_INVENTORY = Component.translatable("prometheus.invsee.your_inventory");
-    private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/invsee.png");
+    private static final ResourceLocation CONTAINER_BACKGROUND = Prometheus.id("textures/gui/invsee.png");
 
     private static final WidgetSprites ENDERCHEST_BUTTON_SPRITES = new WidgetSprites(
-        new ResourceLocation(Prometheus.MOD_ID, "invsee/enderchest_button"),
-        new ResourceLocation(Prometheus.MOD_ID, "invsee/enderchest_button_highlighted")
+        Prometheus.id("invsee/enderchest_button"),
+        Prometheus.id("invsee/enderchest_button_highlighted")
     );
 
     private Player renderedPlayer;

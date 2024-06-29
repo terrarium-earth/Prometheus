@@ -10,6 +10,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import earth.terrarium.prometheus.common.handlers.promotions.Promotion;
 import earth.terrarium.prometheus.common.handlers.promotions.PromotionsHandler;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ComponentArgument;
@@ -17,7 +18,7 @@ import net.minecraft.commands.arguments.TimeArgument;
 import net.minecraft.commands.arguments.UuidArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +26,13 @@ import java.util.UUID;
 
 public class PromotionCommand {
 
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
         dispatcher.register(Commands.literal("promotions")
             .requires(source -> source.hasPermission(2))
             .then(add())
             .then(remove())
             .then(list())
-            .then(edit())
+            .then(edit(context))
         );
     }
 
@@ -61,7 +62,7 @@ public class PromotionCommand {
             .then(
                 Commands.argument("id", StringArgumentType.word())
                     .executes(context -> {
-                        Level level = context.getSource().getLevel();
+                        ServerLevel level = context.getSource().getLevel();
                         String name = StringArgumentType.getString(context, "id");
                         PromotionsHandler.removePromotion(level, name);
                         context.getSource().sendSuccess(
@@ -76,8 +77,7 @@ public class PromotionCommand {
     private static LiteralArgumentBuilder<CommandSourceStack> list() {
         return Commands.literal("list")
             .executes(context -> {
-                PromotionsHandler handler = PromotionsHandler.read(context.getSource().getLevel());
-                for (var entry : PromotionsHandler.getPromotions(handler)) {
+                for (var entry : PromotionsHandler.getPromotions(context.getSource().getLevel())) {
                     context.getSource().sendSystemMessage(entry.getSecond().name().copy()
                         .withStyle(style -> style.withHoverEvent(new HoverEvent(
                             HoverEvent.Action.SHOW_TEXT,
@@ -89,21 +89,21 @@ public class PromotionCommand {
             });
     }
 
-    private static LiteralArgumentBuilder<CommandSourceStack> edit() {
+    private static LiteralArgumentBuilder<CommandSourceStack> edit(CommandBuildContext context) {
         return Commands.literal("edit")
             .then(Commands.argument("id", StringArgumentType.word())
-                .then(editName())
+                .then(editName(context))
                 .then(editRoles(true))
                 .then(editRoles(false))
                 .then(editTime())
             );
     }
 
-    private static LiteralArgumentBuilder<CommandSourceStack> editName() {
+    private static LiteralArgumentBuilder<CommandSourceStack> editName(CommandBuildContext ctx) {
         return Commands.literal("displayname")
-            .then(Commands.argument("name", ComponentArgument.textComponent())
+            .then(Commands.argument("name", ComponentArgument.textComponent(ctx))
                 .executes(context -> {
-                    Level level = context.getSource().getLevel();
+                    ServerLevel level = context.getSource().getLevel();
                     String id = StringArgumentType.getString(context, "id");
                     Component name = ComponentArgument.getComponent(context, "name");
                     Promotion promotion = getPromotion(context);
@@ -123,7 +123,7 @@ public class PromotionCommand {
             .then(Commands.argument("role", UuidArgument.uuid())
                 .suggests(RolesCommand.SUGGEST_ROLES)
                 .executes(context -> {
-                    Level level = context.getSource().getLevel();
+                    ServerLevel level = context.getSource().getLevel();
                     String id = StringArgumentType.getString(context, "id");
                     UUID role = UuidArgument.getUuid(context, "role");
                     Promotion promotion = getPromotion(context);
@@ -148,7 +148,7 @@ public class PromotionCommand {
         return Commands.literal("time")
             .then(Commands.argument("time", TimeArgument.time(10))
                 .executes(context -> {
-                    Level level = context.getSource().getLevel();
+                    ServerLevel level = context.getSource().getLevel();
                     String id = StringArgumentType.getString(context, "id");
                     int time = IntegerArgumentType.getInteger(context, "time");
                     Promotion promotion = getPromotion(context);

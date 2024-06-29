@@ -5,13 +5,13 @@ import earth.terrarium.prometheus.common.commands.ModCommands;
 import earth.terrarium.prometheus.common.handlers.MuteHandler;
 import earth.terrarium.prometheus.common.handlers.heading.HeadingEvents;
 import earth.terrarium.prometheus.common.handlers.nickname.NicknameEvents;
-import earth.terrarium.prometheus.common.handlers.permission.CommandPermissionHandler;
+import earth.terrarium.prometheus.common.handlers.permission.CommandPermissions;
 import earth.terrarium.prometheus.common.handlers.permission.PermissionEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -19,9 +19,9 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.ServerChatEvent;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.server.permission.events.PermissionGatherEvent;
 import net.neoforged.neoforge.server.permission.handler.DefaultPermissionHandler;
 import net.neoforged.neoforge.server.permission.handler.IPermissionHandler;
@@ -36,7 +36,7 @@ public class PrometheusNeoForge {
 
     private static Supplier<IPermissionHandlerFactory> parentPermissionFactory = null;
 
-    public PrometheusNeoForge(IEventBus bus) {
+    public PrometheusNeoForge(IEventBus bus, ModContainer container) {
         Prometheus.init();
         if (FMLEnvironment.dist.isClient()) {
             PrometheusNeoForgeClient.init(bus);
@@ -49,7 +49,7 @@ public class PrometheusNeoForge {
         NeoForge.EVENT_BUS.addListener(PrometheusNeoForge::onServerTick);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, PrometheusNeoForge::onAddHandlers);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, PrometheusNeoForgeConfig.SERVER_CONFIG);
+        container.registerConfig(ModConfig.Type.SERVER, PrometheusNeoForgeConfig.SERVER_CONFIG);
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
@@ -71,7 +71,7 @@ public class PrometheusNeoForge {
         if (event.getEntity() instanceof ServerPlayer player) {
             HeadingEvents.onJoin(player);
             NicknameEvents.onJoin(player);
-            CommandPermissionHandler.onJoin(player);
+            CommandPermissions.sendCommandPermissions(player);
         }
     }
 
@@ -79,7 +79,7 @@ public class PrometheusNeoForge {
         Prometheus.onServerStarted(event.getServer());
     }
 
-    private static void onServerTick(TickEvent.ServerTickEvent event) {
+    private static void onServerTick(ServerTickEvent event) {
         Prometheus.onServerTick(event.getServer());
     }
 

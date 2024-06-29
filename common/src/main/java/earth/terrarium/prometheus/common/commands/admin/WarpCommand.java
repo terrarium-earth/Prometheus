@@ -1,13 +1,16 @@
 package earth.terrarium.prometheus.common.commands.admin;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import earth.terrarium.prometheus.api.locations.LocationsApi;
+import earth.terrarium.prometheus.common.commands.ModCommands;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.locations.WarpHandler;
+import earth.terrarium.prometheus.common.network.messages.client.screens.ClientboundOpenLocationScreenPacket;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -25,6 +28,14 @@ public class WarpCommand {
     };
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+        dispatcher.register(Commands.literal("warps")
+                .executes(context -> {
+                    ServerPlayer player = context.getSource().getPlayerOrException();
+                    ModCommands.checkPacket(player, ClientboundOpenLocationScreenPacket.TYPE);
+                    ClientboundOpenLocationScreenPacket.openWarps(player);
+                    return Command.SINGLE_SUCCESS;
+                }));
+
         dispatcher.register(Commands.literal("warp")
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .suggests(SUGGESTION_PROVIDER)

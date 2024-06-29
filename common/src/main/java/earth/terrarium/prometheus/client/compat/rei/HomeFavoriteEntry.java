@@ -21,8 +21,8 @@ import net.minecraft.sounds.SoundEvents;
 
 @SuppressWarnings("UnstableApiUsage")
 public class HomeFavoriteEntry extends FavoriteEntry {
-    public static final ResourceLocation ID = new ResourceLocation(Prometheus.MOD_ID, Prometheus.MOD_ID);
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/home.png");
+    public static final ResourceLocation ID = Prometheus.id(Prometheus.MOD_ID);
+    private static final ResourceLocation TEXTURE = Prometheus.id("textures/gui/home.png");
 
     @Override
     public boolean isInvalid() {

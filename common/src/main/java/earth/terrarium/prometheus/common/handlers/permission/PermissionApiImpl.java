@@ -11,8 +11,8 @@ import java.util.function.Supplier;
 
 public class PermissionApiImpl implements PermissionApi {
 
-    private static final List<Supplier<List<String>>> AUTO_COMPLETE = new ArrayList<>();
-    private static final Map<String, TriState> DEFAULT_PERMISSIONS = new HashMap<>();
+    private static final List<Supplier<List<String>>> autoComplete = new ArrayList<>();
+    private static final Map<String, TriState> defaultPermissions = new HashMap<>();
 
     @Override
     public TriState getPermission(Player player, String permission) {
@@ -33,14 +33,14 @@ public class PermissionApiImpl implements PermissionApi {
 
     @Override
     public void addAutoComplete(Supplier<List<String>> permission) {
-        AUTO_COMPLETE.add(permission);
+        autoComplete.add(permission);
     }
 
     @Override
     public List<String> getAutoComplete(String text, Set<String> permissions) {
         if (text == null || text.isBlank()) return List.of();
         Set<String> complete = new LinkedHashSet<>();
-        AUTO_COMPLETE.stream()
+        autoComplete.stream()
             .map(Supplier::get)
             .flatMap(List::stream)
             .filter(s -> !permissions.contains(s))
@@ -54,7 +54,7 @@ public class PermissionApiImpl implements PermissionApi {
     @Override
     public List<String> getAutoComplete(Set<String> permissions) {
         Set<String> complete = new LinkedHashSet<>();
-        AUTO_COMPLETE.stream()
+        autoComplete.stream()
             .map(Supplier::get)
             .flatMap(List::stream)
             .filter(s -> !permissions.contains(s))
@@ -66,7 +66,7 @@ public class PermissionApiImpl implements PermissionApi {
     @Override
     public List<String> getAutoComplete() {
         Set<String> complete = new LinkedHashSet<>();
-        AUTO_COMPLETE.stream()
+        autoComplete.stream()
             .map(Supplier::get)
             .flatMap(List::stream)
             .forEach(complete::add);
@@ -75,11 +75,11 @@ public class PermissionApiImpl implements PermissionApi {
 
     @Override
     public void addDefaultPermission(String permission, TriState state) {
-        DEFAULT_PERMISSIONS.put(permission, state);
+        defaultPermissions.put(permission, state);
     }
 
     @Override
     public Map<String, TriState> getDefaultPermissions() {
-        return DEFAULT_PERMISSIONS;
+        return defaultPermissions;
     }
 }

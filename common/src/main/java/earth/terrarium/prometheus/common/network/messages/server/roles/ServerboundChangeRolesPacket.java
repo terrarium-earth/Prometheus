@@ -9,7 +9,6 @@ import com.teamresourceful.resourcefullib.common.network.defaults.CodecPacketTyp
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
@@ -31,8 +30,7 @@ public record ServerboundChangeRolesPacket(List<UUID> ids) implements Packet<Ser
 
         public Type() {
             super(
-                ServerboundChangeRolesPacket.class,
-                new ResourceLocation(Prometheus.MOD_ID, "change_roles"),
+                Prometheus.id("change_roles"),
                 ObjectByteCodec.create(
                     ByteCodec.UUID.listOf().fieldOf(ServerboundChangeRolesPacket::ids),
                     ServerboundChangeRolesPacket::new

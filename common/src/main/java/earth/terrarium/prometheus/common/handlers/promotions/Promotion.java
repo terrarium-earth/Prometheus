@@ -1,13 +1,13 @@
 package earth.terrarium.prometheus.common.handlers.promotions;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import earth.terrarium.prometheus.common.handlers.role.RoleHandler;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
@@ -19,31 +19,16 @@ public record Promotion(
     List<UUID> roles
 ) {
 
+    public static final Codec<Promotion> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        ComponentSerialization.CODEC.fieldOf("name").forGetter(Promotion::name),
+        Codec.LONG.fieldOf("time").forGetter(Promotion::time),
+        UUIDUtil.STRING_CODEC.listOf().fieldOf("roles").forGetter(Promotion::roles)
+    ).apply(instance, Promotion::new));
+
     public void run(ServerPlayer player) {
         Object2BooleanMap<UUID> map = new Object2BooleanOpenHashMap<>();
         for (UUID id : roles) map.put(id, true);
         RoleHandler.changeRoles(player.level(), player.getUUID(), map);
-    }
-
-    public CompoundTag toTag() {
-        CompoundTag tag = new CompoundTag();
-        tag.putString("name", Component.Serializer.toJson(name));
-        tag.putLong("time", time);
-        ListTag roles = new ListTag();
-        this.roles.forEach(uuid -> roles.add(StringTag.valueOf(uuid.toString())));
-        tag.put("roles", roles);
-        return tag;
-    }
-
-    public static Promotion fromTag(CompoundTag tag) {
-        return new Promotion(
-            Component.Serializer.fromJson(tag.getString("name")),
-            tag.getLong("time"),
-            tag.getList("roles", 8).stream()
-                .map(Tag::getAsString)
-                .map(UUID::fromString)
-                .toList()
-        );
     }
 
     public static Promotion fromId(String id, long time) {

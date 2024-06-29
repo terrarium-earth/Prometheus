@@ -22,14 +22,14 @@ import java.util.stream.Stream;
 
 public class LocationScreen extends PriorityScreen implements ContextualMenuScreen {
 
-    private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/location.png");
+    private static final ResourceLocation CONTAINER_BACKGROUND = Prometheus.id("textures/gui/location.png");
     private static final int HEIGHT = 211;
     private static final int WIDTH = 176;
 
     private static final WidgetSprites PLUS_BUTTON_SPRITES = new WidgetSprites(
-        new ResourceLocation(Prometheus.MOD_ID, "location/plus_button"),
-        new ResourceLocation(Prometheus.MOD_ID, "location/plus_button_disabled"),
-        new ResourceLocation(Prometheus.MOD_ID, "location/plus_button_highlighted")
+        Prometheus.id("location/plus_button"),
+        Prometheus.id("location/plus_button_disabled"),
+        Prometheus.id("location/plus_button_highlighted")
     );
 
     private final LocationContent content;

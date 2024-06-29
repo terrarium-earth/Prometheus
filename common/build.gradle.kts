@@ -8,5 +8,5 @@ loom {
 }
 
 dependencies {
-    modCompileOnly(group = "tech.thatgravyboat", name = "commonats", version = "2.0")
+    modCompileOnly(group = "tech.thatgravyboat", name = "commonats", version = "3.0")
 }

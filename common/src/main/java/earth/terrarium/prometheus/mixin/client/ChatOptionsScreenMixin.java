@@ -3,52 +3,24 @@ package earth.terrarium.prometheus.mixin.client;
 import earth.terrarium.prometheus.client.handlers.ClientOptionHandler;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
-import net.minecraft.client.gui.screens.AccessibilityOptionsScreen;
-import net.minecraft.client.gui.screens.ChatOptionsScreen;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.SimpleOptionsSubScreen;
-import net.minecraft.network.chat.Component;
-import org.spongepowered.asm.mixin.Final;
+import net.minecraft.client.gui.screens.options.ChatOptionsScreen;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
-@Mixin(SimpleOptionsSubScreen.class)
+@Mixin(ChatOptionsScreen.class)
 public class ChatOptionsScreenMixin {
 
-    @Shadow
-    @Final
-    @Mutable
-    protected OptionInstance<?>[] smallOptions;
-
-    @Inject(
-        method = "<init>",
-        at = @At("RETURN")
-    )
-    @SuppressWarnings("ConstantValue")
-    private void prometheus$init(Screen screen, Options options, Component component, OptionInstance<?>[] optionInstances, CallbackInfo ci) {
-        Class<?> clazz = this.getClass();
-        List<OptionInstance<?>> optionsList = null;
-
-        if (clazz == ChatOptionsScreen.class) {
-            optionsList = ClientOptionHandler.getChatOptions();
-        }
-        if (clazz == AccessibilityOptionsScreen.class) {
-            optionsList = ClientOptionHandler.getAccessibilityOptions();
-        }
-
-        if (optionsList != null) {
-            var smallOptions = new OptionInstance[this.smallOptions.length + optionsList.size()];
-            for (int i = 0; i < optionsList.size(); i++) {
-                smallOptions[this.smallOptions.length + i] = optionsList.get(i);
-            }
-            System.arraycopy(this.smallOptions, 0, smallOptions, 0, this.smallOptions.length);
-            this.smallOptions = smallOptions;
-        }
+    @Inject(method = "options", at = @At("RETURN"), cancellable = true)
+    private static void prometheus$addChatOptions(Options options, CallbackInfoReturnable<OptionInstance<?>[]> cir) {
+        List<OptionInstance<?>> optionsList = ClientOptionHandler.getChatOptions();
+        OptionInstance<?>[] optionInstances = cir.getReturnValue();
+        OptionInstance<?>[] newOptionInstances = new OptionInstance[optionInstances.length + optionsList.size()];
+        for (int i = 0; i < optionsList.size(); i++) newOptionInstances[optionInstances.length + i] = optionsList.get(i);
+        System.arraycopy(optionInstances, 0, newOptionInstances, 0, optionInstances.length);
+        cir.setReturnValue(newOptionInstances);
     }
 }

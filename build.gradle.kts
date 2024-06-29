@@ -8,7 +8,7 @@ plugins {
     java
     id("maven-publish")
     id("com.teamresourceful.resourcefulgradle") version "0.0.+"
-    id("dev.architectury.loom") version "1.5-SNAPSHOT" apply false
+    id("dev.architectury.loom") version "1.6-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
 }
@@ -41,13 +41,6 @@ subprojects {
         mavenCentral()
         maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
         maven(url = "https://maven.neoforged.net/releases/")
-        maven {
-            url = uri("https://jitpack.io")
-            content {
-                includeGroup("com.github.LlamaLad7")
-                includeGroup("com.github.llamalad7.mixinextras")
-            }
-        }
         maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
         mavenLocal()
     }
@@ -65,11 +58,11 @@ subprojects {
 
             officialMojangMappings()
 
-            parchment(create(group = "org.parchmentmc.data", name = "parchment-1.20.3", version = parchmentVersion))
+            parchment(create(group = "org.parchmentmc.data", name = "parchment-$minecraftVersion", version = parchmentVersion))
         })
 
         "modApi"(group = "com.teamresourceful.resourcefullib", name = "resourcefullib-$modLoader-$minecraftVersion", version = resourcefulLibVersion)
-        val olympus = "modImplementation"(group = "earth.terrarium.olympus", name = "olympus-$modLoader-1.20.4", version = "latest.release") {
+        val olympus = "modImplementation"(group = "earth.terrarium.olympus", name = "olympus-$modLoader-$minecraftVersion", version = "latest.release") {
             isTransitive = false
         }
 
@@ -100,7 +93,7 @@ subprojects {
 
     tasks.processResources {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        filesMatching(listOf("META-INF/mods.toml", "fabric.mod.json")) {
+        filesMatching(listOf("META-INF/neoforge.mods.toml", "fabric.mod.json")) {
             expand("version" to project.version)
         }
     }

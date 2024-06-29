@@ -3,15 +3,15 @@ package earth.terrarium.prometheus.common.handlers.role;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
-import com.teamresourceful.resourcefullib.common.networking.PacketHelper;
+import com.teamresourceful.bytecodecs.base.ByteCodec;
+import com.teamresourceful.bytecodecs.base.object.ObjectByteCodec;
+import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.prometheus.api.roles.options.RoleOption;
 import earth.terrarium.prometheus.api.roles.options.RoleOptionSerializer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -21,7 +21,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public record Role(Map<String, TriState> permissions, Map<ResourceLocation, RoleOption<?>> options) {
+public record Role(
+        Map<String, TriState> permissions,
+        Map<ResourceLocation, RoleOption<?>> options
+) {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -30,11 +33,17 @@ public record Role(Map<String, TriState> permissions, Map<ResourceLocation, Role
         Codec.unboundedMap(Codec.STRING, STATE_CODEC).fieldOf("permissions").orElse(err -> {
             LOGGER.error(err);
         }, new HashMap<>()).forGetter(Role::permissions),
-        new DispatchMapCodec<>(ResourceLocation.CODEC, RoleOptionsApiImpl.codec()).fieldOf("options").orElse(err -> {
+        Codec.dispatchedMap(ResourceLocation.CODEC, RoleOptionsApiImpl.codec()).fieldOf("options").orElse(err -> {
             LOGGER.error(err);
         }, new HashMap<>()).forGetter(Role::options)
     ).apply(instnace, (perms, ops) -> new Role(new HashMap<>(perms), new HashMap<>(ops))));
     //DO NOT CHANGE THIS CODE. It is wrapped because codecs make immutable maps, and we need to be able to modify them.
+
+    public static final ByteCodec<Role> BYTE_CODEC = ObjectByteCodec.create(
+            ByteCodec.mapOf(ByteCodec.STRING, ByteCodec.ofEnum(TriState.class)).fieldOf(Role::permissions),
+            ExtraByteCodecs.RESOURCE_LOCATION.mapDispatch(RoleOptionsApiImpl.byteCodec()).fieldOf(Role::options),
+            Role::new
+    );
 
     public Role() {
         this(new HashMap<>(), new HashMap<>());
@@ -91,16 +100,5 @@ public record Role(Map<String, TriState> permissions, Map<ResourceLocation, Role
         return CODEC.parse(NbtOps.INSTANCE, tag)
             .resultOrPartial(LOGGER::error)
             .orElse(new Role());
-    }
-
-    public void toBuffer(FriendlyByteBuf buffer) {
-        PacketHelper.writeWithYabn(buffer, CODEC, this, true);
-    }
-
-    public static Role fromBuffer(FriendlyByteBuf buffer) {
-        return PacketHelper.readWithYabn(buffer, Role.CODEC, true).get()
-            .ifRight(error -> LOGGER.error("Error reading role: {}", error))
-            .left()
-            .orElse(null);
     }
 }

@@ -2,6 +2,9 @@ package earth.terrarium.prometheus.common.handlers.heading;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.serialization.Codec;
+import com.teamresourceful.bytecodecs.base.ByteCodec;
+import com.teamresourceful.resourcefullib.common.codecs.EnumCodec;
 import com.teamresourceful.resourcefullib.common.utils.CommonUtils;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import net.minecraft.commands.CommandSourceStack;
@@ -19,6 +22,9 @@ public enum Heading {
     MUSIC(-1, -1, 0x5555FF, false),
     RECORDING(0, 0, 0xFF5555, true),
     STREAMING(8, 0, 0x9146FF, true);
+
+    public static final Codec<Heading> CODEC = EnumCodec.of(Heading.class);
+    public static final ByteCodec<Heading> BYTE_CODEC = ByteCodec.ofEnum(Heading.class);
 
     public static final List<Heading> VALUES = List.of(values());
 

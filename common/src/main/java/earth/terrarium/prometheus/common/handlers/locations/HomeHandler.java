@@ -1,34 +1,30 @@
 package earth.terrarium.prometheus.common.handlers.locations;
 
-import com.teamresourceful.resourcefullib.common.utils.SaveHandler;
+import com.mojang.serialization.Codec;
+import com.teamresourceful.resourcefullib.common.utils.files.CodecSavedData;
 import earth.terrarium.prometheus.api.roles.RoleApi;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.roles.HomeOptions;
 import earth.terrarium.prometheus.common.utils.ModUtils;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class HomeHandler extends SaveHandler {
+public class HomeHandler {
 
-    private static final HomeHandler CLIENT_SIDE = new HomeHandler();
-
-    private final Map<UUID, Map<String, GlobalPos>> homes = new HashMap<>();
-
-    public static HomeHandler read(Level level) {
-        return read(level, HandlerType.create(CLIENT_SIDE, HomeHandler::new), "prometheus_homes");
-    }
+    private static final CodecSavedData.Factory<Map<UUID, Map<String, GlobalPos>>> DATA = CodecSavedData
+        .create(Codec.unboundedMap(UUIDUtil.STRING_CODEC, Codec.unboundedMap(Codec.STRING, GlobalPos.CODEC)), "prometheus_homes")
+        .defaultValue(HashMap::new)
+        .global()
+        .clean();
 
     public static boolean add(ServerPlayer player, String name) {
-        Map<String, GlobalPos> homes = getHomes(player.level()).computeIfAbsent(player.getUUID(), uuid -> new HashMap<>());
+        Map<String, GlobalPos> homes = getHomes(player);
         if (homes.size() >= RoleApi.API.getNonNullOption(player, HomeOptions.SERIALIZER).max()) {
             player.sendSystemMessage(ConstantComponents.MAX_HOMES);
             return false;
@@ -37,7 +33,7 @@ public class HomeHandler extends SaveHandler {
             return false;
         }
         homes.put(name, GlobalPos.of(player.level().dimension(), player.blockPosition()));
-        read(player.level()).setDirty();
+        DATA.create(player.serverLevel()).setDirty();
         return true;
     }
 
@@ -48,7 +44,7 @@ public class HomeHandler extends SaveHandler {
             return;
         }
         homes.remove(name);
-        read(player.level()).setDirty();
+        DATA.create(player.serverLevel()).setDirty();
     }
 
     private static void teleport(ServerPlayer player, String name) {
@@ -90,30 +86,8 @@ public class HomeHandler extends SaveHandler {
         return false;
     }
 
-    public static Map<String, GlobalPos> getHomes(Player player) {
-        return getHomes(player.level()).getOrDefault(player.getUUID(), Map.of());
-    }
-
-    public static Map<UUID, Map<String, GlobalPos>> getHomes(Level level) {
-        return read(level).homes;
-    }
-
-    @Override
-    public void saveData(@NotNull CompoundTag tag) {
-        homes.forEach((key, value) -> {
-            CompoundTag homeTag = new CompoundTag();
-            value.forEach((name, pos) -> homeTag.put(name, ModUtils.toTag(pos)));
-            tag.put(key.toString(), homeTag);
-        });
-    }
-
-    @Override
-    public void loadData(CompoundTag tag) {
-        tag.getAllKeys().forEach(key -> {
-            CompoundTag homeTag = tag.getCompound(key);
-            Map<String, GlobalPos> homeMap = new HashMap<>();
-            homeTag.getAllKeys().forEach(homeKey -> homeMap.put(homeKey, ModUtils.fromTag(homeTag.getCompound(homeKey))));
-            homes.put(UUID.fromString(key), homeMap);
-        });
+    public static Map<String, GlobalPos> getHomes(ServerPlayer player) {
+        var data = DATA.create(player.serverLevel());
+        return data.get().computeIfAbsent(player.getUUID(), uuid -> new HashMap<>());
     }
 }

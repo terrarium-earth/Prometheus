@@ -1,10 +1,10 @@
 package earth.terrarium.prometheus.common.menus.content;
 
-import earth.terrarium.prometheus.common.handlers.role.Role;
+import com.teamresourceful.bytecodecs.base.ByteCodec;
+import com.teamresourceful.bytecodecs.base.object.ObjectByteCodec;
 import earth.terrarium.prometheus.common.handlers.role.RoleEntry;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.network.messages.server.roles.ServerboundChangeRolesPacket;
-import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,23 +84,13 @@ public class RolesContent {
         }
     }
 
-    public void write(FriendlyByteBuf buf) {
-        List<RoleEntry> roles = new ArrayList<>(uneditable);
-        roles.addAll(newRoles);
-        buf.writeCollection(roles, (buffer, pair) -> {
-            buffer.writeUUID(pair.id());
-            pair.role().toBuffer(buffer);
-        });
-        buf.writeVarInt(uneditable.size());
-    }
-
-    public static RolesContent read(FriendlyByteBuf buf) {
-        List<RoleEntry> roles = buf.readList(buffer -> new RoleEntry(buffer.readUUID(), Role.fromBuffer(buffer)));
-        for (RoleEntry role : roles) {
-            if (role.role() == null) {
-                return new RolesContent(null, buf.readVarInt());
-            }
-        }
-        return new RolesContent(roles, buf.readVarInt());
-    }
+    public static final ByteCodec<RolesContent> BYTE_CODEC = ObjectByteCodec.create(
+            RoleEntry.BYTE_CODEC.listOf().fieldOf(content -> {
+                List<RoleEntry> roles = new ArrayList<>(content.uneditable);
+                roles.addAll(content.newRoles);
+                return roles;
+            }),
+            ByteCodec.VAR_INT.fieldOf(content -> content.uneditable.size()),
+            RolesContent::new
+    );
 }

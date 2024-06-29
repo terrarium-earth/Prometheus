@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 
 public class TriStateListEntry extends ListEntry {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Prometheus.MOD_ID, "textures/gui/buttons.png");
+    private static final ResourceLocation TEXTURE = Prometheus.id("textures/gui/buttons.png");
 
     private TriState state;
     private final Component component;
