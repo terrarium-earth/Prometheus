@@ -1,6 +1,7 @@
 package earth.terrarium.prometheus.common.handlers.permission.commands;
 
 import com.mojang.brigadier.tree.CommandNode;
+import earth.terrarium.prometheus.common.utils.NodeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +9,10 @@ import java.util.List;
 public class CommandTreeCleaner {
 
     public static <S, T extends CommandNode<S>> T cleanTree(T root) {
-        CommandNodeExtension extension = (CommandNodeExtension) root;
         List<CommandNode<?>> children = new ArrayList<>(root.getChildren());
         for (CommandNode<?> child : children) {
             if (canRemove(child)) {
-                extension.prometheus$removeChild(child);
+                NodeUtils.removeChild(root, child);
             } else {
                 cleanTree(child);
             }

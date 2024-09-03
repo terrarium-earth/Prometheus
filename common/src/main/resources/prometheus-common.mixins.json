@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "common.ChatTypeMixin",
-    "common.commands.CommandNodeMixin",
     "common.commands.CommandsMixin",
     "common.HeadingPlayerMixin",
     "common.NickedPlayerMixin",

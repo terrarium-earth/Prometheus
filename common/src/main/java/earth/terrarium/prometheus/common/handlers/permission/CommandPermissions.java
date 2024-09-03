@@ -6,6 +6,7 @@ import com.mojang.brigadier.tree.RootCommandNode;
 import earth.terrarium.prometheus.common.handlers.permission.commands.*;
 import earth.terrarium.prometheus.common.network.NetworkHandler;
 import earth.terrarium.prometheus.common.network.messages.client.ClientboundCommandPermissionsPacket;
+import earth.terrarium.prometheus.common.utils.NodeUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.server.level.ServerPlayer;
@@ -47,8 +48,7 @@ public class CommandPermissions {
     }
 
     private static void collectPermissions(CommandNode<CommandSourceStack> root) {
-        CommandNodeExtension extension = (CommandNodeExtension) root;
-        commandPermissions.add(extension.prometheus$getPermission());
+        commandPermissions.add(NodeUtils.getPermission(root));
         for (CommandNode<CommandSourceStack> child : root.getChildren()) {
             collectPermissions(child);
         }
