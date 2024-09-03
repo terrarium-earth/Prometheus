@@ -79,7 +79,7 @@ public class PrometheusNeoForge {
         Prometheus.onServerStarted(event.getServer());
     }
 
-    private static void onServerTick(ServerTickEvent event) {
+    private static void onServerTick(ServerTickEvent.Post event) {
         Prometheus.onServerTick(event.getServer());
     }
 
