@@ -6,6 +6,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class NodeUtils {
     public static IdentityHashMap<CommandNode<?>, String> permissions = new IdentityHashMap<>();
@@ -35,6 +36,16 @@ public class NodeUtils {
             children.remove(node.getName());
             literals.remove(node.getName());
             arguments.remove(node.getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void setRequirement(CommandNode<?> node, Predicate<?> requirement) {
+        try {
+            var requirementField = CommandNode.class.getDeclaredField("requirement");
+            requirementField.setAccessible(true);
+            requirementField.set(node, requirement);
         } catch (Exception e) {
             e.printStackTrace();
         }
