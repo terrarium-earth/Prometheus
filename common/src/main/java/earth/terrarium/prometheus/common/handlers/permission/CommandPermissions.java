@@ -33,6 +33,7 @@ public class CommandPermissions {
     private static final List<String> commandPermissions = new ArrayList<>();
 
     public static void registerPermissions(CommandDispatcher<CommandSourceStack> dispatcher) {
+        NodeUtils.clearPermissions();
         NodeMarker.markCommandNodes(dispatcher.getRoot());
         RequirementPropagation.propagateRequirements(dispatcher.getRoot());
         NamedPermissionNodes.modifyPermissions(dispatcher.getRoot());

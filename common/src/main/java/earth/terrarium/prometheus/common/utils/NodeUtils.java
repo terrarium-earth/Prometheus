@@ -50,4 +50,8 @@ public class NodeUtils {
             e.printStackTrace();
         }
     }
+
+    public static void clearPermissions() {
+        permissions.clear();
+    }
 }
