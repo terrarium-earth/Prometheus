@@ -3,7 +3,7 @@ package earth.terrarium.prometheus.common.handlers.permission.commands;
 import com.mojang.brigadier.tree.CommandNode;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
-import earth.terrarium.prometheus.mixin.common.accessors.CommandNodeAccessor;
+import earth.terrarium.prometheus.common.utils.NodeUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -15,20 +15,15 @@ import java.util.function.Predicate;
 public class NamedPermissionNodes {
 
     public static void modifyPermissions(CommandNode<CommandSourceStack> node) {
-        String permission = ((CommandNodeExtension) node).prometheus$getPermission();
+        String permission = NodeUtils.getPermission(node);
         if (permission == null) return;
         Predicate<CommandSourceStack> original = node.getRequirement();
         Predicate<CommandSourceStack> modified = createPermissionPredicate(permission, original);
-        setRequirement(node, modified);
+        NodeUtils.setRequirement(node, modified);
 
         for (CommandNode<CommandSourceStack> child : node.getChildren()) {
             modifyPermissions(child);
         }
-    }
-
-    @SuppressWarnings({"unchecked"})
-    private static <T extends CommandSourceStack> void setRequirement(CommandNode<T> node, Predicate<T> requirement) {
-        ((CommandNodeAccessor<T>) node).setRequirement(requirement);
     }
 
     private static Predicate<CommandSourceStack> createPermissionPredicate(String commandPermission, Predicate<CommandSourceStack> original) {

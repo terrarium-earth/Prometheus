@@ -20,7 +20,7 @@ public class PrometheusNeoForgeClient {
         NeoForge.EVENT_BUS.addListener(PrometheusNeoForgeClient::onClientTick);
     }
 
-    private static void onClientTick(ClientTickEvent event) {
+    private static void onClientTick(ClientTickEvent.Post event) {
         PrometheusClient.clientTick();
     }
 

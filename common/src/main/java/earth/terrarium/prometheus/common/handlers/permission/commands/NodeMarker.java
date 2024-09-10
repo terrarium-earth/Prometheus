@@ -1,6 +1,7 @@
 package earth.terrarium.prometheus.common.handlers.permission.commands;
 
 import com.mojang.brigadier.tree.CommandNode;
+import earth.terrarium.prometheus.common.utils.NodeUtils;
 import net.minecraft.commands.CommandSourceStack;
 
 public class NodeMarker {
@@ -17,6 +18,6 @@ public class NodeMarker {
     }
 
     private static void setPermission(CommandNode<CommandSourceStack> node, String permission) {
-        ((CommandNodeExtension) node).prometheus$setPermission(permission);
+        NodeUtils.setPermission(node, permission);
     }
 }
