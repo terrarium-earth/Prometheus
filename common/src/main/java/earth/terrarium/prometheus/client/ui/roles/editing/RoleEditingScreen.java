@@ -69,6 +69,14 @@ public class RoleEditingScreen extends BaseModal {
         graphics.blitSprite(UIConstants.MODAL_HEADER, this.left, this.top, this.modalWidth, TITLE_BAR_HEIGHT);
     }
 
+    public void renderForeground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        graphics.drawString(
+            this.font,
+            getTitle(content), this.left + INNER_PADDING, (int) (this.top + (TITLE_BAR_HEIGHT - 9) / 2f) + 2,
+            0xffffffff, false
+        );
+    }
+
     private static Component getTitle(RoleEditContent content) {
         CosmeticOptions options = content.selected().getOption(CosmeticOptions.SERIALIZER);
         if (options == null) return CommonComponents.EMPTY;

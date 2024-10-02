@@ -1,6 +1,7 @@
 package earth.terrarium.prometheus.client.ui.roles.editing.pages;
 
-import earth.terrarium.olympus.client.components.buttons.TextButton;
+import earth.terrarium.olympus.client.components.Widgets;
+import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.prometheus.api.roles.client.Page;
 import earth.terrarium.prometheus.api.roles.client.PageApi;
 import earth.terrarium.prometheus.client.ui.roles.editing.RoleEditingScreen;
@@ -28,9 +29,10 @@ public record OptionsPage(RoleEditContent content, Runnable refresh) implements 
             UiUtils.addLine(
                 layout, i, width,
                 title,
-                (w) -> TextButton.create(w, 20, ConstantComponents.EDIT, b ->
-                    RoleEditingScreen.open(content, factory)
-                )
+                (w) -> Widgets.button()
+                    .withSize(w, 20)
+                    .withRenderer(WidgetRenderers.text(ConstantComponents.EDIT))
+                    .withCallback(() -> RoleEditingScreen.open(content, factory))
             );
             i++;
         }

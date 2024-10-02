@@ -1,8 +1,10 @@
 package earth.terrarium.prometheus.client.ui.roles.adding;
 
-import earth.terrarium.olympus.client.components.buttons.TextButton;
-import earth.terrarium.olympus.client.components.dropdown.Dropdown;
+import earth.terrarium.olympus.client.components.Widgets;
+import earth.terrarium.olympus.client.components.dropdown.DropdownState;
+import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.ui.UIIcons;
 import earth.terrarium.olympus.client.ui.modals.BaseModal;
 import earth.terrarium.prometheus.common.constants.ConstantComponents;
 import earth.terrarium.prometheus.common.menus.content.MemberRolesContent;
@@ -16,6 +18,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
+import org.apache.commons.lang3.function.Consumers;
 
 import java.util.Map;
 import java.util.UUID;
@@ -27,8 +30,7 @@ public class MemberEditingScreen extends BaseModal {
     private final MemberRolesContent content;
     private final Object2BooleanMap<UUID> roles = new Object2BooleanLinkedOpenHashMap<>();
 
-    private MemberRolesList memberRolesList;
-    private Dropdown<MemberRolesContent.MemberRole> roleDropdown;
+    private final DropdownState<MemberRolesContent.MemberRole> roleDropdown = DropdownState.empty();
 
     public MemberEditingScreen(MemberRolesContent content, Screen screen) {
         super(getTitle(content), screen);
@@ -59,36 +61,45 @@ public class MemberEditingScreen extends BaseModal {
                 role -> Component.literal(role.name())
             ));
 
-        this.roleDropdown = header.addChild(
-            new Dropdown<>(
-                this.roleDropdown,
-                width / 2 - 35, 20,
-                options,
-                null,
-                role -> {}
-            )
-        );
-        this.roleDropdown.active = !options.isEmpty();
+        var dropdownBtn = header.addChild(Widgets.dropdown(this.roleDropdown,
+            content.roles(),
+            memberRole -> Component.literal(memberRole.name()),
+            button -> button.withSize(width / 2 - 35, 20),
+            Consumers.nop()
+        ));
+
+        dropdownBtn.active = !options.isEmpty();
 
         header.addChild(new SpacerElement(5, 0));
-        header.addChild(TextButton.create(
-            30, 20,
-            ConstantComponents.ADD, b -> {
-                MemberRolesContent.MemberRole role = this.roleDropdown.selected();
-                if (role == null) return;
-                this.roles.put(role.id(), true);
-                this.memberRolesList.save();
-            }
-        )).active = !options.isEmpty();
+
+        header.addChild(Widgets.button(button -> {
+            button.withSize(30, 20)
+                .withRenderer(WidgetRenderers.text(ConstantComponents.ADD))
+                .withCallback(() -> {
+                    MemberRolesContent.MemberRole role = this.roleDropdown.get();
+                    if (role == null) return;
+                    this.roles.put(role.id(), true);
+                    this.rebuildWidgets();
+                });
+        }));
 
         layout.addChild(header);
 
-        this.memberRolesList = layout.addChild(new MemberRolesList(
-            this.memberRolesList, this.modalContentWidth - 20, this.modalContentHeight,
-            this.content.person(), this.content, this.roles,
-            this::rebuildWidgets
-        ));
-        this.memberRolesList.update();
+        layout.addChild(Widgets.list(widget -> {
+            widget.withSize(this.modalContentWidth - 20, this.modalContentHeight);
+            widget.withContents(list -> {
+                content.roles().forEach(member -> {
+                    list.withChild(Widgets.labelled(font, Component.literal(member.name()), Widgets.button(button -> {
+                        button.withSize(16, 16)
+                            .withRenderer(WidgetRenderers.icon(UIIcons.TRASH).withCentered(12, 12))
+                            .withCallback(() -> {
+                                this.roles.put(member.id(), false);
+                                this.rebuildWidgets();
+                            });
+                    })));
+                });
+            });
+        }));
 
         layout.arrangeElements();
         layout.setPosition(this.modalContentLeft + 10, this.modalContentTop);

@@ -3,7 +3,6 @@ package earth.terrarium.prometheus.client.ui.roles.editing.pages;
 import earth.terrarium.prometheus.Prometheus;
 import earth.terrarium.prometheus.api.roles.client.Page;
 import earth.terrarium.prometheus.api.roles.client.PageApi;
-import earth.terrarium.prometheus.client.ui.roles.editing.pages.permissions.PermissionPage;
 import earth.terrarium.prometheus.common.menus.content.RoleEditContent;
 import earth.terrarium.prometheus.common.roles.CosmeticOptions;
 import earth.terrarium.prometheus.common.roles.HomeOptions;
