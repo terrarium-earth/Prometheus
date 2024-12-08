@@ -71,7 +71,10 @@ public class HomeCommand {
         return Commands.literal("sethome")
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .executes(context -> {
-                    HomeHandler.add(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
+                    ServerPlayer player = context.getSource().getPlayerOrException();
+                    String homeName = StringArgumentType.getString(context, "name");
+                    HomeHandler.add(player, homeName);
+                    player.sendSystemMessage(CommonUtils.serverTranslatable("prometheus.locations.home.created", homeName));
                     return 1;
                 })
             )
@@ -86,7 +89,10 @@ public class HomeCommand {
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .suggests(SUGGEST_HOMES)
                 .executes(context -> {
-                    HomeHandler.remove(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
+                    ServerPlayer player = context.getSource().getPlayerOrException();
+                    String homeName = StringArgumentType.getString(context, "name");
+                    HomeHandler.remove(player, homeName);
+                    player.sendSystemMessage(CommonUtils.serverTranslatable("prometheus.locations.home.removed", homeName));
                     return 1;
                 })
 

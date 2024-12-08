@@ -66,7 +66,10 @@ public class WarpCommand {
             .requires(source -> source.hasPermission(2))
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .executes(context -> {
-                    WarpHandler.add(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
+                    ServerPlayer player = context.getSource().getPlayerOrException();
+                    String warpName = StringArgumentType.getString(context, "name");
+                    WarpHandler.add(player, warpName);
+                    player.sendSystemMessage(CommonUtils.serverTranslatable("prometheus.locations.warp.created", warpName));
                     return 1;
                 })
 
@@ -79,7 +82,10 @@ public class WarpCommand {
             .then(Commands.argument("name", StringArgumentType.greedyString())
                 .suggests(SUGGESTION_PROVIDER)
                 .executes(context -> {
-                    WarpHandler.remove(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "name"));
+                    ServerPlayer player = context.getSource().getPlayerOrException();
+                    String warpName = StringArgumentType.getString(context, "name");
+                    WarpHandler.remove(player, warpName);
+                    player.sendSystemMessage(CommonUtils.serverTranslatable("prometheus.locations.warp.removed", warpName));
                     return 1;
                 })
             );
