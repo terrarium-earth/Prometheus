@@ -56,6 +56,7 @@ jobs:
           loaders: neoforge
           game-versions: ${{ steps.properties.outputs.minecraftVersion }}
           version-resolver: exact
+          environment: client | server
 
           dependencies: |
             resourceful-lib | depends | *
@@ -79,6 +80,7 @@ jobs:
           loaders: fabric
           game-versions: ${{ steps.properties.outputs.minecraftVersion }}
           version-resolver: exact
+          environment: client | server
 
           dependencies: |
             fabric-api | depends | *
