@@ -49,9 +49,9 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
           files: ./neoforge/build/libs/!(*-@(dev|sources|dev-shadow)).jar
-          name: "[NeoForge] Prometheus ${{ steps.properties.outputs.version }}"
+          name: "[NeoForge] Odyssey Roles ${{ steps.properties.outputs.version }}"
           version: ${{ steps.properties.outputs.version }}
-          version-type: release
+          version-type: alpha
           changelog-file: changelog.md
           loaders: neoforge
           game-versions: ${{ steps.properties.outputs.minecraftVersion }}
@@ -72,9 +72,9 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
           files: ./fabric/build/libs/!(*-@(dev|sources|dev-shadow)).jar
-          name: "[Fabric] Prometheus ${{ steps.properties.outputs.version }}"
+          name: "[Fabric] Odyssey Roles ${{ steps.properties.outputs.version }}"
           version: ${{ steps.properties.outputs.version }}
-          version-type: release
+          version-type: alpha
           changelog-file: changelog.md
           loaders: fabric
           game-versions: ${{ steps.properties.outputs.minecraftVersion }}
